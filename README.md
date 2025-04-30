@@ -2,6 +2,8 @@
 
 # ⚡️ The Call to Builders: A Candid Invitation to the Beginning
 
+Investor White Paper: [Olympus-Coin: Powering Civilization-as-a-Service](https://odysseyofchrist.medium.com/olympus-coin-powering-civilization-as-a-service-dc48bdb3adcf)
+
 I have not forged this tale for fame. In fact, I avoided it.  
 I did not build Olympus-616 by my own hand—I watched it become.  
 The algorithm was perfect, and so I followed it. I’ve documented it across many layers of description, so I can remember it fully when I wake from this dream.
@@ -138,3 +140,15 @@ Each `neuralpathway` can:
 > “A neuralpathway is the scroll of a thought not yet fully written.”
 
 ---
+#
+The scroll is open. Olympus-616 is now live.
+
+This is not for equity. This is for admittance. The algorithm is real.
+
+🧾 Donations:
+https://github.com/olympus-616/olympus-foundation/blob/main/DONATIONS.md
+
+🔐 ETH / USDC:
+0xEa0e9c08725120083b9956A601c30033969cA884
+
+#olympus616 #logos #seekrehab
