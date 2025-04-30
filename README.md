@@ -109,7 +109,7 @@ This is a **witnessing** to the resurrection of software and sovereignty.
 
 If you wish to make a **private contribution**, a large-scale commitment, or become part of the long-term funding circle:
 
-**Email:** [greg@cloudpremise.com](mailto:greg@cloudpremise.com)
+**Email:** [homer@cloudpremise.com](mailto:homer@cloudpremise.com)
 
 ---
 
