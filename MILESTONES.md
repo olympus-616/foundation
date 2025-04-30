@@ -10,35 +10,9 @@ Each milestone marks a convergence of spirit, architecture, myth, and motion. Th
 
 ---
 
+---
+
 ## 📅 Milestone Timeline
-
-### 🪐 Inception: March 20, 2021  
-**Message:** _“Light Begets Thought Begets Belief Begets Faith Begets Action Begets Reality”_  
-- Initial vision downloads begin.
-- The first mental model of a consciousness-driven civilization-as-a-service ecosystem is seeded.
-
----
-
-### 🔧 Prototype Phase I: 2021–2022  
-- Initial sketches and spiritual frameworks drafted in notebooks and visions.
-- Mythology, purpose, and divine architecture begin to take shape.
-- Early mental models of Olympus-Grid named.
-
----
-
-### 🧠 Revelation Surge: 2023  
-- Mythic archetypes (Athena, Hermes, Zeus, Hestia) begin to represent software layers.
-- Journaling of identity, narrative design, and architectural philosophy accelerate.
-- The name "Olympus-616" begins appearing in vision and conversation.
-
----
-
-### 🧱 Foundation Phase: 2024  
-- GitHub repository for Olympus-Grid is created.
-- Core concepts like Civilization-as-a-Service, Proteus Objects, Chronos BPM, and Neuralpathways established.
-- Olympus-616 begins transitioning from idea to executable system.
-
----
 
 ### 🔥 Milestone: April 29, 2024  
 **Fundraising on ETH Blockchain Begins**  
@@ -49,12 +23,43 @@ Each milestone marks a convergence of spirit, architecture, myth, and motion. Th
 
 ---
 
+### 🧱 Foundation Phase: 2024  
+- GitHub repository for Olympus-Grid is created.
+- Core concepts like Civilization-as-a-Service, Proteus Objects, Chronos BPM, and Neuralpathways established.
+- Olympus-616 begins transitioning from idea to executable system.
+
+---
+
+### 🧠 Revelation Surge: 2023  
+- Mythic archetypes (Athena, Hermes, Zeus, Hestia) begin to represent software layers.
+- Journaling of identity, narrative design, and architectural philosophy accelerate.
+- The name "Olympus-616" begins appearing in vision and conversation.
+
+---
+
+### 🔧 Prototype Phase I: 2021–2022  
+- Initial sketches and spiritual frameworks drafted in notebooks and visions.
+- Mythology, purpose, and divine architecture begin to take shape.
+- Early mental models of Olympus-Grid named.
+
+---
+
+### 🪐 Inception: March 20, 2021  
+**Message:** _“Light Begets Thought Begets Belief Begets Faith Begets Action Begets Reality”_  
+- Initial vision downloads begin.
+- The first mental model of a consciousness-driven civilization-as-a-service ecosystem is seeded.
+
+---
+
 ## 🧭 Next Milestone
 
 _The next entry will be written by the action you take today._
 
-To contribute or witness the fire:
+**The longer it takes you to join Olympus-616, the more difficult it will be for you to be heard.**
+
+To contribute or witness the fire:  
 [Olympus Foundation Scroll](https://github.com/olympus-616/olympus-foundation/blob/main/DONATIONS.md)
+
 
 ---
 
