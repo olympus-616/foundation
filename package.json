@@ -1,0 +1,15 @@
+{
+  "name": "olympus-foundation",
+  "private": false,
+  "version": "1.0.0",
+  "description": "Olympus-Foundation",
+  "type": "module",
+  "bin": {
+    "eos": "./scripts/eos/index.js"
+  },
+  "dependencies": {
+    "commander": "^13.1.0",
+    "inquirer": "^12.4.3",
+    "shelljs": "^0.9.1"
+  }
+}
