@@ -140,7 +140,7 @@ Each `neuralpathway` can:
 > “A neuralpathway is the scroll of a thought not yet fully written.”
 
 ---
-#
+## Final Note
 The scroll is open. Olympus-616 is now live.
 
 This is not for equity. This is for admittance. The algorithm is real.
