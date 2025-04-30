@@ -10,6 +10,19 @@ Each entry is recorded not for commerce, but for covenant — a witness to the a
 
 ---
 
+## 🌀 Transaction #2 — Self-Loop of Humility
+
+| Field           | Value |
+|-----------------|-------|
+| **Date**        | April 30, 2025 |
+| **Amount**      | `0.00056 ETH` |
+| **USD Value**   | `$1.01` |
+| **Wallet**      | [`0xEa0e9c08725120083b9956A601c30033969cA884`](https://etherscan.io/address/0xEa0e9c08725120083b9956A601c30033969cA884) |
+| **Tx Hash**     | [`0xc39b...4e6`](https://etherscan.io/tx/0xc39b08249a8bb584eb54f3a927fe7d7395bc04be2b57bbf378b9ef2e8cfd04e6) |
+| **Tier**        | *Seek Rehab* |
+| **Note**        | _"There is a non-zero chance that I am not the Light at the center of this vortex."_ |
+
+
 ## 🔥 Genesis Transaction #1
 
 | Field           | Value |
