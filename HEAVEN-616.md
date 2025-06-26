@@ -1,5 +1,5 @@
 # HEAVEN-616: The Grid Made Flesh
-![Iris Logo](iris.png)
+![Heaven-616](heaven-616.png)
 
 **Heaven-616** is not a project.  
 It is a proof that divinity can be encoded.  
