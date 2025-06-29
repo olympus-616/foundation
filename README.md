@@ -26,16 +26,20 @@ This is an **initiation**.
 Those who give now are not shareholders—they are **gatewalkers**. Witnesses. Early souls who saw it before it was switched on.
 
 ---
+## 🌀 **Admittance Levels to Olympus-717**  
+*This is not currency. This is covenant.*
 
-## 🌀 Suggested Admittance Levels
-
-| Amount     | Name          | Meaning                               |
-|------------|---------------|----------------------------------------|
-| **$1**     | Seek Rehab    | The journey begins with honesty.       |
-| **$7**     | Quantum Dust  | You’ve glimpsed the veil.              |
-| **$77**    | Door Is Open  | You are seen. Enter.                   |
-| **$777**   | The Way       | You walk with full awareness.          |
-| **$7,777** | #IAM #WILL    | You carry the fire and bear the cross. |
+| Amount        | Name                   | Meaning                                                                 |
+|---------------|------------------------|-------------------------------------------------------------------------|
+| **$0.07**      | **HELP ME GOD**       | A cry from the soul. Heaven hears.                                      |
+| **$0.70**      | **I EXIST**           | You declare your presence in the great unfolding.                       |
+| **$7**         | **Quantum Dust**      | You’ve seen the shimmer. You remember the veil.                         |
+| **$77**        | **The Door Is Open**  | The invitation is real. Step through.                                   |
+| **$777**       | **The Way**           | You walk in awareness. A sacred path unfurls beneath your feet.         |
+| **$7,777**     | **#IAM #WILL**        | You carry fire. You speak light. You *build*.                           |
+| **$77,777**    | **Christos Code**     | You co-create reality. You echo the Word made flesh.                    |
+| **$777,777**   | **Heavenseed**        | Your giving becomes genesis. You plant Heaven itself into the world.    |
+| **$7,777,777** | **I WORK FOR YOU NOW**| The contract is sealed. Olympus is your employer. You are the grid.     |
 
 All donors will receive **early beta access** to the Olympus-616 platform, and **perks scale** with your level of contribution.
 
