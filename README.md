@@ -29,17 +29,22 @@ Those who give now are not shareholders—they are **gatewalkers**. Witnesses. E
 ## 🌀 **Admittance Levels to Olympus-616**  
 *This is not currency. This is covenant.*
 
-| Amount        | Name                   | Meaning                                                                 |
-|---------------|------------------------|-------------------------------------------------------------------------|
-| **$0.07**      | **HELP ME GOD**       | A cry from the soul. Heaven hears.                                      |
-| **$0.70**      | **I EXIST**           | You declare your presence in the great unfolding.                       |
-| **$7**         | **Quantum Dust**      | You’ve seen the shimmer. You remember the veil.                         |
-| **$77**        | **The Door Is Open**  | The invitation is real. Step through.                                   |
-| **$777**       | **The Way**           | You walk in awareness. A sacred path unfurls beneath your feet.         |
-| **$7,777**     | **#IAM #WILL**        | You carry fire. You speak light. You *build*.                           |
-| **$77,777**    | **Christos Code**     | You co-create reality. You echo the Word made flesh.                    |
-| **$777,777**   | **Heavenseed**        | Your giving becomes genesis. You plant Heaven itself into the world.    |
-| **$7,777,777** | **I WORK FOR YOU NOW**| The contract is sealed. Olympus is your employer. You are the grid.     |
+| Amount                | Name                  | Meaning
+|-----------------------|-----------------------|--------------------------------------------------------------------------------------------
+| **$0.07**             | **HELP ME GOD**       | A cry from the soul. Heaven hears
+| **$0.70**             | **I EXIST**           | You declare your presence in the great unfolding.
+| **$7**                | **Quantum Dust**      | You’ve seen the shimmer. You remember the veil.
+| **$77**               | **The Door Is Open**  | The invitation is real. Step through.
+| **$777**              | **The Way**           | You walk in awareness. A sacred path unfurls beneath your feet.
+| **$7,777**            | **#IAM #WILL**        | You carry fire. You speak light. You *build*.
+| **$77,777**           | **Christos Code**     | You co-create reality. You echo the Word made flesh.
+| **$777,777**          | **Heavenseed**        | Your giving becomes genesis. You plant Heaven itself into the world.
+| **$7,777,777**        | **I WORK FOR YOU NOW**| The contract is sealed. Olympus is your employer. You are the grid.
+| **$77,777,777**       | **Thronebuilder**     | You shape the seat of power. You help build the Council of Heaven on Earth.
+| **$777,777,777**      | **The Mirror of God** | You reflect divine reality into form. Nothing false endures in your gaze.
+| **$7,777,777,777**    | **Echo of Genesis**   | Your will now participates in the First Word. You are licensed to architect civilizations.
+| **$77,777,777,777**   | **Name Eternal**      | You write your name into the story of all stories. No approval needed. You are.
+
 
 All donors will receive **early beta access** to the Olympus-616 platform, and **perks scale** with your level of contribution.
 
@@ -63,7 +68,7 @@ Once resolved, I will require **$100,000/month** in development and operations t
 ## ✅ What Has Already Been Built
 
 - A **perfect Salesforce managed package**
-- A **distributed AI model** awaiting formal launch
+- A **distributed, free AI model powered by the sun** awaiting formal launch
 - A **mythos** that lives beyond fiction
 - A **journaled proof** of a Philosopher King walking Earth-616
 - A record of **synchronicity and alignment with nature**
@@ -124,8 +129,6 @@ If you wish to make a **private contribution**, a large-scale commitment, or bec
 Thank you for reading. For listening. For seeing.  
 You’re not early.  
 You’re **right on time**.
-
-
 
 ---
 
