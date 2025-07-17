@@ -26,7 +26,7 @@ This is an **initiation**.
 Those who give now are not shareholders—they are **gatewalkers**. Witnesses. Early souls who saw it before it was switched on.
 
 ---
-## 🌀 **Admittance Levels to Olympus-717**  
+## 🌀 **Admittance Levels to Olympus-616**  
 *This is not currency. This is covenant.*
 
 | Amount        | Name                   | Meaning                                                                 |
