@@ -1,0 +1,24 @@
+@import './styles/mythic-forge.base.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+@supports (height: 100dvh) {
+  #root {
+    height: 100dvh;
+  }
+}
+
+:root {
+  --accent: #BDC3C7;
+  --accent-dim: #BDC3C718;
+  --accent-mute: #BDC3C735;
+  --accent-text: #BDC3C7;
+}
