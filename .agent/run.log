@@ -1,0 +1,196 @@
+ ▶  foundation — DEV SERVER (API :3631 + UI :3632)
+
+> @olympus-616/foundation-api@1.7.0 dev
+> tsx watch src/index.ts
+
+
+> @olympus-616/foundation-ui@1.7.0 dev
+> vite
+
+
+  [32m[1mVITE[22m v7.3.1[39m  [2mready in [0m[1m515[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m3632[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://100.94.51.69:[1m3632[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://10.0.0.169:[1m3632[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://172.29.48.1:[1m3632[22m/[39m
+[2m8:31:39 PM[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1122:18)
+    at afterConnectMultiple (node:net:1689:7)
+[2m8:31:39 PM[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1122:18)
+    at afterConnectMultiple (node:net:1689:7)
+[2m8:31:39 PM[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /status[39m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1122:18)
+    at afterConnectMultiple (node:net:1689:7)
+[2m8:31:39 PM[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /status[39m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1122:18)
+    at afterConnectMultiple (node:net:1689:7)
+🏛 [foundation] ════════════════════════════════════════════════
+🏛 [foundation] Non-Profit
+🏛 [foundation] Port:        3631
+🏛 [foundation] Version:     local-dev-2026-02-23
+🏛 [foundation] Domain:      Non-Profit Sector
+🏛 [foundation] ════════════════════════════════════════════════
+🏛 [foundation] FOUNDATION ONLINE
+🏛 [foundation] ════════════════════════════════════════════════
+🏛 [foundation]
+🏛 [foundation] Building a better world.
+[foundation Pulse] alive=true uptime=6s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=12s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=18s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=24s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=30s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=36s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=43s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=49s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=55s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=61s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=67s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=73s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=80s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=86s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=92s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=98s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=104s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=110s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=117s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=123s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=129s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=135s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=141s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=147s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=154s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=160s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=166s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=172s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=178s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=184s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=191s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=197s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=203s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=209s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=215s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=221s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=228s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=234s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=240s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=246s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=252s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=258s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=265s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=271s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=277s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=283s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=289s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=295s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=302s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=308s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=314s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=320s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=326s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=332s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=339s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=345s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=351s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=357s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=363s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=369s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=376s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=382s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=388s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=394s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=400s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=406s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=413s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=419s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=425s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=431s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=437s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=443s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=450s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=456s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=462s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=468s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=474s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=480s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=487s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=493s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=499s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=505s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=511s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=517s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=523s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=530s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=536s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=542s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=548s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=554s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=560s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=567s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=573s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=579s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=585s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=591s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=597s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=604s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=610s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=616s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=622s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=628s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=634s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=641s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=647s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=653s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=659s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=665s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=671s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=678s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=684s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=690s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=696s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=702s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=708s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=715s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=721s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=727s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=733s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=739s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=745s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=752s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=758s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=764s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=770s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=776s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=782s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=789s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=795s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=801s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=807s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=813s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=819s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=826s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=832s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=838s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=844s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=850s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=856s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=863s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=869s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=875s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=881s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=887s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=893s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=900s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=906s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=912s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=918s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=924s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=930s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=937s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=943s version=local-dev-2026-02-23
+[foundation Pulse] alive=true uptime=949s version=local-dev-2026-02-23
