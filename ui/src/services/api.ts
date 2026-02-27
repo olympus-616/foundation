@@ -1,9 +1,9 @@
+import { resolveApiBase } from "../lib/api-config";
 import type { HealthResponse, StatusResponse } from "../types/foundation";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
-
 function url(path: string): string {
-  return `${BASE_URL}${path}`;
+  const base = resolveApiBase('foundation');
+  return `${base || (import.meta.env.VITE_API_BASE_URL ?? "")}${path}`;
 }
 
 export async function fetchHealth(): Promise<HealthResponse> {
