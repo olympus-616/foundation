@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #0F1B2D;
+  --color-warm-white: #FAFAF8;
+  --color-gold: #C9A84C;
+  --color-dark-text: #1a1a1a;
+  --color-medium-gray: #6B7280;
+  --color-light-gray: #E5E7EB;
+  --color-success: #059669;
+  --color-warning: #D97706;
+  --color-chart-blue: #3B82F6;
+  --color-chart-gold: #C9A84C;
+
+  --font-serif: 'Georgia', 'Times New Roman', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}

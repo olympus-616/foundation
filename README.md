@@ -35,7 +35,30 @@ That's the whole deployment.
 
 **31 services. 64 endpoints. Online.**
 
-Global deployment: **July 17, 2026.**
+| Metric | |
+|---|---|
+| Fleet | 31 microservices, zero failures from fresh `git clone` |
+| Coverage | 198 passing tests, 99% code coverage |
+| Proxy Architecture | Ares → Hermes → God service routing |
+| Mobile | TurtleShell.ai — iOS, streaming AI, Salesforce OAuth 2.0 PKCE |
+| Cloud | AWS ECS/Fargate + CloudFront, proven local ↔ cloud parity |
+| Enterprise | Salesforce MCP integration, multi-org architecture |
+
+---
+
+## Launch
+
+<h3 align="center">July 17, 2026</h3>
+
+<p align="center">
+  Global deployment. Open source protocol release.<br/>
+  Full specifications and documentation published on day one.
+</p>
+
+<p align="center">
+  The architecture is designed to propagate independently of any single entity.<br/>
+  Until then, the grid is in private beta.
+</p>
 
 ---
 
@@ -47,14 +70,21 @@ Global deployment: **July 17, 2026.**
 | [**olympus-616.ai**](https://www.olympus-616.ai) | Learn, fork, deploy your own grid |
 | [**olympus-grid.com**](https://www.olympus-grid.com) | Enterprise — connect your organization |
 | [**AppExchange**](https://appexchange.salesforce.com/appxListingDetail?listingId=aadbbe80-2d4e-42bc-84bd-348ade18a00a&tab=e) | Salesforce connector |
+| [**Investors**](https://investors.olympus-foundation.org/) | Investment package — Series 1 Redeemable Preferred Units |
+
+---
+
+## The Tithe
+
+Seven percent of every dollar of gross revenue flows to the Olympus Foundation — irrevocable, encoded in the governing documents, senior to all distributions. The Foundation owns the Cosmos Logos protocol and is dedicated to the elimination of human suffering through technology.
+
+The tithe is architecture, not charity.
 
 ---
 
 ## Open Source
 
-Full specifications and protocol documentation will be released as open source on deployment day. The architecture is designed to propagate independently of any single entity.
-
-Until then, the grid is in private beta.
+The protocol specification, architecture documentation, and deployment tooling will be released as open source on launch day. Every service, every endpoint, every integration — documented and deployable.
 
 If you're here, you're early.
 
