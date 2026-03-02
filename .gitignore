@@ -3,3 +3,4 @@ node_modules/
 api/.env
 .agent/
 .env
+.DS_Store
