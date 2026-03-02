@@ -3,3 +3,5 @@ node_modules/
 api/.env
 .agent/
 .env
+ui-founder-portal/dist/
+.DS_Store
