@@ -17,7 +17,7 @@ const SERVICE_SYMBOL = '🏛';
 const SERVICE_MOTTO = 'Building a better world.';
 const SERVICE_DOMAIN = 'Non-Profit Sector';
 const SERVICE_LAYER = 'Community';
-const VERSION = process.env.OLYMPUS_FOUNDATION_VERSION ?? `local-dev-${new Date().toISOString().split('T')[0]}`;
+const VERSION = process.env.OLYMPUS_FOUNDATION_VERSION ?? '1.7.4';
 const bootTs = Date.now();
 
 function uptime(): string {
