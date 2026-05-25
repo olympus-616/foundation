@@ -279,35 +279,121 @@ ApiRouteFeedback.handlePost reads `X-Request-ID` from apiCtx.headers, stamps ont
 
 ## §10 Execution plan
 
-| # | Task | Repo | Time |
-|---|------|------|------|
-| §10.1 | Identity Name trigger (FB#8) | olympus-grid | 25m |
-| §10.2 | RequestId__c fields + permset FLS | olympus-grid | 30m |
-| §10.3 | ApiRouteFeedback stamps RequestId | olympus-grid | 15m |
-| §10.4 | Deploy schema + Apex test | olympus-grid | 20m |
-| §10.5 | Portal lifecycle fixes (FB#9, #10, #12, #14) | omens | 2.5h |
-| §10.6 | UI quick wins (FB#11, #17, #19) | omens | 1.5h |
-| §10.7 | Pantheon requestId echo (7 services) | each pantheon service | 2h |
-| §10.8 | Headless play-driver scaffold | omens | 2.5h |
-| §10.9 | End-to-end loop + iterate | — | 1.5h |
-| §10.10 | Closeout §13; git mv 04_executing → 05_verifying | foundation | 30m |
+| # | Task | Repo | Time | Status |
+|---|------|------|------|--------|
+| §10.1 | Identity Name trigger (FB#8) | olympus-grid | 25m | ✅ shipped |
+| §10.2 | RequestId__c fields + permset FLS | olympus-grid | 30m | ✅ shipped |
+| §10.3 | ApiRouteFeedback stamps RequestId | olympus-grid | 15m | ✅ shipped |
+| §10.4 | Deploy schema + Apex test | olympus-grid | 20m | ✅ shipped |
+| §10.5 | Portal lifecycle fixes (FB#9, #10, #12, #14) | omens | 2.5h | ✅ shipped |
+| §10.6 | UI quick wins (FB#11, #17, #19) | omens | 1.5h | ✅ shipped |
+| ~~§10.7~~ | ~~Pantheon requestId echo~~ | — | — | 🚫 DEFERRED — see §14 |
+| §10.8 | Headless play-driver (full 15-step EOS verification cycle) | omens + ares + olympus-grid | 12-14h | 🔨 in progress |
+| §10.9 | End-to-end dry-run + iterate | — | 1.5h | ⏳ blocked by §10.8 |
+| §10.10 | Closeout §13; git mv 04_executing → 05_verifying | foundation | 30m | ⏳ blocked by §10.9 |
 
-Overnight realistic scope: §10.1-§10.6 + §10.10 partial. §10.7-§10.9 deferred to morning iteration.
+### §10.8 sub-task breakdown
+
+| Sub | Task | Repo | Owner | Status |
+|-----|------|------|-------|--------|
+| §10.8.A | Expand §10.8 spec in cycle doc | foundation | claude | 🔨 in progress |
+| §10.8.B | Ares route `POST /v1/auth/eos-test/mint` (env-gated proxy) | ares | claude | pending |
+| §10.8.C | Apex `ApiRouteEosTest` handler (sandbox-gated, mints JWT direct) | olympus-grid | claude | pending |
+| §10.8.D | Driver framework — `EosPlayDriver` autoload + state machine + 4 primitives + assertion engine + JSON report | omens | claude | pending |
+| §10.8.E | Per-step play actions (15 scenes + DLC bonus) | omens | claude | pending |
+| §10.8.F | Backend verification companion `tools/eos-verify-backend.sh` | omens | claude | pending |
+| §10.8.G | Dry run + commit + push to all eos-1 PRs | (multi) | claude | pending |
+
+### §10.8 — The 15-step EOS-1 verification cycle (Steward-authored, 2026-05-25)
+
+The play driver IS the canonical EOS verification: drive the real omens game programmatically, record every step (frontend session log), trigger every backend system (Plutus + Hermes + SF objects), and produce a verifiable artifact (backend SOQL counts match frontend recording per step).
+
+This is also the **enterprise-scale demonstration that EOS works as a methodology** — a single artifact (the cycle JSON) defines the canonical user journey, and every future cycle runs the same script to verify regressions + surface feature gaps.
+
+| # | Step | Frontend evidence | Backend evidence |
+|---|------|-------------------|------------------|
+| 1 | Server verify (defaults to athena-303) | `eos-play.server.verified` | — |
+| 2 | Login email (simulated — see §10.8.B/C) | `auth.session.adopted` | Identity__c + ApplicationProfile__c + IdentityToken__c |
+| 3 | Talk to Logos (persona overlay on Athena) | `ui.athena.message.success` (persona=logos) | Conversation__c row + LedgerEntry__c (athena) |
+| 4 | Talk to Athena | `ui.athena.message.success` (persona=athena) | Conversation__c rows + LedgerEntry__c (athena) |
+| 5 | Hermes — send message (to self) | `ui.hermes.send.success` | Messages__c row + LedgerEntry__c (hermes) |
+| 6 | Apollo — create sound | `ui.apollo.speak.success` | LedgerEntry__c (apollo.speak) |
+| 7 | Apollo — create music | `ui.apollo.music.success` | LedgerEntry__c (apollo.music) |
+| 8 | Poseidon — get weather (via Athena MCP tool) | tool result in athena turn | LedgerEntry__c (athena+poseidon tool call) |
+| 9 | Ares — enter/exit combat arena | likely SKIP (scene not built) | — |
+| 10 | Hephaestus — talk (eventually transmute) | likely SKIP (scene not built) | — |
+| 11 | Chronos — create list, create task, move to in-progress | `chronos.list.created`, `chronos.task.created`, `chronos.task.status.in_progress` | TaskList__c + Task__c (Status__c=in_progress) |
+| 12 | Atlas — generate a map | `world_builder.atlas.manifest.received` | LedgerEntry__c (athena+atlas persona) |
+| 13 | Muse (Mnemosyne) — story enter + exit | `ui.mnemosyne.sing.success`, scene transition into world_builder + back to library | LedgerEntry__c (athena+muse persona) |
+| 14 | Book — see Odyssey + Aeneid, pick one, play a chapter level | `book_picker.opened`, `book.selected`, `chapter.level.entered` | — (depends on chapter system) |
+| 15 | Enter/exit game (full boot loop) | `scene.transition.*` events | — |
+| BONUS | DLC purchase + play (if Beachcomber DLC seeded) | `dlc.store.opened`, `iap.purchase.*` | LedgerEntry__c (plutus.purchase + plutus.tithe) |
+
+### §10.8 architectural decisions (locked 2026-05-25 — see §6.8)
+
+| Decision | Choice | Rationale |
+|----------|--------|-----------|
+| Where the driver lives | **In-engine Godot autoload** | The driver IS the player. Tests the real game; generates the real session log; iOS/desktop parity. |
+| Activation | `godot --headless --eos-play=res://eos/cycles/eos1.cycle.json --eos-server=<url>` | One flag, scriptable cycle config |
+| Login bypass | New Ares route `/v1/auth/eos-test/mint` + Apex `ApiRouteEosTest` | Reusable for every future cycle; clean separation from production auth |
+| Production safety | Apex sandbox gate (`Organization.IsSandbox = true`) + Ares env-var gate (`OG_EOS_TEST_MODE_TOKEN` unset → 404) | Two-layer defense; both must fail open for the endpoint to be reachable |
+| Driver primitives | `WalkToPortal`, `PressButton`, `TypeText`, `WaitForEvent` | Four ops cover the whole engine |
+| Assertion model | Per step: `expected` (must fire) + `forbidden` (must NOT fire) + `timeoutSeconds` | Replaces "did it work?" with "exactly what happened, was it expected?" |
+| Output artifacts | `session_<id>.jsonl` (existing) + `eos-1-report.json` (new — per-step PASS/FAIL/SKIP) | Frontend artifact for the loop |
+| Backend verification | Companion `tools/eos-verify-backend.sh` runs SOQL rollup after driver completes | Frontend log ⊕ backend SOQL ⊕ ledger rollup = full attribution loop |
+| Resilience to missing features | Step returns SKIP with reason; driver continues | Missing scenes become EOS-2 backlog candidates, not blockers |
+
+### §10.8 file layout
+
+```
+omens/engines/godot/scripts/eos/
+├── EosPlayDriver.cs          # Autoload — boots on --eos-play flag, walks step list
+├── EosAssertionEngine.cs     # Expected/forbidden event tracker per step
+├── EosNavPrimitives.cs       # WalkToPortal, PressButton, TypeText, WaitForEvent
+├── EosReport.cs              # JSON output (eos-1-report.json)
+├── EosStep.cs                # Base class for steps + StepResult enum
+└── steps/                    # 15 step handlers + DLC bonus
+    ├── ServerVerifyStep.cs
+    ├── LoginStep.cs
+    ├── LogosStep.cs
+    ├── AthenaStep.cs
+    ├── HermesStep.cs
+    ├── ApolloSoundStep.cs
+    ├── ApolloMusicStep.cs
+    ├── PoseidonWeatherStep.cs
+    ├── AresCombatStep.cs     # SKIP placeholder
+    ├── HephaestusStep.cs     # SKIP placeholder
+    ├── ChronosStep.cs
+    ├── AtlasStep.cs
+    ├── MuseStep.cs
+    ├── BookStep.cs
+    ├── GameEnterExitStep.cs
+    └── DlcStep.cs            # SKIP placeholder (Beachcomber gate not seeded yet)
+
+omens/eos/                    # Cycle artifacts (versioned per EOS cycle)
+├── cycles/
+│   └── eos1.cycle.json       # The canonical 15-step cycle definition
+└── tools/
+    ├── eos-run.sh            # Headless Godot launcher wrapper
+    └── eos-verify-backend.sh # SOQL rollup verifier
+```
 
 ## §11 Verification protocol
 
-### Without iPhone (primary tonight)
+### Headless EOS verification (the canonical loop)
 
-1. `sf apex run --file olympus-grid/scripts/dev-org-data-wipe.apex --target-org dev_enterprise`
-2. Apex anon: create eos-1-test@example.com Identity + ApplicationProfile; mint JWT
-3. `godot --headless --eos-1-play --eos-1-jwt $JWT` from omens/engines/godot
-4. Pull captured session log from Feedback__c
-5. Python assertion script checks §9 A1-A15
-6. Iterate until green
+Once §10.8 is built, every EOS cycle uses this same 6-step harness:
 
-### With iPhone (morning if phone alive)
-1. Deploy fresh build; Steward plays canonical sequence
-2. Submit feedback; pull + assert against §9
+1. **Wipe** — `sf apex run --file omens/eos/tools/wipe-org.apex --target-org dev_enterprise` (or use the in-line wipe_chunk.apex pattern from 2026-05-25)
+2. **Run** — `bash omens/eos/tools/eos-run.sh eos-1` — launches headless Godot with the play driver against `athena-303.templeathena.ai`
+3. **Capture** — driver writes `~/Library/Application Support/Godot/.../logs/session_<id>.jsonl` + `eos-1-report.json`
+4. **Verify backend** — `bash omens/eos/tools/eos-verify-backend.sh eos-1` queries dev_enterprise and emits `eos-1-backend.json`
+5. **Join + assert** — unified `eos-verify-cycle.sh` joins frontend + backend evidence, emits per-step PASS/FAIL/SKIP
+6. **Iterate** — fix failures in code, re-run from step 1
+
+### With iPhone (regression check, optional)
+1. Deploy fresh build; Steward plays the same canonical 15-step sequence by hand
+2. Submit feedback; compare actual session log against the headless driver's reference run
 
 ## §12 Rollback plan
 
@@ -315,6 +401,41 @@ Overnight realistic scope: §10.1-§10.6 + §10.10 partial. §10.7-§10.9 deferr
 - **Server**: requestId echo additive — no rollback risk
 - **Client**: portal fixes local to scenes + controllers — git revert clean
 - **Cycle doc**: if cycle aborts, git mv 04_executing → 07_aborted; write §13 with abort rationale
+
+## §14 Open architectural questions deferred to future EOS cycles
+
+### §14.1 — Distributed request scope (was §10.7)
+
+The user asked the foundational question: **"what is the scope of a request?"** — and added the constraint: "this same framework is going through the enterprise layers so whatever it is needs to be there."
+
+Three industry models for distributed request scope:
+
+| Model | What "request" means | Pros | Cons |
+|-------|----------------------|------|------|
+| **A. Per-HTTP-call** | Fresh ID per HTTP hop | Zero coordination cost | Cannot reconstruct a user action that spans 5+ services |
+| **B. Request-tree** | One ID minted at the user-action root; propagated through every downstream HTTP call, async job (Queueable / @future / Platform Event), MCP tool call, LLM provider call | One ID = one cost attribution = one user impact; matches AWS X-Ray | Requires propagation discipline across 30+ services + async inheritance rules |
+| **C. W3C TraceContext (OpenTelemetry)** | TraceId + SpanId per hop, formal spec | Industry standard; ecosystem support (Datadog, Honeycomb, Jaeger) | Heavy spec; needs more tooling; arguably overkill until B is locked |
+
+**The enterprise scope this must cover:** omens (Godot), iris (React in SF Experience Cloud), turtleshell-web (React on Netlify), turtleshell-ios (Swift), turtleshell-offgrid (containers), Ares (Node.js), 30+ god services (Node.js), Apex (sync + Queueable + @future + Platform Events), LLM providers (Athena → OpenAI/Anthropic/Google/xAI), MCP tool servers (Poseidon, others).
+
+**Decision (2026-05-25):** Defer to a dedicated future cycle — likely **EOS-3 "Distributed Tracing v1 — Request Scope Specification."** Locking this in EOS-1 would either rush the spec or block the rest of the cycle. **Model B is the recommended target**, with Model C as an additive evolution later (TraceId/SpanId headers are purely additive on top of a single requestId).
+
+**What EOS-1 already shipped that survives this deferral:**
+- `ApiLog__c.RequestId__c` (pre-existing)
+- `LedgerEntry__c.RequestId__c` (added in PR #270)
+- `Feedback__c.RequestId__c` (added in PR #270)
+- `ApiRouteFeedback` stamps the inbound `x-request-id` header on every submit
+
+These fields stamp **whatever scope the eventual specification chooses** — they are not coupled to a particular model. Nothing wasted.
+
+**EOS-3 scope (forward reference):**
+1. Pick Model B vs Model C (recommend B-first)
+2. Specify async inheritance rules (Queueable inherits parent requestId; Platform Events carry it on the event payload; @future inherits via static map injection)
+3. Specify MCP / LLM passthrough (tool call carries parent requestId; LLM provider call gets it as a custom header)
+4. Roll out X-Request-ID echo middleware across all 30+ services in one coordinated sweep
+5. Update god services to write requestId into their respective per-call telemetry
+
+---
 
 ## §13 Closeout — overnight pass
 
