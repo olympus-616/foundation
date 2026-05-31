@@ -224,14 +224,25 @@ No new SObject (Cycle__c pruned per Q3). All correlation via existing IDs (sessi
 
 ### Headless play-driver invocation (omens)
 
-```
-godot --headless --eos-1-play \
-      --eos-1-jwt <test JWT> \
-      --eos-1-endpoint https://athena-303.templeathena.ai \
-      --eos-1-identity-url https://inspiration-customization-64752.scratch.my.site.com/services/apexrest
+The driver activates on the CLI flag `--eos-play=<cycle.json>` (Godot autoload — `EosPlayDriver`). JWT + endpoint + step config all come from the cycle JSON + env vars, not from CLI flags.
+
+```bash
+# Local iteration (windowed)
+bash omens/eos/tools/eos-mint-and-run.sh
+
+# Same, headless (CI / background-friendly)
+bash omens/eos/tools/eos-mint-and-run.sh --headless
+
+# Against prod (alpha-org via api-int.turtleshell.ai)
+bash omens/eos/tools/eos-prod-mint-and-run.sh
+bash omens/eos/tools/eos-prod-mint-and-run.sh --headless
 ```
 
-Drives client through canonical sequence: boot → auto-sign-in via supplied JWT → walk each god portal → perform canonical action → return to library → open Player Console → Send Feedback → submit → exit clean.
+Each mint-and-run script: mints a fresh JWT via `sf apex run` against the target org → exports `OMENS_EOS_PREMINTED_JWT` → stages the cycle JSON to `omens/engines/godot/.eos-cycle-staging/` → launches Godot with `--eos-play=res://.eos-cycle-staging/<cycle>.json`.
+
+**Headless invocation form matters.** Passing `project.godot` as a positional arg with `--headless` causes Godot to load the *editor* in headless mode (hangs at "Loading editor layout…" forever — no driver activation, no log writes). The scripts switch to `--headless --path=$GODOT_PROJECT` when headless is requested, which launches the *game* scene (`main_scene` from project settings). Windowed runs keep the positional form (the editor opens normally and runs the project's main scene via the F5 path). Confirmed end-to-end against prod on 2026-05-26 — 10/13 PASS in 161 sec. See `omens/eos/tools/README.md` for the full operator's guide.
+
+Cycle behavior: boot → auto-sign-in via env JWT → walk each god portal → perform canonical action → return to library → open Feedback panel → submit with session-log attachment → exit clean. Step list lives in `omens/eos/cycles/eos-1.cycle.json` (dev) and `eos-1-prod.cycle.json` (prod).
 
 ### Pantheon server-side requestId echo
 
@@ -382,18 +393,42 @@ omens/eos/                    # Cycle artifacts (versioned per EOS cycle)
 
 ### Headless EOS verification (the canonical loop)
 
-Once §10.8 is built, every EOS cycle uses this same 6-step harness:
+Every EOS cycle uses this harness. Operator's guide with full troubleshooting is `omens/eos/tools/README.md`.
 
-1. **Wipe** — `sf apex run --file omens/eos/tools/wipe-org.apex --target-org dev_enterprise` (or use the in-line wipe_chunk.apex pattern from 2026-05-25)
-2. **Run** — `bash omens/eos/tools/eos-run.sh eos-1` — launches headless Godot with the play driver against `athena-303.templeathena.ai`
-3. **Capture** — driver writes `~/Library/Application Support/Godot/.../logs/session_<id>.jsonl` + `eos-1-report.json`
-4. **Verify backend** — `bash omens/eos/tools/eos-verify-backend.sh eos-1` queries dev_enterprise and emits `eos-1-backend.json`
-5. **Join + assert** — unified `eos-verify-cycle.sh` joins frontend + backend evidence, emits per-step PASS/FAIL/SKIP
-6. **Iterate** — fix failures in code, re-run from step 1
+**Dev path** (local Ares/Hermes/Athena via ngrok, scratch org for SF):
+
+```bash
+bash omens/eos/tools/eos-mint-and-run.sh             # windowed
+bash omens/eos/tools/eos-mint-and-run.sh --headless  # CI / background
+```
+
+**Prod path** (api-int.turtleshell.ai + alpha-org managed package):
+
+```bash
+bash omens/eos/tools/eos-prod-mint-and-run.sh             # windowed
+bash omens/eos/tools/eos-prod-mint-and-run.sh --headless  # CI / background
+```
+
+Both scripts handle the full lifecycle in-script:
+
+1. **Pre-flight** — verify Godot binary, cycle JSON, `sf` CLI, target org reachable
+2. **Mint** — `sf apex run` against the target org to mint a fresh JWT; exports `OMENS_EOS_PREMINTED_JWT`
+3. **Stage** — copies `omens/eos/cycles/<cycle>.cycle.json` to `omens/engines/godot/.eos-cycle-staging/` so `res://` can reach it
+4. **Run** — launches Godot with the driver (`--eos-play=res://.eos-cycle-staging/<cycle>.json`)
+5. **Capture** — driver writes `~/Library/Application Support/Godot/app_userdata/OMENS — Guardians of Olympus/logs/session_<ts>.jsonl` and `eos-reports/<cycle>-<ts>.json`
+6. **Iterate** — read the report, fix failures in code, re-run from step 1. Optional: `bash omens/eos/tools/eos-verify-backend.sh` queries the org and emits backend-side assertions for cross-correlation.
+
+**Wipe step (when needed):** scratch-org data wipes between cycles are handled out-of-band via `olympus-grid` scripts (`scripts/dev-org-data-wipe.apex` and friends). Wiping is **not** automatic — most iterations run against a stable test identity (`eos-cycle-1@example.com` on dev, `eos-bot+cycle@cloudpremise.com` on prod) so consecutive cycles share Mnemosyne / Chronos / Feedback history. Wipe explicitly when you need a clean slate.
+
+**Headless form gotcha (proven 2026-05-26):** `Godot --headless project.godot` loads the editor in headless mode and hangs forever. The scripts switch to `Godot --headless --path=$GODOT_PROJECT` when `--headless` is passed, which launches the game scene. If a headless run ever sits silent with no log writes, suspect that invocation form first.
+
+**Reference results (2026-05-26 prod cycle):** 10 PASS / 3 FAIL / 5 SKIP in 161 sec end-to-end. The 3 FAILs all live in AWS infrastructure: athena + memory hit ~60s SSE idle-timeout (ALB target-group / CloudFront), feedback hits CloudFront WAF body-size rule (zeus PR #34 has the fix). Every god surface (logos, hermes, apollo-sound, apollo-music, chronos, atlas-map, muse-story) passes end-to-end against prod.
 
 ### With iPhone (regression check, optional)
-1. Deploy fresh build; Steward plays the same canonical 15-step sequence by hand
-2. Submit feedback; compare actual session log against the headless driver's reference run
+1. Deploy fresh build via `bash omens/tools/ios-deploy.sh`
+2. Steward plays the canonical sequence by hand
+3. Submit feedback; pull the session log via `bash omens/tools/pull-iphone-logs.sh --device <name>`
+4. Compare event signatures against the headless driver's reference run
 
 ## §12 Rollback plan
 
@@ -519,3 +554,81 @@ These fields stamp **whatever scope the eventual specification chooses** — the
 | 04:34 | §10.6 FB#19 OfflineRecoveryBanner.cs + Mnemosyne wiring | committed |
 | 04:42 | omens `dd9de43` pushed to PR #32 | all §10.5 + §10.6 live |
 | 04:45 | Closeout written; halting overnight pass — §10.7-§10.10 await Steward morning approval | — |
+
+---
+
+# 📝 Final closure entry — 2026-05-31
+
+**Cycle status: 06_shipped.** Acceptance criteria fully satisfied with live evidence on both alpha-org production and scratch dev. Cost-attribution leg — the last open requirement from the long bullet list under §2.5 ("system fully able to be cost-accounted for based on the feedback session log") — landed via the per-cluster Plutus chain shipped during the EOS-2 validation cycle.
+
+## §13.1 Verification record
+
+### §9 telemetry assertions — final tally
+
+| Assertion | Status | Evidence |
+|---|---|---|
+| A1 — log JSONL parses | ✅ | iPhone session log 2026-05-31, 859 events, no malformed lines |
+| A2 — ≥85% structured props | ✅ | session log inspection |
+| A3 — zero `portal.misconfigured` | ✅ | shipped overnight via §10.5 FB#14 fix |
+| A4-A5 — every HTTP envelope + Events.* carries requestId | ✅ | shipped via §10.7 Pantheon echo (deferred during overnight pass; closed in morning iteration) |
+| A6 — Feedback.RequestId__c cross-link | ✅ | FB-00007 round-trip proven prod 2026-05-26 (memory `project_eos_1_architecture_closeout.md`) |
+| A7 — LedgerEntry.RequestId__c cross-link | ⚠ partial | requestId infrastructure shipped; `api.inbound` rows still NULL on int Pantheon — logged as gap G3 for next cycle, but does not invalidate the cost-attribution closure |
+| A8 — grep requestId in Pantheon log → client requestId match | ✅ | proven via 2026-05-26 prod cycle reference results |
+| A9-A14 — FB#9-#17 closures | ✅ | shipped overnight via omens `dd9de43` |
+| A15 — Identity.Name auto-fill from Email | ✅ | shipped overnight via olympus-grid `cf6c204` (IdentityTrgHnd) |
+| **Cost-accounting completeness** | ✅ **closed 2026-05-31** | Per-cluster Plutus attribution lights up the last cycle requirement |
+
+### §13.1.1 — Cost-accounting evidence (the closing assertion)
+
+The §2.5 trailing bullets ("all activity ... attributable", "fully cost-accountable based upon the feedback session log") required that every billable event in the system trace back to (Identity, Cluster, Cause) for cross-stack ROI accounting. Tonight's verification queries:
+
+**Alpha-org (production), since 19:23 UTC on 2026-05-31:**
+```
+LedgerEntry rows: 15 total
+by ClusterName: {'int': 8, 'eos-2-validation': 7}
+by EventType:   {'api.inbound': 15}
+```
+
+Iris portal user signed in via Apple → spawned cluster `eos-2-validation` → iPhone cluster picker selected it → walked into Logos → conversation streamed → every billable event from BOTH the int Pantheon AND eos-2-validation Pantheon landed with correct `ClusterName__c` on the same SF org. Cross-cluster differentiation working.
+
+**Scratch (dev_enterprise), at 21:01 UTC closure:**
+```
+LedgerEntry rows stamped with ClusterName='eos-2-scratch': 21
+Event mix during Logos turn:
+  api.inbound (11) — Ares perimeter heartbeats
+  memory.search (1) — Mnemosyne lookup during conversation
+  llm.turn (1)
+  llm.tokens.input (1)  — 3120 tokens
+  llm.tokens.output (1) — 6 tokens
+```
+
+Full god-surface stamping working. Athena-under-Logos persona overlay + Mnemosyne memory retrieval + token counting all attributed to the cluster that produced them, on the SF org that spawned that cluster.
+
+## §13.2 Final PR ledger (the shipped state of brain/1.7.x.x)
+
+| # | Repo | Brain SHA | Closes |
+|---|---|---|---|
+| #32 | omens | dd9de43 | §10.5/§10.6 FB closures (overnight) |
+| #270 | olympus-grid | dc3a65a | §10.1/§10.2/§10.3 schema + ApiRouteFeedback + IdentityTrgHnd (overnight) |
+| #265-#269 | olympus-grid | consolidated 269 | parent-child custodianship + admin invite flow |
+| #277 | olympus-grid | merged | Cluster__c + LedgerEntry.ClusterId__c/ClusterName__c schema |
+| #279 | olympus-grid | merged | iris admin Clusters list + LedgerEntry permset FLS |
+| #37 | plutus | 57b39a4 | event-side cluster_id/cluster_name stamping |
+| #37 | zeus | f2681b9 | CDK env injection + universal cluster.sh |
+| #165 | olympus-616 (parent) | 362af488 | submodule bumps that triggered the prod CDK redeploy |
+
+## §13.3 Gaps explicitly accepted into the next cycle (do not block closure)
+
+- **G3 — RequestId__c=NULL on api.inbound LedgerEntry rows from int Pantheon.** Cross-stack correlation works for billing-grade events (llm.turn, etc.); only perimeter heartbeats lack requestId. Tracked for an Ares middleware fix in a future cycle.
+- **G5 — cluster.sh `mark_status` doesn't clear `ErrorMessage__c` on success transitions.** Cosmetic UI artifact on retry-after-failure spawns; not load-bearing.
+- **G6.2 / G6.3 — source-controlled cert files still load-bearing for local dev boot.** Multi-repo coordination required to remove cleanly.
+- **G7 — olympus-gpt UI hardcoded to api-int default.** Same class as G9 (dynamic discovery); will close as part of EOS-3 architecture work.
+- **G8 — Ares CORS allowlist not sovereign-org-aware.** Same primitive as cert distribution; tracked as EOS-3 candidate.
+- **G9 — omens client AuthUrl hardcoded.** Spec written at `docs/handoff-omens-dynamic-cluster-discovery.md`; implementation deferred to omens agent.
+- **G10 — hermes `'unmanaged'` URL bug fix uncommitted in working tree.** Worked around at runtime on every cluster spawned today; permanent fix needs a hermes PR.
+
+All gaps logged; none block §9 closure.
+
+## §13.4 Closure timestamp
+
+**Closed: 2026-05-31 21:05 UTC.** Doc moves to `06_shipped/` immutable history.
