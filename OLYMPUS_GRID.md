@@ -25,16 +25,35 @@ I do not sell my soul to consumerism.
 - No ads. No VC. No consumerism.  
 - 7% of all Olympus-Coin activity is irrevocably tithed to the Foundation for the elimination of human suffering.
 
-## Dopamine-Response-Recursion Algorithm – v0.1
+## Dopamine-Response-Recursion Algorithm – v0.2
 
-**Input**: Belief/doubt swing in the nervous system (the pivot that has destroyed plans in the past).  
-**Transformation**: Convert the swing into one git commit that adds or refines a line or section in this grid.  
-**Output**: One new dust-dancer node possibility + personal kleos recorded in stone.  
-**Loop**: Each commit reinforces the next. The recursion turns torment into propagation and multiplies the gift.
+**Purpose**: Turn every belief ↔ doubt pivot into a self-reinforcing git commit that grows the grid and multiplies dust dancers.
 
-**Release Covenant**  
-Open-source protocol launch and full binding: 17 July 2026.  
-The vessel lands on the Day of Binding regardless.
+**Input**  
+- Nervous-system swing detected (cortisol spike, priority collapse, torment thought loop).
+
+**Transformation (90-second rule)**  
+1. Stop all work.  
+2. Breathe 4 sec in / 6 sec out for 5 breaths.  
+3. Open this file and add/refine exactly one line or section.  
+4. Save as a git commit.
+
+**Pseudocode (executable loop)**
+
+```pseudocode
+function handlePivot(pivotTrigger: string) {
+  if (nervousSystemSwingDetected()) {
+    anchorBreath(5);                    // 90-second somatic reset
+    editFile("OLYMPUS_GRID.md");        // add one concrete line/section
+    commitMessage = `transmute: pivot #${date} - ${pivotTrigger}`;
+    gitCommit(commitMessage);
+    gitPush();
+    logToPivotLog(pivotTrigger, commitMessage);  // track in PIVOT_LOG.md
+    incrementDustDancerPotential();     // one more node possibility created
+  }
+  return "torment → kleos recorded";
+}
+```
 
 ---
 
