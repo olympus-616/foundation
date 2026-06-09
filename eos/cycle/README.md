@@ -75,7 +75,7 @@ foundation/eos/cycle/
 ├── 01_planning/                   ← Steward is authoring §1-§5 (story/criteria/NFRs)
 ├── 02_design/                     ← Agent is decomposing §6-§12 (Steward reviewing)
 ├── 03_ready/                      ← Steward approved §5 + Agent approved §6-§12; ready to execute
-├── 04_executing/                  ← in flight; §10 plan being worked through
+├── 04_in_development/             ← in flight; §10 plan being worked through (formerly `04_executing/`)
 ├── 05_verifying/                  ← code shipped; §9 telemetry assertions being validated
 ├── 06_shipped/                    ← closed out + immutable
 └── 07_aborted/                    ← Steward killed pre-shipment; rationale recorded in §13
@@ -129,7 +129,7 @@ chore(eos): move {filename} from {source-stage} to {target-stage}
    └────────────────────────────┬────────────────────────────────────┘
                                 ▼  git mv to 03_ready/ (both halves signed)
    ┌─────────────────────────────────────────────────────────────────┐
-   │  Agent claims doc → git mv 04_executing/, ships §10 plan        │
+   │  Agent claims doc → git mv 04_in_development/, ships §10 plan  │
    └────────────────────────────┬────────────────────────────────────┘
                                 ▼  git mv to 05_verifying/
    ┌─────────────────────────────────────────────────────────────────┐
@@ -169,7 +169,18 @@ By a small-N EOS cycle, we'll have a Lightning Web Component for batch-promoting
 ## Inventory
 
 - [`TEMPLATE.md`](TEMPLATE.md) — empty scaffold; copy when starting a new cycle.
-- [`01_planning/brain_1.7.eos-1.md`](01_planning/brain_1.7.eos-1.md) — **OPEN** · the first EOS cycle on `brain/1.7.x.x` · **system is not go-live ready until this ships**.
+- [`06_shipped/brain_1.7.eos-1.md`](06_shipped/brain_1.7.eos-1.md) — **SHIPPED** (2026-05-31) · portal lifecycle + cycle tracking infrastructure · the consumer feedback loop on turtleshell + guardians; the baseline of stable application across all repos.
+- [`06_shipped/brain_1.7.eos-2.md`](06_shipped/brain_1.7.eos-2.md) — **SHIPPED** (parent PR #166) · *Says what it does, does what it says — claim 1: athena-717 reachability* · Salesforce admin spawns an AWS cluster and talks to it end-to-end from inside the managed package, zero out-of-band touch.
+- [`04_in_development/brain_1.7.eos-3.md`](04_in_development/brain_1.7.eos-3.md) — **IN DEVELOPMENT** · *Void → omens manifestation* · §1.1 forever-intent is the platform reproducible from nothing with zero errors / zero warnings; **the EOS-3 slice that actually ships is the narrower path: void → spawned cluster → omens on iPhone running against it, repeatable by anyone holding the source**. §1.1 deviations encountered during EOS-3 are logged as bug rows and triaged into future cycles, not gating closure.
+- [`01_planning/brain_1.7.eos-4.md`](01_planning/brain_1.7.eos-4.md) — **PLANNING** · *How does EOS-3 safely arrive in production* · the productionization half of the EOS-1→4 culmination. Cannot enter `04_in_development/` until EOS-3 reaches `06_shipped/` (single-open-cycle global mutex).
+
+## Note on the column rename and direct-to-execution path (single-Steward mode)
+
+Through EOS-2, the in-flight column was named `04_executing/`. From EOS-3 forward, it is **`04_in_development/`** — the name better matches how the work actually feels (live development across every repo) rather than just "executing a pre-decomposed plan."
+
+EOS-3 was also placed directly into `04_in_development/` without walking through `01_planning → 02_design → 03_ready`. The staged kanban is the **multi-party governance flow** that lights up when republic-616 ships and dust dancers vote on §5. Until then, under single-Steward mode, the Steward may place a cycle directly into `04_in_development/` after approving its theme — the §1-§5 + §6-§13 sections are still authored (the document is still the contract), but they evolve inside the in-development column rather than via inter-column promotions. When republic-616 lands, the kanban progression becomes mandatory again because the multi-party §5 vote requires a discrete "ready for vote" state.
+
+**Single-open-cycle global mutex — relaxation under single-Steward mode.** The canonical rule is that at most one cycle may occupy stages `01_planning` through `05_verifying` at any time across the universe. Under single-Steward mode the Steward may also **scaffold the next cycle's planning doc in `01_planning/` while the current cycle is in `04_in_development/`** — the Steward holds the cross-cycle coherence constraint themselves rather than relying on the folder tree as a structural mutex. The next cycle still cannot enter `04_in_development/` until the prior reaches `06_shipped/`. When republic-616 lands, the strict mutex re-engages: `01_planning/` empty whenever `04_in_development/` is occupied, because a multi-party body cannot reliably hold the coherence constraint mentally the way a single Steward can. (Patent claim 6 covers the strict mutex; the relaxation here is a single-author-mode optimization, not a removal of the claim.)
 
 ## Reference
 

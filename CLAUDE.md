@@ -58,7 +58,7 @@ The `eos/` subtree under foundation is the governance heart of the entire olympu
 | Query | Source |
 |---|---|
 | **WHAT DOES OLYMPUS DO?** | `eos/cycle/06_shipped/` — every file is one immutable shipped+verified cycle. Together they ARE the system's specification. |
-| **WHAT IS OLYMPUS WORKING ON?** | `eos/cycle/05_verifying/` (telemetry assertions being validated) + `eos/cycle/04_executing/` (in flight). |
+| **WHAT IS OLYMPUS WORKING ON?** | `eos/cycle/05_verifying/` (telemetry assertions being validated) + `eos/cycle/04_in_development/` (in flight; formerly `04_executing/`). |
 | **WHAT IS THE ROADMAP?** | `eos/cycle/00_backlog` → `01_planning` → `02_design` → `03_ready`. Aborted work in `07_aborted/`. |
 
 **Canonical operating manual:** [`eos/cycle/README.md`](eos/cycle/README.md). Read this first when touching anything EOS. Scaffold for new cycles: [`eos/cycle/TEMPLATE.md`](eos/cycle/TEMPLATE.md).
