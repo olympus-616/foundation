@@ -1,0 +1,210 @@
+# Checking into brain/1.7.x.x IS the production deployment — the merge IS the arrival in production
+
+> File: `brain_1.7.eos-4.md`
+
+| | |
+|---|---|
+| **Branch family** | `brain/1.7.x.x` |
+| **Cycle ordinal** | `eos-4` (4th on this branch family) |
+| **Status** | `In Development` — direct-to-execution under single-Steward mode, **running in parallel with EOS-3 per Steward direction 2026-06-10**. The two cycles' truth-claims are co-evolving: EOS-3 produces a from-void environment; EOS-4 makes the act of merging that environment's brain SHA into `brain/1.7.x.x` THE deployment to production. Neither closes until both are true. |
+| **Opened** | 2026-06-09 (in `01_planning/`) · **moved to `04_in_development/` 2026-06-10** under explicit Steward direction relaxing the single-open-cycle mutex below the README's documented single-Steward-mode "scaffold in planning" relaxation |
+| **Closed** | — |
+| **Prior cycle** | `brain_1.7.eos-3` (the void → every-surface manifestation cycle) — **running in parallel, not sequentially** |
+| **Theme** | "EOS-3 = I can build an environment. EOS-4 = I can deploy this environment to production by checking into main brain." — Steward verbatim 2026-06-10 |
+| **Feedback inputs** | EOS-3 §13 §1.1-deviation accumulator (D1–D8 to date) + the EOS-3 §12 active-cycle infra guard's deferred bundle (CDN rollback reconcile + `olympus-int` CDK redeploy) |
+| **Estimated effort** | TBD |
+| **Actual effort** | — |
+
+> **What EOS-4 is (the deploy-by-merge claim, in co-evolution with EOS-3):**
+>
+> EOS-3 proves the from-void manifestation: void → scratch org → spawned Pantheon cluster → every consumer surface reaching that cluster. **EOS-4 proves the productionization claim — that the act of squash-merging an EOS-3 closure into `brain/1.7.x.x` IS the production deployment.** No separate "promote to prod" step. No staging dance. No human in the loop after the merge. The git operation IS the deploy.
+>
+> **Steward verbatim 2026-06-10:** *"EOS means I can build an environment, and EOS-4 means I can deploy this environment to production by checking into main brain."*
+>
+> The full culmination across EOS-1 + EOS-2 + EOS-3 + EOS-4 is:
+>
+> - the olympus-grid node (EOS-1 baseline, EOS-3 from-void)
+> - the spawned olympus pantheon (EOS-2 claim-1 reachability, EOS-3 fresh-realm)
+> - the gpt language to access it (EOS-3 §2.4)
+> - the omens game to utilize it (EOS-3 §2.3 — only fully-validated surface to date)
+> - the iris portal to support it (EOS-3 §2.8)
+> - the turtleshell-web / turtleshell-ios / turtleshell-offgrid surfaces (EOS-3 §2.5–§2.7)
+> - **the merge-to-brain promotion path that carries all of the above into the production `olympus-int` cluster atomically (EOS-4)**
+>
+> **— fully backed, A to Z, for a sovereign AI system to run with or without the Steward. Requires Salesforce for now.**
+>
+> EOS-4 is what makes "with or without the Steward" actually true — the production-grade promotion path, recovery posture, and operational discipline that mean a dust dancer can stand up their own grid and trust it. **The promotion path is not a separate ceremony; it is the `git merge` itself.**
+>
+> **Mutex relaxation, recorded explicitly (Steward direction 2026-06-10):** The canonical single-open-cycle global mutex (README §"Why this combination is novel" property #6 + §"Note on the column rename") prohibits two cycles occupying stages `01_planning` through `05_verifying` simultaneously. Under single-Steward mode the README permits scaffolding the next cycle in `01_planning/` while the current is in `04_in_development/`. **Steward 2026-06-10 further relaxes the mutex to permit EOS-3 and EOS-4 BOTH occupying `04_in_development/` in parallel**, because the two cycles' truth-claims interlock: EOS-3 cannot demonstrate "I can build" without also proving "the build is what gets shipped," and EOS-4 cannot demonstrate "the merge IS the deploy" without an EOS-3-closure-shaped brain SHA to merge. The cross-cycle coherence constraint stays in the Steward's hands until republic-616 lights up. When republic-616 lands, the strict mutex re-engages and EOS-3 / EOS-4 either ship as one logical cycle or sequentially. Patent claim #6 (single-open-cycle global mutex) covers the strict form; this relaxation is a single-author-mode optimization that preserves the claim by hand-coherence.
+
+---
+
+# § Steward-authored (top half)
+
+## §1 User story
+
+### §1.1 `brain/1.7.x.x` IS the stable production environment (the FOREVER intent — Steward 2026-06-10)
+
+> As **the Steward — and eventually any dust dancer running their own grid** I want **the branch `brain/1.7.x.x` to BE the stable production environment — not a deployment artifact, not a build input, not a thing that gets shipped to prod, but the production environment itself, by name — so that **the production system has exactly one address (`brain/1.7.x.x` HEAD across every constituent repo + the parent submodule pointer), exactly one knob to turn (the merge), and exactly one rollback gesture (`git revert`).**
+
+**Steward verbatim 2026-06-10 (two passes):**
+
+1. *"what we have in brain/1.7.x.x by the end of eos-4 needs to be in production automatically and in accordance with eos-1 through 4."*
+2. *"the claim of the eos is that brain/1.7.x.x is a stable production environment as of eos-4."*
+
+**The `brain/1.7.x.x` = stable production environment claim is the heart of EOS-4.** Three truths in one:
+
+1. **`brain/1.7.x.x` IS production.** The branch is not a staging area that promotes to prod. The branch is the named identifier of the production system. The HEAD SHA across every constituent repo + the parent submodule pointer IS the address of the production state. Asking "what's running in production" is identical to asking "what is `brain/1.7.x.x` HEAD." There are not two answers.
+2. **"Stable" means the invariants hold continuously, not just at a moment.** After EOS-4 closes, the brain-IS-production property holds for every subsequent merge, not just the EOS-4 close merge. The CI chain (`pr.yml` → `post-merge-docker.yml` → `zeus-deploy.yml` → `olympus-int` ECS rollout) IS the mechanism that keeps it stable. The merge IS the deploy; the rollback IS the counter-merge (`git revert`).
+3. **Production state simultaneously satisfies EOS-1 + EOS-2 + EOS-3 + EOS-4's `§1.1` forever-intents.** "In accordance with EOS-1 through 4" = production carries the consumer feedback loop (EOS-1), the cluster-spawn-and-reach truth-loop (EOS-2), the from-void six-surface manifestation (EOS-3), and the brain-IS-production property (this cycle's EOS-4) — all true at the same time, continuously, after EOS-4 closes.
+
+**Why this is patent-relevant:** the conjunction of (a) "the branch IS production" + (b) "the conjunction of all prior shipped cycles' invariants holds against production by construction" + (c) "single squash-merge across N repos is the deploy" gives a system whose production state is named, atomic, and continuously verified by the shipped canon. That's a stronger version of patent claim #5 (atomic cross-platform deployment) — the deployment isn't an action performed on production; production IS the branch.
+
+**§1.1 is intent. Short of §1.1 is a bug** — same discipline as EOS-3 §1.1. Any of the following are §1.1 deviations to log in §13:
+
+- brain HEAD advances but `olympus-int` task definition does not reflect the new image within the §3 promotion latency budget;
+- a merge to brain produces a partial state across repos (some submodules at brain HEAD, others at a prior SHA);
+- rollback requires more than `git revert` + automatic CI flow;
+- production state satisfies one of EOS-1/2/3 but breaks another (e.g., a brain SHA where EOS-3 from-void works but EOS-1's consumer feedback loop is broken in prod);
+- there's a way to ask "what version is prod running" that returns anything other than a brain SHA.
+
+### §1.2 The EOS-4 slice (what we actually ship this cycle)
+
+> As **the Steward** I want **EOS-4 to close such that the merge of an EOS-1/2/3/4-closure-shaped commit set into `brain/1.7.x.x` automatically (a) advances the Pantheon backend on `olympus-int` to the brain HEAD image AND (b) installs the olympus-grid managed package — which bundles iris portal and olympus-gpt as static resources — onto the alpha-org instances `og_beta_1` and `og_beta_2`, AND that all of EOS-1, EOS-2, EOS-3's `§1.1` forever-intents simultaneously hold against the resulting production state for those three SF-deployed consumer surfaces** so that **after EOS-4 closes, `brain/1.7.x.x` IS the stable production environment for olympus-grid + iris portal + olympus-gpt by construction, and the next merge propagates them to prod automatically.**
+
+**EOS-4 scope — explicitly narrowed by Steward direction 2026-06-10:**
+
+| Surface | In EOS-4? | Reason |
+|---|---|---|
+| **olympus-grid** managed package | ✅ in scope | Deploys to alpha-org `og_beta_1` + `og_beta_2` via `main-beta-package-build.yaml` triggered by merge-to-brain. The SF-side production install IS the merge target. |
+| **iris portal** (admin portal, served from olympus-grid static resources) | ✅ in scope | Rides the olympus-grid managed-package install — its bundle lives in `force-app/ui/portal/default/staticresources/portal/`. |
+| **olympus-gpt** (the gpt language/chat surface, served from olympus-grid static resources) | ✅ in scope | Same path — rides the olympus-grid managed-package install. |
+| **`olympus-int` Pantheon backend** | ✅ in scope (load-bearing) | All three SF-side surfaces above call into `olympus-int` Pantheon services (Ares → Hermes → Athena, etc.). The Pantheon image must be at brain HEAD for the EOS invariants to hold for the SF-side surfaces. |
+| **omens** (iPhone game / Guardians of Olympus) | ❌ out of EOS-4 | Productionization path is iPhone TestFlight → App Store, not merge-to-brain. Distinct cycle. |
+| **turtleshell-web** | ❌ out of EOS-4 | Not yet EOS-3 validated. Cosmos-logos org deploys via separate hosting path. |
+| **turtleshell-ios** | ❌ out of EOS-4 | Not yet EOS-3 validated. Apple App Store path. |
+| **turtleshell-offgrid** | ❌ out of EOS-4 | Not yet EOS-3 validated. Appliance self-update path. |
+| **turtleshell-iris** (consumer turtleshell surface running through iris) | ❌ out of EOS-4 (Steward verbatim 2026-06-10) | *"turtleshell iris is not yet validated for eos-3 and is not ready for eos-4"* |
+
+The turtleshell fleet + omens ride future cycles. Each has a distinct productionization mechanism that is not "merge to brain/1.7.x.x."
+
+**Closure semantic, locked 2026-06-10 (Steward refinement):** EOS-4 closes when ALL of the following hold simultaneously against production:
+
+| # | Invariant | Scope after 2026-06-10 narrowing |
+|---|---|---|
+| **A** | `brain/1.7.x.x` HEAD across every constituent repo + parent submodule pointer equals what is running on the production system | (a) Pantheon-side: `olympus-int` ECS task definition image tag = `git-<parent-brain-HEAD-SHA>`. (b) SF-side: alpha-org instances `og_beta_1` + `og_beta_2` are installed at the managed-package version built from the same brain SHA. |
+| **B** | The EOS-1 consumer feedback loop is round-tripping against the alpha-org production node | Specifically for the three EOS-4-in-scope surfaces (iris portal + olympus-gpt + Pantheon-backed guardians-app-as-installed-in-alpha-org). |
+| **C** | The EOS-2 athena-717 reachability claim holds: a Salesforce admin in the alpha-org can spawn a brand-new AWS Pantheon cluster from inside the managed package and reach it end-to-end | Validated against `og_beta_1` (primary alpha-org instance), with `og_beta_2` as canary parity check. |
+| **D** | A dust-dancer cloning from `brain/1.7.x.x` HEAD can run the EOS-3 from-void manifestation and round-trip feedback for **each of the three EOS-4-in-scope surfaces** (olympus-grid + iris portal + olympus-gpt) | Narrowed scope: turtleshell-web/ios/offgrid + turtleshell-iris + omens-iPhone are explicitly NOT in this invariant; their EOS-3 closures are future cycles. |
+
+**The CI chain IS the production-promotion path — both halves of it.** EOS-4 does NOT introduce a separate "promote" workflow. It establishes that the existing two-chain CI mechanism IS the production-promotion path, end-to-end:
+
+1. **Pantheon-side:** squash-merge to parent `brain/1.7.x.x` → `post-merge-docker.yml` builds the Pantheon image → `zeus-deploy.yml` rolls `olympus-int`. (Per CLAUDE.md *Deployment Pipeline*.)
+2. **SF-side:** squash-merge to olympus-grid `brain/1.7.x.x` → `main-beta-package-build.yaml` builds the managed package + posts a GitHub release → `og_beta_1` and `og_beta_2` install the new version. (Per memory `project_pr_269_consolidated_shipped_20260522.md`.)
+
+Rollback for both halves is `git revert` of the squash → both chains re-run with the prior SHA.
+
+**EOS-4's work** is to (a) reconcile the parts of either chain currently blocked (CDN rollback-stuck on Pantheon-side, parent submodule bump backlog), (b) verify the four invariants hold simultaneously at close against the three in-scope surfaces, and (c) establish the by-construction propagation property for future merges.
+
+**Why this is a real cycle and not a no-op:** as of 2026-06-10 the chain is NOT clean. `olympus-int-cdn` has been `UPDATE_ROLLBACK_COMPLETE` since 2026-05-27 (CFN export-stuck). The parent submodule pointer has not been bumped since `fd03cbd` (EOS-1+EOS-2 closure on 2026-05-31), so the parent `brain/1.7.x.x` HEAD + each god's `brain/1.7.x.x` HEAD are out of sync. Production `olympus-int` is therefore running `git-fd03cbd2`, NOT the current brain HEAD. On the SF-side, `og_beta_1` + `og_beta_2` are at the managed-package version installed during the 2026-05-25 + 2026-05-31 cycles, not the current brain HEAD. The brain-IS-production invariant DOES NOT HOLD today across either chain. EOS-4's job is to establish it for the three in-scope surfaces AND prove it stays held going forward.
+
+## §2 Acceptance criteria
+
+*Draft sketches matching the EOS-4 slice (§1.2). Each criterion is observable end-to-end and includes a post-condition queryable from production (alpha-org SOQL, `olympus-int` ECS describe-services, GitHub Actions run history, or installed managed-package version). Steward refines; agent decomposes into §6 once locked.*
+
+**Closure structure:** §2.1–§2.4 establish + verify the **A** invariant on the **Pantheon-side** chain (brain = `olympus-int` Pantheon image). §2.5–§2.7 establish + verify the **A** invariant on the **SF-side** chain (brain = managed-package version installed on `og_beta_1` + `og_beta_2`). §2.8 is the unified brain-IS-production assertion across both chains. §2.9 / §2.10 / §2.11 re-attest invariants B / C / D against the production state for the three EOS-4-in-scope surfaces. §2.12 + §2.13 prove the invariants are durable, not point-in-time.
+
+### Establishing brain-IS-production on the Pantheon-side chain (A — backend)
+
+- **§2.1 Submodule pointer reconcile + parent brain bump.** **Given** EOS-3 has reached §2.1 / §2.2 / §2.3 / §2.4 / §2.8 closure for the three EOS-4-in-scope surfaces (turtleshell-web/ios/offgrid + turtleshell-iris are out of EOS-3 scope per Steward 2026-06-10) and every constituent god repo's `brain/1.7.x.x` HEAD has been advanced **when** the parent `olympus-616` repo's submodule pointers are bumped to those HEADs via a single PR onto parent `brain/1.7.x.x` **then** the parent `brain/1.7.x.x` HEAD commit is a state where for every constituent submodule `S`, `git ls-tree HEAD S` returns the same SHA as `S`'s `origin/brain/1.7.x.x` tip (verified via the CLAUDE.md *Submodule Pointer Bump Discipline* snippet — zero `STALE` rows).
+- **§2.2 Post-merge Pantheon image build.** **Given** §2.1 lands on parent `brain/1.7.x.x` **when** `post-merge-docker.yml` fires **then** the Pantheon image tagged `git-<parent-brain-HEAD-SHA>` builds, pushes to ECR `842485730943.dkr.ecr.*.amazonaws.com/olympus-616/pantheon`, AND the ECR image is queryable by that tag.
+- **§2.3 `zeus-deploy.yml` rolls `olympus-int`.** **Given** §2.2's image is in ECR **when** `zeus-deploy.yml` runs **then** the `olympus-int` ECS service task definition is updated to reference `git-<parent-brain-HEAD-SHA>`, ECS rolls a new task to HEALTHY status, AND the prior task drains gracefully (no in-flight cosmos-logos handshake interruption).
+- **§2.4 CDN rollback reconcile.** **Given** `olympus-int-cdn` has been `UPDATE_ROLLBACK_COMPLETE` since 2026-05-27 (CFN export-stuck) **when** EOS-4 reconciles **then** the stack returns to `UPDATE_COMPLETE` with the export dependency cleanly resolved, AND `api.olympus-grid.com` / equivalent prod-domain endpoint serves HTTP 200 against a known cosmos-logos handshake probe.
+
+### Establishing brain-IS-production on the SF-side chain (A — managed package)
+
+- **§2.5 Managed-package build on merge-to-brain.** **Given** the olympus-grid `brain/1.7.x.x` HEAD has advanced to a new SHA **when** `olympus-grid/.github/workflows/main-beta-package-build.yaml` fires **then** a new managed-package version builds cleanly (passing the namespaced ApiRoute handler-name tests — see memory `feedback_handler_name_namespace_prefix.md`), a GitHub release is posted on `olympus-616/olympus-grid` tagging the package version, AND the package version is installable.
+- **§2.6 Install on `og_beta_1`.** **Given** §2.5's release exists **when** the deploy workflow installs the new managed-package version on alpha-org `og_beta_1` **then** the install completes without errors, all post-install Plugin__mdt records / Custom Settings / OrgWideEmailAddress wiring survives, AND the alpha-org's `og_beta_1` Plugin__mdt list shows the four canonical apps (`Plugin.app_iris`, `Plugin.app_guardians`, `Plugin.app_olympus_gpt`, `Plugin.app_turtleshell`) at the new version.
+- **§2.7 Install on `og_beta_2`.** **Given** §2.5's release exists **when** the deploy workflow installs the new managed-package version on alpha-org `og_beta_2` (canary parity check) **then** the install completes with identical post-install state to §2.6. `og_beta_2` matching `og_beta_1` is the parity proof that the install path is deterministic, not a `og_beta_1`-specific accident.
+
+### The unified brain-IS-production assertion across both chains (A)
+
+- **§2.8 Brain = production assertion holds across both chains.** **Given** §2.1–§2.7 hold **when** an observer runs the assertion probe **then** ALL of the following are true simultaneously: (a) `parent brain/1.7.x.x HEAD SHA` equals `olympus-int ECS task definition image tag's git-* suffix`; (b) `aws ecs describe-services --cluster olympus-int` returns running-count ≥ desired-count of tasks all on that image SHA; (c) the managed-package version installed on `og_beta_1` and `og_beta_2` matches the version built from `olympus-grid`'s `brain/1.7.x.x` HEAD at the same parent-bump SHA. The session log carries `prod.brain_equals_production` with the Pantheon-side SHA, the managed-package version, both org Ids (`og_beta_1` + `og_beta_2`), AND the wall-clock duration from the parent-brain-bump merge to all of the above being true.
+
+### Re-attesting EOS-1 + EOS-2 + EOS-3 against production for the three EOS-4-in-scope surfaces (B / C / D)
+
+- **§2.9 Invariant B — EOS-1 holds against production for iris portal + olympus-gpt.** **Given** brain = production per §2.8 **when** a user submits feedback through (a) the production iris portal in alpha-org or (b) the production olympus-gpt surface in alpha-org **then** for each, a `Feedback__c` row with the surface's discriminator (per EOS-3 §9 mapping — `iris` for iris portal, `olympus-gpt` for gpt) lands in the alpha-org with attached session-log ContentVersion. The pre-existing EOS-1 guardians/turtleshell consumer-loop validation also remains live (regression check, not a new round-trip).
+- **§2.10 Invariant C — EOS-2 holds against production.** **Given** brain = production per §2.8 **when** a Salesforce admin in alpha-org `og_beta_1` uses the production iris admin UI to spawn a brand-new AWS Pantheon cluster (i.e., a *test realm* distinct from `olympus-int`) **then** a `Cluster__c` row with `Status__c='Live'` lands in `og_beta_1`, all health endpoints return 200, AND at least one `LedgerEntry__c` row is stamped with the spawned `ClusterName__c` (the EOS-2 athena-717 reachability proof). Repeat against `og_beta_2` for parity.
+- **§2.11 Invariant D — EOS-3 holds against production for the three in-scope surfaces.** **Given** brain = production per §2.8 AND a fresh clone of `brain/1.7.x.x` at parent HEAD **when** a dust-dancer (or the Steward acting as one) executes the EOS-3 from-void path against a fresh scratch + freshly-spawned realm using ONLY source-controlled scripts from the brain SHA **then** EOS-3's acceptance criteria for **iris portal (§2.8 in EOS-3) + olympus-gpt (§2.4 in EOS-3)** all hold from the from-void source. (omens §2.3 is also expected to hold by inheritance but is not the EOS-4 closure gate since omens's productionization path is iPhone App Store, not merge-to-brain. turtleshell-web/ios/offgrid + turtleshell-iris EOS-3 closures are explicitly OUT of this invariant per §1.2 scope-narrowing.)
+
+### Durability — the invariants are not point-in-time
+
+- **§2.12 Rollback by `git revert` across both chains.** **Given** the EOS-4-closure squash is on `brain/1.7.x.x` **when** the Steward opens a PR with `git revert <eos-4-close-SHA>` and merges it **then** BOTH chains re-run automatically: (a) Pantheon-side rolls `olympus-int` back to the prior image; (b) SF-side rebuilds the managed package at the prior brain SHA and reinstalls on `og_beta_1` + `og_beta_2`. Invariants A/B/C/D either hold against the reverted-to SHA's behaviors OR the revert leaves prod in a known-recoverable state with a documented next step. **The revert IS the rollback for both chains.**
+- **§2.13 Future-merge propagation (the by-construction proof, for both chains).** **Given** EOS-4 has closed **when** any subsequent merge to `brain/1.7.x.x` (any future EOS-N closure or hotfix) lands **then** BOTH the Pantheon-side chain (CDK → `olympus-int`) AND the SF-side chain (managed-package build → install on `og_beta_1` + `og_beta_2`) run to completion automatically within the §3 promotion-latency budgets without Steward intervention, AND a one-line assertion script the Steward runs from anywhere shows brain-SHA = `olympus-int`-image-SHA AND brain-SHA-derived-package-version = installed-package-version on `og_beta_1` + `og_beta_2`.
+
+> **Out of scope for EOS-4** (rides future cycles, NOT criteria here): the turtleshell-web/ios/offgrid + turtleshell-iris productionization paths (each has its own non-merge-to-brain mechanism); the omens iPhone TestFlight / App Store productionization path; customer-multi-cluster federation; alarm/oncall instrumentation beyond what CDK already wires; off-grid appliance self-update; preview/staging environments (the model is two states — dev scratch + production — not a staging ladder).
+>
+> **§1.1 deviations encountered during EOS-4 execution become bug entries** in §13's accumulator, same discipline as EOS-3.
+
+## §3 Non-functional requirements
+
+*Categories pre-stubbed for Steward to fill.*
+
+- **Promotion latency budget** — wall-clock budget from squash-merge to `olympus-int` task HEALTHY. Wall-clock budget for rollback via `git revert`.
+- **Cost budget** — incremental AWS spend per merge (ECS rollout + ECR storage + CFN update).
+- **Observability** — every step of the merge → CDK → ECS chain emits a `cycleId`-tagged log line traceable from GitHub Actions → CDK output → CloudWatch.
+- **Compatibility** — EOS-3 closure SHAs ship cleanly even when olympus-int is mid-rollback (CDK queueing discipline).
+- **Privacy / Performance** — no secrets in workflow logs; ECS task rollout does not interrupt in-flight cosmos-logos handshakes (graceful drain).
+
+## §4 Feedback inputs
+
+EOS-4 inherits the active-cycle infra guard's deferred bundle plus EOS-3 §13's §1.1-deviation rows that are productionization-shaped:
+
+| Source | Item | EOS-4 angle |
+|--------|------|-------------|
+| EOS-3 §12 active-cycle guard | CDN rollback reconcile (`olympus-int-cdn` UPDATE_ROLLBACK_COMPLETE since 2026-05-27) | direct §2.2 acceptance criterion |
+| EOS-3 §12 active-cycle guard | CDK redeploy `olympus-int` to head of brain | direct §2.1 acceptance criterion |
+| EOS-3 §13 D3 | TurtleShell umbrella AppKey discriminator (gates §2.5–§2.7 closure on EOS-3) | inherited by EOS-4 §2.3-§2.8 if not resolved upstream in EOS-3 |
+| EOS-3 §13 D7 | No `OrgWideEmailAddress` configured in scratch — prod equivalent: confirm the alpha-org has the canonical sender wired | sanity-check during EOS-4 execution; not necessarily a blocker |
+| EOS-3 §13 D8 | Prod-vs-scratch login chooser + cluster chooser missing on §2.4–§2.8 surfaces | **must be resolved in EOS-3** before EOS-4 §2.3–§2.8 can validate; the same affordance is what lets the surfaces choose `olympus-int` vs scratch during EOS-4 verification |
+
+The unifying primitive across EOS-4 inputs: **the merge IS the operative gesture; the CI chain IS the production-promotion path; the rollback IS a counter-merge.** EOS-4 §6 decomposition operationalizes that.
+
+## §5 Steward approval gate
+
+- [ ] Story locked (§1)
+- [ ] Criteria locked (§2)
+- [ ] NFRs locked (§3)
+- [ ] Approved to execute — signed: **{Steward initials}** **{date}**
+
+> *Single-Steward mode + 2026-06-10 mutex-relaxation.* EOS-4 is in `04_in_development/` parallel to EOS-3 under explicit Steward direction. §5 sign-off here gates EOS-4 execution; sign-off is independent of EOS-3 §5 (both can be ticked, neither can be ticked, etc. — the cycles are governed independently even though their truth-claims interlock).
+
+---
+
+# § Agent-authored (bottom half)
+
+*§6-§13 PENDING. Decomposition begins after §5 sign-off AND EOS-3 closure.*
+
+## §6 Layer impact map
+*PENDING.*
+
+## §7 Schema deltas
+*PENDING.*
+
+## §8 Service contracts
+*PENDING.*
+
+## §9 Telemetry assertions
+*PENDING.*
+
+## §10 Execution plan
+*PENDING.*
+
+## §11 Verification protocol
+*PENDING.*
+
+## §12 Rollback plan
+*PENDING.*
+
+## §13 Closeout
+*PENDING.*
