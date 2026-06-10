@@ -72,21 +72,26 @@
 
 > As **the Steward** I want **EOS-4 to close such that the merge of an EOS-1/2/3/4-closure-shaped commit set into `brain/1.7.x.x` automatically (a) advances the Pantheon backend on `olympus-int` to the brain HEAD image AND (b) installs the olympus-grid managed package — which bundles iris portal and olympus-gpt as static resources — onto the alpha-org instances `og_beta_1` and `og_beta_2`, AND that all of EOS-1, EOS-2, EOS-3's `§1.1` forever-intents simultaneously hold against the resulting production state for those three SF-deployed consumer surfaces** so that **after EOS-4 closes, `brain/1.7.x.x` IS the stable production environment for olympus-grid + iris portal + olympus-gpt by construction, and the next merge propagates them to prod automatically.**
 
-**EOS-4 scope — explicitly narrowed by Steward direction 2026-06-10:**
+**EOS-4 scope — inclusive-by-default (Steward correction 2026-06-10):**
 
-| Surface | In EOS-4? | Reason |
-|---|---|---|
-| **olympus-grid** managed package | ✅ in scope | Deploys to alpha-org `og_beta_1` + `og_beta_2` via `main-beta-package-build.yaml` triggered by merge-to-brain. The SF-side production install IS the merge target. |
-| **iris portal** (admin portal, served from olympus-grid static resources) | ✅ in scope | Rides the olympus-grid managed-package install — its bundle lives in `force-app/ui/portal/default/staticresources/portal/`. |
-| **olympus-gpt** (the gpt language/chat surface, served from olympus-grid static resources) | ✅ in scope | Same path — rides the olympus-grid managed-package install. |
-| **`olympus-int` Pantheon backend** | ✅ in scope (load-bearing) | All three SF-side surfaces above call into `olympus-int` Pantheon services (Ares → Hermes → Athena, etc.). The Pantheon image must be at brain HEAD for the EOS invariants to hold for the SF-side surfaces. |
-| **omens** (iPhone game / Guardians of Olympus) | ❌ out of EOS-4 | Productionization path is iPhone TestFlight → App Store, not merge-to-brain. Distinct cycle. |
-| **turtleshell-web** | ❌ out of EOS-4 | Not yet EOS-3 validated. Cosmos-logos org deploys via separate hosting path. |
-| **turtleshell-ios** | ❌ out of EOS-4 | Not yet EOS-3 validated. Apple App Store path. |
-| **turtleshell-offgrid** | ❌ out of EOS-4 | Not yet EOS-3 validated. Appliance self-update path. |
-| **turtleshell-iris** (consumer turtleshell surface running through iris) | ❌ out of EOS-4 (Steward verbatim 2026-06-10) | *"turtleshell iris is not yet validated for eos-3 and is not ready for eos-4"* |
+Steward verbatim 2026-06-10: *"brain/1.7.x.x is deployed to production for olympus-grid, olympus-616, and turtleshell-web.... many other parts actually..."*
 
-The turtleshell fleet + omens ride future cycles. Each has a distinct productionization mechanism that is not "merge to brain/1.7.x.x."
+**The EOS-4 scope is the union of every repo whose CI pipeline propagates from `brain/1.7.x.x` HEAD to a production-deployed artifact**, minus the explicit exclusions below. Earlier draft of this section narrowed too tightly to "olympus-grid + iris portal + olympus-gpt" — that's the SF-side subset, not the whole picture. Correcting in place.
+
+| Surface / repo | In EOS-4? | Status as of 2026-06-10 | Mechanism |
+|---|---|---|---|
+| **olympus-grid** managed package | ✅ in scope | Squashed to brain (PR #282 → `a53453a`) → installed on `og_node_beta_1` (✅ FB-00045 evidence); `og_node_beta_2` canary parity ❌ TBD | `main-beta-package-build.yaml` → GitHub release → alpha-org install |
+| **olympus-616** parent (carries Pantheon gods athena / hermes / apollo / poseidon / ares / plutus / mnemosyne / chronos / hephaestus / zeus / etc.) | ✅ in scope (Steward 2026-06-10) | Parent submodule bump landed; Pantheon image build + `olympus-int` ECS rollout in flight | `post-merge-docker.yml` → ECR → `zeus-deploy.yml` → `olympus-int` ECS |
+| **iris portal** (admin portal in olympus-grid static resources) | ✅ in scope | Rides the olympus-grid install; cluster chooser visible in production iris admin UI per EOS-2 mechanism | Embedded in olympus-grid managed-package install |
+| **olympus-gpt** (gpt language/chat surface in olympus-grid static resources) | ✅ in scope | Rides the olympus-grid install; in-flight prod-vs-scratch chooser still pending | Embedded in olympus-grid managed-package install |
+| **turtleshell-web** | ✅ in scope (Steward 2026-06-10) | **✅ VALIDATED** via FB-00045 (`og_node_beta_1`, "looks like it worked", `session_20260610_104709.jsonl` 5.29 KB, cluster selector showing `api-int` at `turtleshell.ai/app/chat`) | cosmos-logos/turtleshell-web CI propagates from `brain/1.7.x.x` to production hosting (`turtleshell.ai`) |
+| **"many other parts"** — all repos whose CI propagates `brain/1.7.x.x` to a production-deployed artifact | ✅ in scope (by default — Steward 2026-06-10 *"many other parts actually"*) | Status per surface as the Steward exercises them | Per repo's CI design |
+| **turtleshell-iris** (consumer turtleshell surface running through iris) | ❌ explicitly out of EOS-4 (Steward verbatim 2026-06-10) | *"turtleshell iris is not yet validated for eos-3 and is not ready for eos-4"* | Reserved for a future cycle |
+| **omens iPhone binary** (the game running on a TurtleShell device) | ❌ binary side out of EOS-4 | Productionization path is iPhone TestFlight → App Store, not merge-to-brain. The omens repo SOURCE is at brain HEAD (✅ part of olympus-616 parent), but the deployed binary on App Store is not advanced by a `brain/1.7.x.x` merge. | Reserved for a future cycle (App Store distribution path) |
+| **turtleshell-ios** | TBD per Steward attestation | Status TBD — likely follows the turtleshell-web pattern if its CI propagates from brain, OR the omens-binary pattern if it goes through Apple App Store | Awaiting Steward confirmation |
+| **turtleshell-offgrid** | TBD per Steward attestation | Status TBD — depends on appliance self-update mechanism, may or may not be merge-to-brain triggered | Awaiting Steward confirmation |
+
+**Operational rule for the scope ambiguity:** when a surface's status is TBD, treat it as **in scope by default** for EOS-4 unless and until the Steward explicitly excludes it. The explicit exclusions to date are turtleshell-iris (whole surface) and the omens iPhone binary (the App Store distribution path specifically — omens source code IS in scope via olympus-616 parent). Anything else the merge-to-brain reaches is presumed in EOS-4 scope.
 
 **Closure semantic, locked 2026-06-10 (Steward refinement):** EOS-4 closes when ALL of the following hold simultaneously against production:
 
@@ -221,9 +226,14 @@ The unifying primitive across EOS-4 inputs: **the merge IS the operative gesture
 
 ### Verification evidence
 
-**Source production state:**
-- **Pantheon-side:** parent submodule bump landed 2026-06-10 (per memory `project_eos_3_validation_cycle.md`). Pantheon image at brain HEAD propagating through `post-merge-docker.yml` → `zeus-deploy.yml` → `olympus-int` ECS. (Live SHA / wall-clock TBD on this commit's rolling-evidence pass.)
-- **SF-side:** olympus-grid PR #282 squash-merged to `brain/1.7.x.x` (commit `a53453a`). Managed package installed on alpha-org `og_node_beta_1` (verified) and `og_node_beta_2` (canary, parity TBD).
+**Source production state (Steward verbatim 2026-06-10):** *"brain/1.7.x.x is deployed to production for olympus-grid, olympus-616, and turtleshell-web.... many other parts actually..."*
+
+The brain-IS-production claim is therefore in flight across a substantially broader surface area than the SF-side trio (olympus-grid + iris portal + olympus-gpt). EOS-4 §13 captures the parts the Steward has explicitly attested + the parts attested via SOQL evidence. Inclusive-by-default per §1.2 operational rule.
+
+- **Pantheon-side (olympus-616 parent + Pantheon gods):** parent submodule bump landed 2026-06-10 (per memory `project_eos_3_validation_cycle.md`). Pantheon image build via `post-merge-docker.yml`, propagating through `zeus-deploy.yml` to `olympus-int` ECS. Live image SHA + wall-clock TBD on a future evidence-pass.
+- **SF-side (olympus-grid + iris portal + olympus-gpt as bundled static resources):** olympus-grid PR #282 squash-merged to `brain/1.7.x.x` (commit `a53453a`). Managed package installed on alpha-org `og_node_beta_1` (✅ verified via FB-00045) and `og_node_beta_2` (❌ canary parity TBD).
+- **cosmos-logos-side (turtleshell-web):** ✅ deployed to `turtleshell.ai`. Production URL `turtleshell.ai/app/chat` serves the brain-HEAD UI with the prod-vs-scratch + cluster-chooser flow, signed-in user reaching `api-int` (alpha-org canonical Pantheon cluster) through cosmos-logos handshake → Ares → Hermes → Athena chain.
+- **Many other parts:** per Steward 2026-06-10 the merge-to-brain chain reaches more than the explicitly-named three. Each will be attested as the Steward exercises them. Operational rule: in scope by default; only the explicit exclusions (turtleshell-iris, omens iPhone binary App Store path) are out.
 
 **Per-criterion validation table** (rolling; queried 2026-06-10):
 
@@ -237,7 +247,7 @@ The unifying primitive across EOS-4 inputs: **the merge IS the operative gesture
 | §2.6 Install on `og_beta_1` | ✅ validated (Steward 2026-06-10) | `og_node_beta_1__Feedback__c.FB-00045` exists in alpha-org with attached `.jsonl` — proves the install is live AND functional. |
 | §2.7 Install on `og_beta_2` (canary parity) | ❌ not yet | Zero rows in `og_node_beta_2__Feedback__c` last 2 days. Either canary install lag, or Steward only exercised `og_node_beta_1` so far. |
 | §2.8 Brain = production assertion across both chains | 🟡 partial | SF-side anchored by §2.6 evidence. Pantheon-side anchor pending §2.2/§2.3/§2.4. Both-chain unified assertion not yet attestable end-to-end. |
-| §2.9 Invariant B (EOS-1 holds) — iris portal + olympus-gpt | 🟡 partial | turtleshell-web (bonus surface for invariant B) attested via FB-00045 (`AppKey='turtleshell'`, body "looks like it worked", session log `session_20260610_104709.jsonl` 5.29 KB). iris portal + olympus-gpt not yet attested against prod. |
+| §2.9 Invariant B (EOS-1 holds) — iris portal + olympus-gpt + turtleshell-web + any in-scope surface | 🟡 partial | **turtleshell-web ✅** attested via FB-00045 (`AppKey='turtleshell'`, body "looks like it worked", session log `session_20260610_104709.jsonl` 5.29 KB) — moved from "bonus" to **first-class evidence** per Steward 2026-06-10 scope-inclusive correction. iris portal + olympus-gpt not yet attested against prod. |
 | §2.10 Invariant C (EOS-2 holds) — spawn via `og_beta_1` | 🟡 partial | The screenshot of `turtleshell.ai/app/chat` showing cluster selector at `api-int` with Athena responding through the Ares→Hermes→Athena chain IS evidence that EOS-2's reachability claim holds against `api-int` (the prod canonical cluster). A fresh test-realm spawn via `og_beta_1` iris admin UI not yet attempted; that would close §2.10 strictly. |
 | §2.11 Invariant D (EOS-3 from-void holds) — iris portal + olympus-gpt | ❌ not yet | Awaits the EOS-3 §2.4 + §2.8 closures against the EOS-3 scratch. |
 | §2.12 Rollback by `git revert` | ❌ not yet | No revert exercised. |
