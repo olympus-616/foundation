@@ -1,6 +1,14 @@
 # Portal lifecycle + cycle tracking infrastructure
 
 > File: `brain_1.7.eos-1.md`
+>
+> ---
+>
+> **Canonical Steward attestation statement for EOS-1 (added 2026-06-10 as annotation; the body of this shipped doc is immutable history):**
+>
+> *"I attest the software creates a recursive loop of AI-generated software that is visible to the AI that built it."*
+>
+> Sharpest single-sentence statement of EOS-1's truth-claim. The shipped closure (§13) demonstrates the consumer-feedback-loop baseline that instantiates this property; the canonical statement above is the abstract invariant the baseline points at. Added per the Steward's five-statement framing 2026-06-10; the immutable closure record below is unchanged.
 
 | | |
 |---|---|

@@ -166,6 +166,44 @@ chore(eos): move {filename} from {source-stage} to {target-stage}
 
 By a small-N EOS cycle, we'll have a Lightning Web Component for batch-promoting feedback into a draft cycle doc (placeholder TBD; see relevant EOS cycle when scheduled).
 
+## Canonical Steward attestation statements (locked 2026-06-10)
+
+Each EOS cycle is anchored by a single one-or-two-sentence attestation statement that captures the cycle's truth-claim sharply. These are authoritative:
+
+| Cycle | Canonical statement |
+|---|---|
+| **EOS-1** | *"I attest the software creates a recursive loop of AI-generated software that is visible to the AI that built it."* |
+| **EOS-2** | *"I attest the software can create the necessary resources in order for it to scale. I attest the compute resources can be destroyed without losing data integrity of the system."* |
+| **EOS-3** | *"I attest the entire application can be constructed by accessing the GitHub repositories under correctly-configured principle-of-least-privilege access controls, and following the instructions therein."* |
+| **EOS-4** | *"I attest the entire application can be deployed to production by the merging of code into the main repository branches."* |
+| **EOS-5** | *"I attest the entire application has data integrity for each database record that is created, so that we can manage, monitor, and optimize the work that was created. I further attest the system properly accounts for an algorithmic royalty disbursement system, of which the first royalty to go into production is a 7% tithe tied to the reduction of human suffering."* |
+
+Together these five attestations describe a self-building, self-deploying, self-reproducing, self-managing, self-monetizing AI platform — the olympus-grid claim shape.
+
+## Attestation scope is dimensional — cross-repo × single-EOS vs single-repo × multi-EOS
+
+> **Steward direction 2026-06-10 verbatim:** *"we can go cross repo against a single eos attestation or we can go a single repo against multiple attestations."*
+
+An EOS cycle's attestation matrix is NOT fixed at "all repos for all five claims." It is dimensional:
+
+- **Cross-repo × single-EOS** (what EOS-1/2/3/4 have done): a broad theme spans many repos coordinating on ONE attestation claim. Example: EOS-3 "void → manifestation" required olympus-616 + olympus-grid + iris + cosmos-logos repos all contributing to a single from-void reproducibility attestation.
+- **Single-repo × multi-EOS**: one repo individually attested against multiple EOS claims. Example: the **omens** repo on its own carries EOS-1 (recursive AI loop visible in its session logs) + EOS-2 (its `eos/tools/*.sh` scripts spawn/destroy clusters) + EOS-3 (omens is reproducible from its repo + parent's) + EOS-4 (the iPhone binary deploys via brain-merge → image build → device install). The omens repo *alone* is EOS-1-4 attestable.
+
+**Practical implication:** the single-open-cycle global mutex still applies at the cycle level (one cycle in 04 at a time, or two in parallel under the 2026-06-10 relaxation). But the **attestation scope per cycle** is a design choice — broad theme across many repos OR deep attestation set within fewer repos. Future cycles pick the dimension that fits the work.
+
+## One `git newthought` per repo per EOS cycle — multi-agent fix-in-flight discipline
+
+> **Steward direction 2026-06-10 verbatim:** *"its just that once there is an active branch from git newthought, other agents shoudl add to that if we are in the midst of an eos cycle so there is always just the one git newthought."*
+
+When an EOS cycle is in flight across multiple repos and multiple agents are working in parallel (the cross-agent fix-in-flight pattern proven by D16 / D17 / D18 in the EOS-3+4 session), the branch-discipline is:
+
+1. **One `git newthought` per repo per EOS cycle.** The cycle's working branch in each repo is created ONCE at cycle open (or whenever the cycle first touches that repo) and STAYS the single working branch for the duration of the cycle.
+2. **All in-cycle commits go through `git savethought`** — alchemisthomer commits in `foundation/`, turtleshell agent commits in `cosmos-logos/turtleshell-web`, iris agent commits in `olympus-616/iris`, gpt agent commits in `iris/reactforce/olympus-grid-ai`, etc. Each agent works in its own repo but ADDS to that repo's existing one-cycle working branch via `git savethought` — no second `git newthought` until the cycle ships.
+3. **`git commit` is NEVER used by the alchemisthomer agent** for EOS work. (Ceremony of Binding is the only exception — Steward-dictated literal `-m` message on a separate manifesto file, per memory `feedback_ceremony_commit_messages_literal.md`.)
+4. After the cycle ships: `git mainbrain && git pull && git cleanthoughts` — the working branch is squashed-merged into `brain/1.7.x.x`, the in-cycle savethought commits collapse to one canonical merge commit (the EOS cycle's atomic-promotion record), and the next cycle starts fresh with its own one `git newthought`.
+
+The result: each EOS cycle leaves exactly ONE squash commit on `brain/1.7.x.x` per touched repo, regardless of how many agents collaborated or how many fix iterations landed. The brain history reads as a clean per-cycle log.
+
 ## Inventory
 
 - [`TEMPLATE.md`](TEMPLATE.md) — empty scaffold; copy when starting a new cycle.

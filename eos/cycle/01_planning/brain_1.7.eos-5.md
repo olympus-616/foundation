@@ -33,13 +33,35 @@
 
 ## §1 User story
 
-### §1.1 The autonomous revenue loop + system-wide transactional accounting (the FOREVER intent — Steward 2026-06-10 dual claim)
+### §1.1 The autonomous revenue loop + system-wide data integrity (the FOREVER intent — Steward 2026-06-10)
 
-> As **the Steward — and eventually any dust dancer running their own grid** I want **every consumer surface of the platform to expose a complete, autonomous, production-grade revenue path — sign-up → identity → cause-choice (per cosmic-7) → tier-choice → payment (Stripe for web/desktop, Apple StoreKit/IAP for iOS) → turtleshell.ai-token mint → consumption-metered ledger → 7% tithe to chosen cause — with NO Steward intervention at any step, AND every transaction in the system (payment, mint, consumption debit, credit, transfer, tithe accrual, tithe payout, refund, chargeback, cluster-spawn cost, agent-action cost, observability event) to be written to `LedgerEntry__c` with complete attribution (Identity FK, ApplicationProfile, AppSource, Cycle FK, ClusterName, RequestId, EventType, Cause, TitheAmount, CurrencyType, Description)** so that **the platform pays for its own operation by construction, the seven causes receive their tithe by construction, a sovereign user can start/sustain/end their relationship without talking to a human, AND every action in the system is accountable to a queryable per-Identity / per-Cycle / per-Cluster / per-Surface ledger — the financial truth-loop matching the operational truth-loop EOS-1–4 already established.**
+**Canonical Steward attestation statement for EOS-5 (locked 2026-06-10):**
 
-**Steward verbatim (two passes 2026-06-10):**
+> *"I attest the entire application has data integrity for each database record that is created, so that we can manage, monitor, and optimize the work that was created. I further attest the system properly accounts for an algorithmic royalty disbursement system, of which the first royalty to go into production is a 7% tithe tied to the reduction of human suffering."*
+
+**Decomposed — two co-equal halves:**
+
+**Half A — Data integrity for every database record.**
+- **(a) "Entire application"** + **"each database record"** — every custom SObject (not just `LedgerEntry__c`): `Feedback__c`, `Cluster__c`, `ApplicationProfile__c`, `Identity__c`, `Cycle__c` (when it ships), `Memory__c`, `ApiLog__c`, `Logger__c`, `Conversation__c`, `Messages__c`, every Portal/Process/Chronos object, etc.
+- **(b) "Data integrity"** — full attribution chain per row (who/when/where/what/why) such that the row is *managable*, *monitorable*, and *optimizable*.
+- **(c) "Manage / monitor / optimize"** — three operational verbs:
+    - **Manage** = admin UIs / operations affordances (iris admin, portal admin, ledger management)
+    - **Monitor** = observability / alerting / dashboards (CloudWatch, Mnemosyne traces, anomaly detection)
+    - **Optimize** = analytics for cost reduction / latency / quality / outcome (per-cluster cost rollup, per-surface margin, per-cause tithe efficacy)
+
+**Half B — Algorithmic royalty disbursement system.**
+- **(a) "Algorithmic royalty disbursement system"** — a generalized engine that supports MULTIPLE royalty types, configured via SObject (or Plugin__mdt), not hardcoded. A `RoyaltyConfiguration__c` shape: royalty-type, percentage, trigger-event, payout-destination, payout-cadence.
+- **(b) "First royalty to go into production"** — implies many more to follow. Future royalty types: creator royalties (content authored by users), referral royalties, IP royalties (the patent claims being filed), audit-trail royalties. The 7% tithe is just *one configured row* in the same engine.
+- **(c) "7% tithe tied to the reduction of human suffering"** — the seven cosmic causes (Oceans, Water, Food, Healthcare, Shelter, Education, AI for Those in Need) unified under a single thematic banner: **reduction of human suffering**. This is the brand framing that should appear structurally in email templates + payout proofs + audit trails so the WHY of the royalty is inseparable from the WHAT.
+
+**Steward verbatim (three passes 2026-06-10):**
 1. *"after eos-4 is validated to production the eos-5 will be each surface has its revenue path for turtleshell.ai tokens without my help. basically each app needs to have its revenue path finished and production ready... this needs to be both stripe and apple and this must work across all of the surfaces."*
 2. *"in eos-5 we will do full system wide acconting of each transaction in the system."*
+3. (Canonical) *"I attest the entire application has data integrity for each database record that is created, so that we can manage, monitor, and optimize the work that was created. I further attest the system properly accounts for an algorithmic royalty disbursement system, of which the first royalty to go into production is a 7% tithe tied to the reduction of human suffering."*
+
+**The original autonomous-revenue narrative is preserved below as a useful concrete instance of Half B:**
+
+> As **the Steward — and eventually any dust dancer running their own grid** I want **every consumer surface of the platform to expose a complete, autonomous, production-grade revenue path — sign-up → identity → cause-choice (per cosmic-7) → tier-choice → payment (Stripe for web/desktop, Apple StoreKit/IAP for iOS) → turtleshell.ai-token mint → consumption-metered ledger → 7% tithe to chosen cause — with NO Steward intervention at any step, AND every transaction in the system (payment, mint, consumption debit, credit, transfer, tithe accrual, tithe payout, refund, chargeback, cluster-spawn cost, agent-action cost, observability event) to be written to `LedgerEntry__c` with complete attribution (Identity FK, ApplicationProfile, AppSource, Cycle FK, ClusterName, RequestId, EventType, Cause, TitheAmount, CurrencyType, Description)** so that **the platform pays for its own operation by construction, the seven causes receive their tithe by construction, a sovereign user can start/sustain/end their relationship without talking to a human, AND every action in the system is accountable to a queryable per-Identity / per-Cycle / per-Cluster / per-Surface ledger — the financial truth-loop matching the operational truth-loop EOS-1–4 already established.**
 
 The two passes together define EOS-5 as the **financial-truth-loop closure** that mirrors the EOS-1+2+3+4 operational-truth-loop closure. Two co-equal halves:
 
@@ -94,16 +116,32 @@ The two passes together define EOS-5 as the **financial-truth-loop closure** tha
 
 *PENDING — Steward to draft after EOS-4 closes. Anticipated shapes, organized into two co-equal blocks per §1.1:*
 
-### Block A — Autonomous revenue rails (Stripe + Apple, every surface)
+### Block A — Algorithmic royalty disbursement system + autonomous revenue rails (reframed 2026-06-10 per canonical EOS-5 Half B)
+
+> **Scope reframe 2026-06-10:** the prior framing was "Stripe + Apple checkout + token economy + 7% cosmic-7 tithe." Steward's canonical EOS-5 Half B widens it to *"an algorithmic royalty disbursement system, of which the first royalty to go into production is a 7% tithe tied to the reduction of human suffering."* — meaning the architectural shape is a **generalized royalty engine** where the cosmic-7 tithe is *one configured row*, not a hardcoded special case. Future royalty types (creator royalties, referral royalties, IP royalties for the patent claims, etc.) plug into the same engine via config. The Stripe + Apple rails feed payment events INTO that engine, where the engine then computes + disburses the configured royalties.
+
+### Block A-ROYALTY — Generalized algorithmic royalty engine (added 2026-06-10 per canonical Half B)
+
+- **§2.A-ROY.1 RoyaltyConfiguration__c SObject (or Plugin__mdt) ships.** Shape: `RoyaltyType__c` (picklist: tithe, creator, referral, IP, audit, etc.) · `Percentage__c` · `TriggerEvent__c` (LedgerEntry event-type pattern that fires the royalty calculation) · `PayoutDestination__c` (cause Id, creator Identity, account Id) · `PayoutCadence__c` (per-event, daily, weekly, monthly) · `Active__c` flag · `EffectiveFrom__c`/`EffectiveUntil__c`. Each row is a configured royalty stream.
+- **§2.A-ROY.2 Tithe as the first configured RoyaltyConfiguration row.** A `RoyaltyConfiguration__c` row with `RoyaltyType__c='tithe'`, `Percentage__c=7.0`, `TriggerEvent__c` matching consumption events, `PayoutDestination__c` mapping to one of the seven cosmic causes (per Identity's cause-choice), `PayoutCadence__c='daily'` or similar. **No hardcoded tithe logic** — the engine reads this row and applies it.
+- **§2.A-ROY.3 Royalty calculation happens at LedgerEntry write time.** Every `LedgerEntry__c` row with `EventType` matching any active `RoyaltyConfiguration__c.TriggerEvent__c` writes its `TitheAmount__c` (or general `RoyaltyAmount__c`) field populated correctly + `Cause__c` (or general `PayoutDestination__c`) carried through. Resolves §13 D11 generalized.
+- **§2.A-ROY.4 Royalty disbursement happens at the configured cadence.** A scheduled job reads accumulated `LedgerEntry__c` rows, aggregates per-RoyaltyConfiguration-per-destination, executes payouts (Stripe Connect / direct deposit / on-chain transfer — mechanism per `PayoutDestination__c` shape), writes a `RoyaltyPayout__c` row with the proof. Steward never touches the cash.
+- **§2.A-ROY.5 "Reduction of human suffering" brand frame structurally inseparable from the WHAT.** Every tithe `RoyaltyConfiguration__c` row + every `RoyaltyPayout__c` row + every consumer-facing email template referring to tithe carries the unifying-theme language. Audit: every prod artifact that mentions "tithe" or "7%" also mentions "reduction of human suffering" (or equivalent canonical framing). Not a code requirement; a brand-architecture requirement that gets enforced in templates + audit trails.
+
+### Block A-RAILS — Autonomous revenue rails (Stripe + Apple, every surface) — the payment-event source feeding Block A-ROYALTY
 
 - **§2.A1 Stripe checkout works on every web/desktop surface in scope** — from cold sign-in to first-token consumption, end-to-end, against production Stripe (live keys, not test mode). Observable: a `LedgerEntry__c` credit row with `EventType__c='payment.stripe'` + `PaymentProvider__c='stripe'` lands in the alpha-org / `og_beta_1` / `og_beta_2` per purchase, with `Identity__c` FK populated.
 - **§2.A2 Apple IAP works on every iOS surface in scope** — App Store Connect product configured, StoreKit transaction signed, receipt validated server-side, tokens minted. Observable: a `LedgerEntry__c` credit row with `EventType__c='payment.apple'` + `PaymentProvider__c='apple'` lands, with the original StoreKit `transactionId` in `TransactionId__c` for deduplication.
 - **§2.A3 Single token economy holds** — tokens purchased on one surface are honored on every other surface. Observable: SOQL `SELECT SUM(CreditAmount__c) - SUM(DebitAmount__c) FROM LedgerEntry__c WHERE Identity__c = :id` returns the same balance regardless of which surface queries it.
-- **§2.A4 Consumption metering debits balance + attributes tithe** — every `llm.turn` (or equivalent metered event) writes a `LedgerEntry__c` debit row + populates `TitheAmount__c` = `DebitAmount__c × 0.07` + populates `Cause__c` from the user's chosen cosmic-7 cause. Resolves §13 D11.
+- **§2.A4 Consumption metering debits balance + attributes royalties via Block A-ROYALTY** — every `llm.turn` (or equivalent metered event) writes a `LedgerEntry__c` debit row + the royalty engine (§2.A-ROY.3) populates `TitheAmount__c` + `Cause__c` from the active `RoyaltyConfiguration__c` rows. Resolves §13 D11 (in the generalized form).
 - **§2.A5 Autonomous failure handling** — Stripe webhook retry, Apple receipt re-validation, balance-exhausted soft-fail (graceful UX, no platform crash), refund flow per Stripe/Apple policy. All without Steward intervention.
 - **§2.A6 Tithe distribution proves itself** — at end of each accounting period, the 7% accumulated per cause has a payout proof (mechanism TBD) and SOQL aggregate matches disbursed amount.
 
-### Block B — System-wide transactional accounting completeness (closes EOS-3 §13 D10–D15)
+### Block B — System-wide data integrity for **every database record** (broadened 2026-06-10 per canonical EOS-5 Half A)
+
+> **Scope expansion 2026-06-10:** the prior framing of Block B was "LedgerEntry__c accounting completeness." Steward's canonical EOS-5 Half A widens it to *"data integrity for each database record that is created"* — meaning every custom SObject in production, not just the ledger. The LedgerEntry-specific criteria below remain (renumbered as §2.B-LE-…); a new sub-block §2.B-ALL adds the all-SObjects bar.
+
+### Block B-LE — LedgerEntry__c-specific accounting completeness (closes EOS-3 §13 D10–D15)
 
 - **§2.B1 `Cycle__c` SObject ships to production** — exists in `og_node_beta_1` / `og_node_beta_2` managed-package install. Resolves §13 D10. Every karmic cycle (intent → mutation → ledger → outcome) creates a `Cycle__c` row at start and updates it at close with aggregated cost/outcome/duration.
 - **§2.B2 `LedgerEntry__c.Cycle__c` FK populated on 100% of rows** — every row joins back to a `Cycle__c` root. Observable: `SELECT COUNT(Id) FROM LedgerEntry__c WHERE Cycle__c = null` returns 0.
@@ -117,6 +155,13 @@ The two passes together define EOS-5 as the **financial-truth-loop closure** tha
 - **§2.B6 Pricing model locked + reflected in row writes** — Steward selects flat-per-turn (current) vs token-volume-based pricing for `llm.*` events. Resolves §13 D15. Whichever is chosen, the Plutus debit-writer implements it consistently across both clusters AND across all agents (`thoth`, `athena`, etc.).
 - **§2.B7 Every transaction in the system is recorded — no silent events.** Audit: identify N user actions across the six surfaces (sign-in, sign-out, payment, refund, llm.turn, memory.search, cluster.spawn, cluster.terminate, mcp.tool.call, feedback.submit, admin.response, etc.) and confirm each writes ≥1 `LedgerEntry__c` row. **List of action-types-to-ledger-mapping is itself a §10 work product.**
 - **§2.B8 The book balances at every consistent rollup point.** Observable: `SELECT SUM(CreditAmount__c), SUM(DebitAmount__c), SUM(TitheAmount__c) FROM LedgerEntry__c GROUP BY Identity__c` produces per-Identity balances that match the user's displayed balance + outstanding obligations on every surface. Cross-cluster aggregation per Identity is consistent.
+
+### Block B-ALL — Every-SObject data-integrity bar (added 2026-06-10 per canonical Half A)
+
+- **§2.B-ALL.1 Per-SObject attribution audit.** For every custom SObject in production (`Feedback__c`, `Cluster__c`, `ApplicationProfile__c`, `Identity__c`, `Cycle__c` once shipped, `Memory__c`, `ApiLog__c`, `Logger__c`, `Conversation__c`, `Messages__c`, every Portal/Process/Chronos object, etc.), define the minimum attribution columns each row MUST carry to be managable/monitorable/optimizable. At minimum: created-by, created-at, modified-by, modified-at — but for most rows additional context FKs (Identity, ApplicationProfile, Cluster, Cycle, RequestId, AppSource) are required. The audit produces a per-SObject attribution-completeness table; rows below the bar are bugs.
+- **§2.B-ALL.2 Manageable.** Every SObject has at least one admin/operations affordance — a UI screen, a SOQL view, or a CLI tool — that a Steward / admin / dust-dancer-of-their-grid can use to inspect, edit (where allowed by PoLP), or remove rows. No "ghost data" of unknown provenance (see EOS-3 §13 §13 prior data-audit observations about Logger__c noise).
+- **§2.B-ALL.3 Monitorable.** Every SObject has observability instrumentation: row-count growth tracked in a dashboard, anomalous-row-creation triggers alerts, the cross-SObject dependency graph is queryable. Mnemosyne / Plutus / CloudWatch carry the load. Bad-row detection is automated.
+- **§2.B-ALL.4 Optimizable.** Aggregations across SObjects support cost-reduction and quality-improvement analytics: per-cluster cost rollup, per-surface margin, per-cause tithe efficacy, per-cycle outcome score, per-Identity engagement, per-agent productivity. Bonus: the optimization signals are routed back into the EOS-1 recursive loop so the next AI iteration sees them.
 
 ### Block C — Cross-cutting
 

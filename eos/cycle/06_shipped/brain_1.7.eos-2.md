@@ -1,6 +1,14 @@
 # Says what it does, does what it says — claim 1: athena-717 reachability
 
 > File: `brain_1.7.eos-2.md`
+>
+> ---
+>
+> **Canonical Steward attestation statement for EOS-2 (added 2026-06-10 as annotation; the body of this shipped doc is immutable history):**
+>
+> *"I attest the software can create the necessary resources in order for it to scale. I attest the compute resources can be destroyed without losing data integrity of the system."*
+>
+> Two-part attestation. The shipped closure (§13) demonstrates the FIRST half (athena-717 cluster spawn from inside the managed package, ending with a `Cluster__c.Status__c='Live'` and ≥1 `llm.turn` LedgerEntry on the spawned cluster). The SECOND half (destroy without data integrity loss) was not exercised in this shipped cycle and remains open as a `D19` gap in EOS-3 §13 to be addressed in a future EOS or in EOS-3+EOS-4 closeout. Added per the Steward's five-statement framing 2026-06-10; the immutable closure record below is unchanged.
 
 | | |
 |---|---|

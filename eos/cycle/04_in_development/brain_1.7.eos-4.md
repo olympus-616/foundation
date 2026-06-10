@@ -45,6 +45,17 @@
 
 ### §1.1 `brain/1.7.x.x` IS the stable production environment (the FOREVER intent — Steward 2026-06-10)
 
+**Canonical Steward attestation statement for EOS-4 (locked 2026-06-10):**
+
+> *"I attest the entire application can be deployed to production by the merging of code into the main repository branches."*
+
+**Decomposed:**
+- **(a) "Entire application"** — every part of the platform, not a subset of attested surfaces.
+- **(b) "Deployed to production by the merging of code"** — the merge IS the deploy. No separate "promote" gesture, no out-of-band release ceremony.
+- **(c) "Into the main repository branches"** — plural across all repos. The atomic-cross-repo property of `brain/1.7.x.x` across olympus-616 + olympus-grid + iris + cosmos-logos repos + every other constituent is the load-bearing piece.
+
+**Original Steward verbatim (preserved as the FOREVER-intent narrative):**
+
 > As **the Steward — and eventually any dust dancer running their own grid** I want **the branch `brain/1.7.x.x` to BE the stable production environment — not a deployment artifact, not a build input, not a thing that gets shipped to prod, but the production environment itself, by name — so that **the production system has exactly one address (`brain/1.7.x.x` HEAD across every constituent repo + the parent submodule pointer), exactly one knob to turn (the merge), and exactly one rollback gesture (`git revert`).**
 
 **Steward verbatim 2026-06-10 (two passes):**
