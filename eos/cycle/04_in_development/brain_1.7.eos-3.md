@@ -332,6 +332,17 @@ sf data query --target-org dev_enterprise -q "
 | **EOS-3** §2.3 | omens surface — sign into node, join realm, exercise workload, feedback round-trip | Sign-in + cluster-picker phase against prod ✅. Play-cyclops + feedback-submit still in flight. The from-void aspect (does it work from brain HEAD source) is implied — omens iPhone was deployed from the same `omens/tools/ios-deploy.sh` script at brain HEAD that ran for scratch attestation. |
 | **EOS-4** §1.1 (brain IS the stable production environment) | `brain/1.7.x.x` is the stable production environment | omens iPhone code at brain HEAD reads the prod node's Cluster__c list correctly + handles the live-refresh of cluster state correctly. This is the omens client demonstrating that brain-HEAD source talks correctly to brain-HEAD production state. |
 
+**Steward formal assertion 2026-06-10 (verbatim):** *"i would assert that omens passes eos-1, eos-2, eos-3, and eos-4."* This is the first surface formally asserted by the Steward to pass all four cycles' invariants. The evidence chain underpinning the assertion:
+
+| Cycle | Pass-criterion evidence for omens |
+|---|---|
+| **EOS-1** | Consumer feedback loop on `guardians` AppKey alive in production: FB-00046 + FB-00047 in `og_node_beta_1__Feedback__c` with attached `.jsonl` session logs + cross-surface admin-reply round-trip via iris portal (FB-00007 architecture from EOS-1 closeout re-attested at production scale). |
+| **EOS-2** | Athena-717 reachability: omens iPhone reached production `api-int` (Pantheon `git-2fec78e6` on `olympus-int` ECS) via cosmos-logos handshake → Ares → Hermes → Athena. Cluster picker rendered the live alpha-org Cluster__c list; Refresh correctly re-pulled when `eos-4` flipped to Live; cluster-switch mid-session exercised (FB-00046 on api-int → FB-00047 on eos-4). |
+| **EOS-3** | §2.3 omens — full §1.2 prod-vs-scratch + cluster-chooser + workload (cyclops level, beat Polyphemos) + feedback submit + receipt at base — exercised against BOTH the EOS-3 scratch (`innovation-app-8526`: FB-00020 + FB-00038) AND production alpha-org (`og_node_beta_1`: FB-00046 + FB-00047). The omens reference implementation of the §1.2 flow is now demonstrated against both node types. |
+| **EOS-4** | brain-IS-production for omens: omens iPhone source code at `brain/1.7.x.x` HEAD (`omens/4.6.2-stable (official)` on iPhone16,2, deployed via `omens/tools/ios-deploy.sh` at brain HEAD) talks correctly to brain-HEAD production state (`olympus-int` ECS at `git-2fec78e6`, alpha-org `og_node_beta_1` installed at the brain-HEAD-derived managed-package version). The deploy-by-merge chain delivered an omens-iPhone-capable production stack. |
+
+This four-cycle pass for omens is the strongest single-surface validation the platform has produced to date. **It does NOT close EOS-3 or EOS-4** — both cycles still require additional surfaces (gpt, ts-web, ts-ios, ts-offgrid for EOS-3 §2.4–§2.7; the durability + canary work for EOS-4 §2.7/§2.12/§2.13) — but it does establish that **at least one surface fully satisfies the EOS-1+2+3+4 conjunction in production**, which is the EOS-4 §1.1 forever-intent claim instantiated.
+
 **Plutus ledger evaluation 2026-06-10 (the architectural-truth-loop test):** the 2026-06-10 omens validation produced 84 `LedgerEntry__c` rows in production `og_node_beta_1__LedgerEntry__c`. Detailed breakdown:
 
 | Property | Status | Evidence |

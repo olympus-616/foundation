@@ -270,6 +270,8 @@ The brain-IS-production claim is therefore in flight across a substantially broa
 | §2.12 Rollback by `git revert` | ❌ not yet | No revert exercised. |
 | §2.13 Future-merge by-construction propagation | ❌ not yet | Awaits a second EOS-4-era merge to demonstrate. |
 
+**Steward formal assertion 2026-06-10 (verbatim):** *"i would assert that omens passes eos-1, eos-2, eos-3, and eos-4."* **omens is the first surface formally asserted by the Steward to pass all four cycles simultaneously.** This is the first instantiation of the EOS-4 §1.1 brain-IS-production claim on a real consumer surface end-to-end. Full evidence chain in EOS-3 §13. **EOS-4 does NOT close on this single-surface assertion** — EOS-4 still requires §2.4 (CDN reconcile) + §2.7 (`og_beta_2` canary parity) + §2.9 (gpt) + §2.11 (Invariant D) + §2.12 + §2.13 — but the omens four-cycle pass demonstrates that the EOS-4 invariant is **achievable in principle** and is now achieved for one surface.
+
 **Anchor evidence — surfaces attesting EOS-1+2+3+4 against production as of 2026-06-10:**
 
 | Surface | Evidence | Cross-ref |
