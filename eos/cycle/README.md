@@ -166,19 +166,30 @@ chore(eos): move {filename} from {source-stage} to {target-stage}
 
 By a small-N EOS cycle, we'll have a Lightning Web Component for batch-promoting feedback into a draft cycle doc (placeholder TBD; see relevant EOS cycle when scheduled).
 
-## Canonical Steward attestation statements (locked 2026-06-10)
+## Canonical Steward attestation statements — the EOS-1 through EOS-12 family
 
-Each EOS cycle is anchored by a single one-or-two-sentence attestation statement that captures the cycle's truth-claim sharply. These are authoritative:
+> **Master backlog: [`GOALS.md`](GOALS.md)** — the kanban canon of all twelve attested goals + twelve proposed candidates + launch-critical ranking, witnessed by Greg Cook (CloudPremise LLC), go-live target 2026-07-17.
 
-| Cycle | Canonical statement |
-|---|---|
-| **EOS-1** | *"I attest the software creates a recursive loop of AI-generated software that is visible to the AI that built it."* |
-| **EOS-2** | *"I attest the software can create the necessary resources in order for it to scale. I attest the compute resources can be destroyed without losing data integrity of the system."* |
-| **EOS-3** | *"I attest the entire application can be constructed by accessing the GitHub repositories under correctly-configured principle-of-least-privilege access controls, and following the instructions therein."* |
-| **EOS-4** | *"I attest the entire application can be deployed to production by the merging of code into the main repository branches."* |
-| **EOS-5** | *"I attest the entire application has data integrity for each database record that is created, so that we can manage, monitor, and optimize the work that was created. I further attest the system properly accounts for an algorithmic royalty disbursement system, of which the first royalty to go into production is a 7% tithe tied to the reduction of human suffering."* |
+Each EOS cycle is anchored by a single one-or-two-sentence attestation statement. These are authoritative:
 
-Together these five attestations describe a self-building, self-deploying, self-reproducing, self-managing, self-monetizing AI platform — the olympus-grid claim shape.
+| Cycle | Phase | Canonical attestation |
+|---|---|---|
+| **EOS-1** | Foundation | *"I attest the software creates a recursive loop of AI-generated software that is visible to the AI that built it."* |
+| **EOS-2** | Foundation | *"I attest the software can create the necessary resources in order for it to scale. I attest the compute resources can be destroyed without losing data integrity of the system."* |
+| **EOS-3** | Foundation | *"I attest the entire application can be constructed by accessing public GitHub repositories and following the instructions therein."* |
+| **EOS-4** | Foundation | *"I attest the entire application can be deployed to production by the merging of code into the main repository branches."* |
+| **EOS-5** | Integrity | *"I attest the entire application has data integrity for each database record that is created, so that we can manage, monitor, and optimize the work that was created. I further attest the system properly accounts for an algorithmic royalty disbursement system, of which the first royalty to go into production is a 7% tithe tied to the reduction of human suffering."* |
+| **EOS-6** | Resilience | *"I attest the system can withstand full destruction of all resources except for the Olympus-Grid alpha node, and maintain data integrity across future deployments based upon the immutability of the Olympus-Grid alpha node."* |
+| **EOS-7** | Authority | *"I attest the system is designed with the principle of least privilege, and that no Olympus-Grid resources are available unless specifically granted by a super-user admin of Olympus-Grid as defined in the Identity__c table."* |
+| **EOS-8** | Reach | *"I attest the system is globally accessible by all networks accessible by the Olympus-Grid alpha node, currently hosted on salesforce.com."* |
+| **EOS-9** | Reach | *"I attest the system can scale workloads globally using horizontally scaled microservice clusters that can be deployed via Fargate across any AWS region, based upon the context, privileges, and authority of the provisioning user."* |
+| **EOS-10** | Sovereignty | *"I attest that the system does not contain any secrets committed to the repositories; that all production keys are injected into the system at start-up; ..."* (full statement in [`00_backlog/brain_1.7.eos-10.md`](00_backlog/brain_1.7.eos-10.md)) |
+| **EOS-11** | Sovereignty | *"I attest that the system steward has no access to customer data within the node or the cluster without customer permission..."* (full statement in [`00_backlog/brain_1.7.eos-11.md`](00_backlog/brain_1.7.eos-11.md)) |
+| **EOS-12** | Money | *"I attest that no money moves throughout the network without going through trusted payment providers, for which Stripe and Apple Pay are the first payment providers."* |
+
+Together these twelve attestations describe a self-building, self-deploying, self-reproducing, self-managing, self-monetizing, self-defending, globally-reachable, sovereign AI platform — the olympus-grid claim shape.
+
+**Plus twelve proposed candidates (CAND-A through CAND-L)** capturing the hardening + table-stakes + closure-loop attestations needed before go-live. Launch-critical four (load-bearing for 2026-07-17): **CAND-A** (rollback) · **CAND-E** (tenant isolation) · **CAND-G** (royalty disbursement) · **CAND-H** (bounded recursion). All listed in [`GOALS.md`](GOALS.md).
 
 ## Attestation scope is dimensional — cross-repo × single-EOS vs single-repo × multi-EOS
 
@@ -207,11 +218,48 @@ The result: each EOS cycle leaves exactly ONE squash commit on `brain/1.7.x.x` p
 ## Inventory
 
 - [`TEMPLATE.md`](TEMPLATE.md) — empty scaffold; copy when starting a new cycle.
-- [`06_shipped/brain_1.7.eos-1.md`](06_shipped/brain_1.7.eos-1.md) — **SHIPPED** (2026-05-31) · portal lifecycle + cycle tracking infrastructure · the consumer feedback loop on turtleshell + guardians; the baseline of stable application across all repos.
-- [`06_shipped/brain_1.7.eos-2.md`](06_shipped/brain_1.7.eos-2.md) — **SHIPPED** (parent PR #166) · *Says what it does, does what it says — claim 1: athena-717 reachability* · Salesforce admin spawns an AWS cluster and talks to it end-to-end from inside the managed package, zero out-of-band touch.
-- [`04_in_development/brain_1.7.eos-3.md`](04_in_development/brain_1.7.eos-3.md) — **IN DEVELOPMENT** · *Void → every-surface manifestation* · §1.1 forever-intent is the platform reproducible from nothing with zero errors / zero warnings; the EOS-3 slice is the six-surface feedback-roundtrip claim (omens / olympus-gpt / turtleshell-web / turtleshell-ios / turtleshell-offgrid / iris portal). As of 2026-06-10 only omens is fully validated; gpt + iris portal + turtleshell fleet are in flight (turtleshell-iris is explicitly deferred to a future cycle per Steward 2026-06-10).
-- [`04_in_development/brain_1.7.eos-4.md`](04_in_development/brain_1.7.eos-4.md) — **IN DEVELOPMENT** (moved from `01_planning/` 2026-06-10, **running in parallel with EOS-3** per Steward direction) · *`brain/1.7.x.x` IS the stable production environment* · the act of squash-merging to `brain/1.7.x.x` IS the production deployment, across both the Pantheon-side chain (CDK → `olympus-int`) AND the SF-side chain (managed-package build → install on `og_beta_1` + `og_beta_2`). EOS-4 closes when brain = production AND EOS-1/2/3's invariants hold against prod for the three EOS-4-in-scope surfaces (olympus-grid + iris portal + olympus-gpt). turtleshell-web/ios/offgrid + turtleshell-iris + omens-iOS App Store path are explicitly out of EOS-4 scope.
-- [`01_planning/brain_1.7.eos-5.md`](01_planning/brain_1.7.eos-5.md) — **PLANNING** · *Revenue path for turtleshell.ai tokens — every surface, Stripe + Apple, autonomous* · After EOS-4 validates to production, EOS-5 closes the financial truth-loop: every consumer surface exposes a complete autonomous revenue path (Stripe for web/desktop, Apple StoreKit/IAP for iOS) wired to the single turtleshell.ai-token economy with cosmic-7 tithe attribution. "Without my help" — the Steward exits the cash loop. Cannot enter `04_in_development/` until EOS-4 reaches `06_shipped/` (Steward direction 2026-06-10 — sequential, not parallel like EOS-3+EOS-4).
+- [`GOALS.md`](GOALS.md) — master kanban canon: all twelve attested goals + twelve proposed candidates + launch-critical ranking.
+
+### `06_shipped/` — immutable closed cycles
+
+- [`06_shipped/brain_1.7.eos-1.md`](06_shipped/brain_1.7.eos-1.md) — **SHIPPED** (2026-05-31) · portal lifecycle + cycle tracking infrastructure · the consumer feedback loop on turtleshell + guardians; the baseline of stable application across all repos. Canonical statement: *"recursive loop of AI-generated software that is visible to the AI that built it."*
+- [`06_shipped/brain_1.7.eos-2.md`](06_shipped/brain_1.7.eos-2.md) — **SHIPPED** (parent PR #166) · *Says what it does, does what it says — claim 1: athena-717 reachability* · Salesforce admin spawns an AWS cluster and talks to it end-to-end. **Both halves attested 2026-06-10 via D19 closure (destroy-with-data-integrity).**
+
+### `04_in_development/` — in flight
+
+- [`04_in_development/brain_1.7.eos-3.md`](04_in_development/brain_1.7.eos-3.md) — **IN DEVELOPMENT** · *Void → every-surface manifestation* · 5 surfaces formally pass four cycles (omens + turtleshell-web + turtleshell-ios + olympus-gpt + iris-portal-via-iris-turtleshell-popup). Ships to `06_shipped/` on successful production validation + fresh dev-env creation. Canonical statement: *"entire application can be constructed by accessing public GitHub repositories and following the instructions therein."*
+- [`04_in_development/brain_1.7.eos-4.md`](04_in_development/brain_1.7.eos-4.md) — **IN DEVELOPMENT** (running in parallel with EOS-3 per Steward 2026-06-10 mutex relaxation) · *`brain/1.7.x.x` IS the stable production environment* · merge-is-deploy across both Pantheon-side (CDK → `olympus-int`) AND SF-side (managed-package → `og_node_beta_1` + `og_node_beta_2`). Ships to `06_shipped/` on the same closure as EOS-3.
+
+### `01_planning/` — Steward authoring
+
+- [`01_planning/brain_1.7.eos-5.md`](01_planning/brain_1.7.eos-5.md) — **PLANNING** · *Per-record data integrity + algorithmic royalty disbursement* · two co-equal halves: every-SObject data integrity (manage/monitor/optimize) + generalized algorithmic royalty engine (tithe is first configured row). Cannot enter `04_in_development/` until EOS-4 reaches `06_shipped/`.
+
+### `00_backlog/` — attested-but-roadmap cycles + proposed candidates
+
+**Attested roadmap (cards for EOS-6 through EOS-12):**
+
+- [`00_backlog/brain_1.7.eos-6.md`](00_backlog/brain_1.7.eos-6.md) — Resilience · Survive total destruction except the alpha node
+- [`00_backlog/brain_1.7.eos-7.md`](00_backlog/brain_1.7.eos-7.md) — Authority · Least privilege; access granted only via Identity__c
+- [`00_backlog/brain_1.7.eos-8.md`](00_backlog/brain_1.7.eos-8.md) — Reach · Global accessibility via the alpha node's networks
+- [`00_backlog/brain_1.7.eos-9.md`](00_backlog/brain_1.7.eos-9.md) — Reach · Global horizontal scale via Fargate
+- [`00_backlog/brain_1.7.eos-10.md`](00_backlog/brain_1.7.eos-10.md) — Sovereignty · No committed secrets; keys injected at start-up
+- [`00_backlog/brain_1.7.eos-11.md`](00_backlog/brain_1.7.eos-11.md) — Sovereignty · Steward not a data handler without customer-provisioned access
+- [`00_backlog/brain_1.7.eos-12.md`](00_backlog/brain_1.7.eos-12.md) — Money · Money moves only through trusted payment providers (Stripe + Apple Pay first)
+
+**Proposed candidates (cards for CAND-A through CAND-L — pending Greg's accept/reject + EOS-number assignment). Launch-critical four marked ⚡:**
+
+- [`00_backlog/cand-a.md`](00_backlog/cand-a.md) ⚡ — Resilience · Roll back a faulty production deploy without data loss
+- [`00_backlog/cand-b.md`](00_backlog/cand-b.md) — Resilience · System is observed; degradation surfaces before customer impact
+- [`00_backlog/cand-c.md`](00_backlog/cand-c.md) — Resilience · Partial failure degrades cleanly, no cascade
+- [`00_backlog/cand-d.md`](00_backlog/cand-d.md) — Resilience · Customer data is durable and recoverable
+- [`00_backlog/cand-e.md`](00_backlog/cand-e.md) ⚡ — Sovereignty · Tenant isolation across nodes and clusters
+- [`00_backlog/cand-f.md`](00_backlog/cand-f.md) — Authority · Identity is verified, not merely authorized
+- [`00_backlog/cand-g.md`](00_backlog/cand-g.md) ⚡ — Money · The accounted royalty is actually disbursed to the cause (identity-critical)
+- [`00_backlog/cand-h.md`](00_backlog/cand-h.md) ⚡ — Foundation · The recursive loop is bounded and governed
+- [`00_backlog/cand-i.md`](00_backlog/cand-i.md) — Money / Compliance · System stays out of PCI scope
+- [`00_backlog/cand-j.md`](00_backlog/cand-j.md) — Compliance · Terms, privacy, and customer agreement accepted at signup
+- [`00_backlog/cand-k.md`](00_backlog/cand-k.md) — Compliance · SOC2 evidence trail exists and the auditor engagement is real
+- [`00_backlog/cand-l.md`](00_backlog/cand-l.md) — Foundation / Compliance · Production state is reproducible and version-provenanced
 
 ## Note on the column rename and direct-to-execution path (single-Steward mode)
 

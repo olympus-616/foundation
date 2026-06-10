@@ -35,16 +35,16 @@
 
 ### §1.1 The reproducible platform from the void (the FOREVER intent)
 
-**Canonical Steward attestation statement for EOS-3 (locked 2026-06-10):**
+**Canonical Steward attestation statement for EOS-3 (per the master GOALS.md kanban canon 2026-06-10):**
 
-> *"I attest the entire application can be constructed by accessing the GitHub repositories under correctly-configured principle-of-least-privilege access controls, and following the instructions therein."*
-
-(Original phrasing was "public GitHub repositories"; Steward sharpening 2026-06-10: *"i don't mean it has to be public. it has to be principle of least privilege as to who is suppossed to have access to parts of the system."*)
+> *"I attest the entire application can be constructed by accessing public GitHub repositories and following the instructions therein."*
 
 **Decomposed:**
 - **(a) "Entire application"** — every part of the platform, not just one surface or one slice.
-- **(b) "Accessing GitHub repositories under correctly-configured PoLP"** — each persona/role gets exactly the access they need, no more, no less. The access matrix itself is a verifiable property.
+- **(b) "Accessing public GitHub repositories"** — the official kanban attestation. **Operational interpretation 2026-06-10 (Steward sharpening):** *"i don't mean it has to be public. it has to be principle of least privilege as to who is suppossed to have access to parts of the system."* — i.e., the repos do NOT need to be literally world-public; correctly-configured principle-of-least-privilege access controls satisfy the attestation. The PoLP qualification is the implementation; the kanban attestation is the canonical truth-claim shape.
 - **(c) "Following the instructions therein"** — anyone with the appropriate access can reproduce from what's in the repos alone, with no out-of-band team-knowledge dependency for their access scope.
+
+**Done-when (per GOALS.md):** *"The full system is built from raw public source to a working dev environment by following the documented instructions, without Greg's intervention; Greg witnesses."*
 
 **Original Steward verbatim (pre-canonical, preserved as the void-→-manifestation slice):**
 
