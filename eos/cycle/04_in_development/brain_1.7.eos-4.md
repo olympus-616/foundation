@@ -219,7 +219,22 @@ The unifying primitive across EOS-4 inputs: **the merge IS the operative gesture
 - *(rolling)*
 
 ### What deferred (and why)
-- *(rolling)*
+
+**EOS-5 inputs surfaced 2026-06-10 from Plutus ledger evaluation:** the 2026-06-10 omens validation produced 84 LedgerEntry rows in prod alpha-org. Architectural many-to-one (N clusters → 1 Node) WORKS — 2 clusters (`int` 78 rows + `eos-4` 6 rows) both writing to `og_node_beta_1__LedgerEntry__c` cleanly. **But six accounting gaps were surfaced that block the EOS-5 autonomous-revenue claim:**
+
+| Steward observation 2026-06-10 | Architectural truth | Accounting truth |
+|---|---|---|
+| *"we could spawn an unlimited number of clusters and all have them reporting back to the node"* | ✅ proven — schema + write-path supports it cleanly | ⚠️ partial — observability events land; financial fields don't populate |
+
+Six deviations logged in EOS-3 §13 D10–D15 captured as EOS-5 inputs:
+- **D10:** No `Cycle__c` SObject in alpha-org → karmic-cycle root missing
+- **D11:** `TitheAmount__c` + `Cause__c` null on 100% of rows → cosmic-7 tithe not computed
+- **D12:** `AppSource__c` null on 100% of rows → per-surface revenue unattributable
+- **D13:** `RequestId__c` null on 100% of rows → request-to-ledger trace broken
+- **D14:** No `Identity__c` FK on LedgerEntry__c → single-token-economy aggregation impossible by direct query
+- **D15:** `llm.turn` flat 1-shell debit → only fits prepaid-per-turn pricing
+
+All six are inputs to EOS-5 §4 (revenue path productionization).
 
 ### What surprised
 - *(rolling)*
