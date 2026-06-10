@@ -270,12 +270,13 @@ The brain-IS-production claim is therefore in flight across a substantially broa
 | §2.12 Rollback by `git revert` | ❌ not yet | No revert exercised. |
 | §2.13 Future-merge by-construction propagation | ❌ not yet | Awaits a second EOS-4-era merge to demonstrate. |
 
-**Steward formal assertions 2026-06-10 (TWO surfaces now formally pass all four cycles):**
+**Steward formal assertions 2026-06-10 (THREE surfaces now formally pass all four cycles):**
 
-1. *"i would assert that omens passes eos-1, eos-2, eos-3, and eos-4."* — omens is the first surface to pass.
-2. *"turtleshell-web is validated for eos-1,2,3,4"* — turtleshell-web is the second surface to pass (post the D16 turtleshell-agent fix landing at 15:49 UTC). Cross-cluster user-sovereignty now operational on ts-web: pick eos-4 → chat lands on `olympus-eos-4` ECS → `llm.turn × athena × eos-4` in ledger (LE-103480 first ever); pick api-int → chat lands on `olympus-int` ECS → `llm.turn × athena × int` in ledger (LE-103486).
+1. *"i would assert that omens passes eos-1, eos-2, eos-3, and eos-4."* — omens iPhone, first surface to pass.
+2. *"turtleshell-web is validated for eos-1,2,3,4"* — turtleshell-web, second surface to pass (post the D16 turtleshell-agent fix at 15:49 UTC).
+3. *"if so turtleshell-ios is verified for eos-1,2,3,4"* (conditional on backend check, which passed) — turtleshell-ios, **third surface to pass, at ~16:00 UTC**. Native iOS client (Swift, iPhone iOS 26.5, ClientVersion `turtleshell-ios/1.7.4`) demonstrating three Athena chats across two clusters with perfect attribution (LE-103504/09/14) + FB-00051 round-trip + dual-cluster CloudWatch confirmation. **No D16-equivalent fix needed on iOS — cluster routing worked correctly out of the box.**
 
-Full evidence chains in EOS-3 §13 (both omens and turtleshell-web assertion blocks). **EOS-4 does NOT close on these two assertions alone** — EOS-4 still requires §2.4 (CDN reconcile) + §2.7 (`og_beta_2` canary parity) + §2.9 olympus-gpt + §2.11 (Invariant D) + §2.12 + §2.13 — but two independent surfaces fully attesting the EOS-4 §1.1 brain-IS-production claim **raises closure-feasibility from "achievable in principle for one surface" to "achievable in production for the kinds of surfaces EOS-4 actually scopes for."**
+Full evidence chains in EOS-3 §13 (all three assertion blocks). **EOS-4 does NOT close on these three assertions alone** — EOS-4 still requires §2.4 (CDN reconcile) + §2.7 (`og_beta_2` canary parity) + §2.9 olympus-gpt + §2.11 (Invariant D) + §2.12 + §2.13 — but **three independent surfaces across THREE distinct technology stacks (Godot/C#, React/TS, Swift/iOS native) fully attesting the EOS-4 §1.1 brain-IS-production claim** raises closure-feasibility from "achievable in principle" to "demonstrated as a portable property of the platform, not a property of any one client codebase."
 
 **D16 (turtleshell-web cluster selector cosmetic for chat) — RESOLVED 2026-06-10 15:49 UTC** by the turtleshell agent within ~14 minutes of Steward assignment. Five-source ground-truth confirmation: browser DevTools + CloudWatch on both clusters + Plutus ledger + FB-00050 verbal confirm + ECS state at brain HEAD. See EOS-3 §13 D16 row for the full deviation+resolution trail. **First cross-agent deviation cycle closed within an EOS session.**
 

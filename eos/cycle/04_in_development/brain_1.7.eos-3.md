@@ -278,12 +278,12 @@ sf data query --target-org dev_enterprise -q "
 | §2.3 omens (AppKey `guardians`) | ✅ **FULLY validated against PRODUCTION end-to-end** with cross-surface admin-reply round-trip + multi-submission-per-session + cross-cluster switch (Steward 2026-06-10 15:06–15:13 UTC) | **Against production (full-architecture validation):** Steward signed into omens iPhone as `homer@cloudpremise.com / PRODUCTION` → cluster picker rendered `eos-4` Provisioning + `api-int` Live → CDK provision finished → Refresh re-pulled list (`eos-4` flipped to Live, endpoint `https://api-eos-4.turtleshell.ai`) → played cyclops → submitted feedback against `api-int` → switched clusters → submitted again against `eos-4`. **FB-00046** 15:06:32 UTC · "Eos-4 api-int run" · session log `session_20260610_145854.jsonl` (1.04 MB) · AdminResponse "We received your feedback thanks!" written from iris portal at 15:07:52 UTC (**80s**) → Status: Responded. **FB-00047** 15:12:27 UTC · "Eos-4 cluster test" · same session-start filename, log grew to 2.35 MB · Status: New (no reply). **Three architectural findings simultaneously:** (a) The FB-00007 cross-surface admin-reply architecture (EOS-1 closeout memory) re-attested in prod. (b) Multi-feedback-per-session works — omens uploads the FULL session-log snapshot on each submit, not a delta. (c) Cluster switch mid-session works — `Cluster__c` rows are per-Node, `Feedback__c` is per-Identity at the Node, so feedback lands at `og_node_beta_1` regardless of which cluster ran the workload. Client `omens/4.6.2-stable (official)` on iPhone16,2. Against scratch (prior evidence): FB-00020 + FB-00038 in `innovation-app-8526`. |
 | §2.4 olympus-gpt | ❌ **NOT** validated (Steward correction 2026-06-10) | **FB-00017** "cluster not working" / **FB-00018** "it didn't work" / **FB-00019** "test" — rows + `.jsonl` attachments do exist in the new scratch, but the gpt surface lacks the prod-vs-scratch login chooser + the cluster chooser. The feedback landed because the Steward was already signed into `innovation-app-8526` under the `olympus-gpt` ApplicationProfile, but the §2.4 acceptance criterion ("sign into the new scratch org, **join the realm**, issue commands against the realm's Pantheon fleet") is NOT satisfied — gpt cannot currently choose which scratch + which realm to talk to. See §1.1-deviation D8. |
 | §2.5 turtleshell-web | ✅ validated **against PRODUCTION** with TWO independent feedback round-trips + onboarding + Athena chat + **in-surface admin reply**. Stronger than the EOS-3 spec — validated against alpha-org `og_node_beta_1`, not against the `innovation-app-8526` scratch. | **FB-00045** in `og_node_beta_1__Feedback__c` 2026-06-10 10:48:13 UTC · body "looks like it worked" · `session_20260610_104709.jsonl` (5.29 KB) · cluster `api-int` chosen at `turtleshell.ai/app/chat` — D8 chooser-gap resolved for ts-web. **FB-00048** 2026-06-10 15:32:28 UTC · body "eos-4 testing on default cluster" · `session_20260610_153120.jsonl` (4.59 KB) · ClientVersion `turtleshell-web/1.7.4` · **AdminResponse "i got it and rsponded from within turtleshell-web itself" written from within ts-web itself (not iris portal)** → Status: Responded. **This second submission also validated:** (a) onboarding flow end-to-end on production turtleshell-web; (b) Athena LLM conversation on the default cluster (`api-int`) — first `athena` agent activity in production ledger (`llm.turn × athena × int` + token rows); (c) **turtleshell-web carries BOTH consumer AND admin sides of the FB-00007 architecture in ONE surface**, distinct from omens (consumer-only) and iris portal (admin-only). |
-| §2.6 turtleshell-ios | ❌ not yet validated | no Feedback__c row matching the surface discriminator + same chooser gap expected |
+| §2.6 turtleshell-ios | ✅ **FULLY validated against PRODUCTION** with three-cluster chat + correct per-cluster routing (Steward 2026-06-10 ~16:00 UTC) | **FB-00051** in `og_node_beta_1__Feedback__c` 2026-06-10 16:00:51 UTC · body "I just spoke to 3 different options check the backend" · ClientVersion `turtleshell-ios/1.7.4` · DeviceModel `iPhone · iOS 26.5 · turtleshell-ios` · session log `session_20260610_155841.jsonl` (2.53 KB). **Three Athena LLM turns 12 seconds before submit, perfect per-cluster attribution:** LE-103504 ("Testing default" → `athena × int` 15:59:20), LE-103509 ("Testing api-int" → `athena × int` 15:59:33), LE-103514 ("Testing Eos-4" → `athena × eos-4` 15:59:47). **CloudWatch confirmation on both clusters:** olympus-eos-4 received the eos-4 chat (requestId `f7bc21e9` → `bbc635c6`, 200 25ms); olympus-int received the api-int chat (requestId `74e4540c` → `a6d7f1f5`). **D16-equivalent routing works correctly on turtleshell-ios out of the box** — no fix needed (unlike ts-web which needed the D16 fix). D8 chooser-gap and D16 cluster-routing both resolved for ts-ios. |
 | §2.7 turtleshell-offgrid | ❌ not yet validated | no Feedback__c row matching the surface discriminator + same chooser gap expected |
 | §2.8 iris portal | ✅ validated in flight (Steward 2026-06-10) against PRODUCTION at `app.olympus-grid.com/admin/clusters` | (a) Signup flow completed successfully for a user under `homer@cloudpremise.com`. (b) Admin Clusters page lists `api-int` (CL-00004, Live, `git-fd03cbd2`, endpoint `api-int.turtleshell.ai`) — proves the EOS-2 cluster-visibility mechanism works in production iris admin UI. (c) "Spawn A Cluster" button exercised → CL-00005 `eos-4` (Pending) created against alpha-org `og_node_beta_1` with stack prefix `olympus-eos-4` + endpoint `api-eos-4.turtleshell.ai` + Pantheon image **`git-2fec78e6` (the new brain HEAD)**. Provisioning in flight via universal `zeus/scripts/cluster.sh provision` (Wizard-of-Oz pattern per memory `project_cluster_architecture_v1_2026_05_29.md`). (d) D8 chooser/visibility gap **resolved for iris portal** — cluster admin UI shows both clusters cleanly. Final feedback round-trip from iris portal pending. |
 | §2.9 Repeatability | gates on §2.4-§2.8 | — |
 
-**Tally as of 2026-06-10 (third update, post-iris-portal-prod-attestation): 5 of 9 criteria validated.** §2.5 turtleshell-web + §2.8 iris portal both ✅ via prod attestation. **Three surfaces now demonstrate full prod-vs-scratch login + cluster-choice flow end-to-end** — omens (against scratch, three-cycle re-attestation), turtleshell-web (against prod, four-cycle re-attestation), iris portal (against prod, four-cycle re-attestation). Closure-on-brain still requires §2.4 (olympus-gpt chooser flow + round-trip), §2.6 (turtleshell-ios), §2.7 (turtleshell-offgrid) + §2.9 repeatability check.
+**Tally as of 2026-06-10 (fourth update, post-turtleshell-ios-validation): 6 of 9 criteria validated.** §2.6 turtleshell-ios now ✅ via FB-00051 + perfect three-cluster ledger attribution (LE-103504/09/14: two `athena × int` + one `athena × eos-4`) + dual-cluster CloudWatch confirmation. **Three surfaces now formally pass all four cycles against PRODUCTION end-to-end** — omens iPhone + turtleshell-web (post D16 fix) + turtleshell-ios (no fix needed, correct out of the box). Closure-on-brain still requires §2.4 (olympus-gpt chooser flow + round-trip), §2.7 (turtleshell-offgrid) + §2.9 repeatability check.
 
 **Cross-cycle re-attestation (Steward direction 2026-06-10): the omens surface is now validated for EOS-1, EOS-2, AND EOS-3 simultaneously** via the same evidence (FB-00020 + FB-00038 in `innovation-app-8526` with attached session logs):
 
@@ -332,11 +332,24 @@ sf data query --target-org dev_enterprise -q "
 | **EOS-3** §2.3 | omens surface — sign into node, join realm, exercise workload, feedback round-trip | Sign-in + cluster-picker phase against prod ✅. Play-cyclops + feedback-submit still in flight. The from-void aspect (does it work from brain HEAD source) is implied — omens iPhone was deployed from the same `omens/tools/ios-deploy.sh` script at brain HEAD that ran for scratch attestation. |
 | **EOS-4** §1.1 (brain IS the stable production environment) | `brain/1.7.x.x` is the stable production environment | omens iPhone code at brain HEAD reads the prod node's Cluster__c list correctly + handles the live-refresh of cluster state correctly. This is the omens client demonstrating that brain-HEAD source talks correctly to brain-HEAD production state. |
 
-**Steward formal assertions 2026-06-10 — two surfaces now formally pass all four cycles' invariants:**
+**Steward formal assertions 2026-06-10 — THREE surfaces now formally pass all four cycles' invariants:**
 
-**(1) Verbatim:** *"i would assert that omens passes eos-1, eos-2, eos-3, and eos-4."* **omens is the first surface formally asserted by the Steward to pass all four cycles.**
+**(1) Verbatim:** *"i would assert that omens passes eos-1, eos-2, eos-3, and eos-4."* — omens iPhone, the first surface to pass.
 
-**(2) Verbatim:** *"turtleshell-web is validated for eos-1,2,3,4"* (asserted post the D16 turtleshell-agent fix). **turtleshell-web is the second surface to formally pass all four cycles.** Pass-evidence for turtleshell-web:
+**(2) Verbatim:** *"turtleshell-web is validated for eos-1,2,3,4"* (asserted post the D16 turtleshell-agent fix). turtleshell-web, the second surface to pass.
+
+**(3) Verbatim:** *"if so turtleshell-ios is verified for eos-1,2,3,4"* (asserted conditional on the backend check passing — which it did). **turtleshell-ios is the third surface to formally pass all four cycles**, on iPhone iOS 26.5, ClientVersion `turtleshell-ios/1.7.4`. Pass-evidence for turtleshell-ios:
+
+| Cycle | Pass-criterion evidence for turtleshell-ios |
+|---|---|
+| **EOS-1** | Consumer feedback loop alive in production: **FB-00051** ("I just spoke to 3 different options check the backend") in `og_node_beta_1__Feedback__c` 2026-06-10 16:00:51 UTC with attached `session_20260610_155841.jsonl` session log (2.53 KB). DeviceModel `iPhone · iOS 26.5 · turtleshell-ios` confirms native iOS client. |
+| **EOS-2** | Athena-717 reachability proven on BOTH production clusters in 12 seconds: `LE-103504 llm.turn × athena × int` (15:59:20 "Testing default") + `LE-103509 llm.turn × athena × int` (15:59:33 "Testing api-int") + `LE-103514 llm.turn × athena × eos-4` (15:59:47 "Testing Eos-4"). Full Ares → Hermes → Athena chain verifiable in CloudWatch on both clusters: `olympus-eos-4` Ares correlation `f7bc21e9 → bbc635c6` (200 25ms); `olympus-int` Ares correlation `74e4540c → a6d7f1f5`. |
+| **EOS-3** §2.6 | Full §1.2 flow against PRODUCTION: sign-in + cluster-chooser (no D16 fix needed — works correctly out of the box) + workload (three Athena chats across two clusters) + feedback round-trip to base. |
+| **EOS-4** §1.1 | brain-IS-production for turtleshell-ios: native iOS client (ClientVersion `turtleshell-ios/1.7.4` on iPhone iOS 26.5) reaches brain-HEAD production Pantheon (`olympus-int` ECS at `git-2fec78e6` AND `olympus-eos-4` ECS at `git-2fec78e6`) AND alpha-org `og_node_beta_1` writes attest. Cross-cluster user-sovereignty operational with correct attribution on every turn. |
+
+**THREE surfaces pass all four cycles** — the EOS-4 §1.1 brain-IS-production invariant is now demonstrated for three independent client surfaces, across THREE distinct technology stacks: Godot/C# (omens) + React/TS (turtleshell-web) + Swift/iOS native (turtleshell-ios). This is no longer "the platform works for one kind of client"; it's "the platform's deploy-by-merge claim holds across heterogeneous client stacks."
+
+**Steward formal assertion 2026-06-10 (#2 — turtleshell-web):** Pass-evidence for turtleshell-web:
 
 | Cycle | Pass-criterion evidence for turtleshell-web |
 |---|---|
@@ -376,11 +389,44 @@ This four-cycle pass for omens is the strongest single-surface validation the pl
 
 **Reading: the architectural claim ("spawn N clusters, all report to the Node") holds at the data-plumbing level — proven structurally and visually. The financial-truth-loop (tithe + Identity + AppSource + Cycle) has six specific gaps that all become load-bearing for EOS-5's autonomous-revenue claim. None of them undermine the EOS-3+EOS-4 closure; all of them are EOS-5 prerequisites.**
 
+**Backend chain discovery — the Grid Relay path proven in CloudWatch (2026-06-10):**
+
+The full routing chain from any consumer surface back to the SF Node, now visible in olympus-int Pantheon logs:
+
+```
+Consumer surface (omens / ts-web / ts-ios / iris portal / gpt)
+  ↓ POST /v1/athena/chat to api-{cluster}.turtleshell.ai
+  ↓ CloudFront → cluster-specific ALB → Pantheon ECS container
+  ↓
+Ares (3451): JWT-validates the shell, proxies to Hermes (3411)
+  ↓
+Hermes: routes the request
+  ↓
+Athena: processes LLM call
+  ↓
+Plutus (inside Pantheon): emits ledger event, batches
+  ↓ POST /v1/plutus/api/ingest (internal)
+  ↓
+Ares: POST /v1/grid/master/ledger from ::ffff:127.0.0.1 (Plutus → grid relay)
+  ↓ Ares proxies to grid (localhost:3411)
+  ↓
+Hermes: "Grid relay → POST https://app.olympus-grid.com/services/apexrest/og_node_beta_1/v1/ledger"
+  ↓ 201 Created in ~650ms
+  ↓
+Salesforce Apex REST endpoint (managed-package scoped to og_node_beta_1 namespace)
+  ↓ writes
+  ↓
+og_node_beta_1__LedgerEntry__c row lands at the SF Node
+```
+
+This closes a documentation gap from earlier in the session: the data architecture diagrams previously stopped at "Plutus writes to SF" without showing HOW. The Hermes Grid Relay is the answer — Pantheon → Hermes "/v1/grid/master/ledger" → Salesforce Apex REST → SObject write. **The relay is per-namespace** (`/og_node_beta_1/v1/ledger` vs `/og_node_beta_2/v1/ledger`), which is how the "many clusters → one Node" architecture is reified in code: Hermes routes to the Node namespace, not to the cluster. This is the load-bearing piece that makes the architectural claim true.
+
 **Cumulative significance — three surfaces now demonstrate four-cycle attestation against production:**
 
 | Surface | Production attestation completeness | Anchor evidence |
 |---|---|---|
 | **omens (iPhone)** | ✅ **complete four-cycle PLUS cross-surface admin-reply round-trip** | FB-00046 (cyclops play + feedback "Eos-4 api-int run" + 1.04 MB log + iris-portal admin reply "We received your feedback thanks!" 80s later — the FB-00007 architecture re-attested in prod) |
+| **turtleshell-ios** (Swift/native iOS) | ✅ **complete four-cycle with perfect three-cluster routing, no D16 fix needed** | FB-00051 ("I just spoke to 3 different options check the backend") + LE-103504/09/14 athena turns split across int + eos-4 with correct attribution + CloudWatch confirms both clusters' Ares→Hermes→Athena chains, ClientVersion `turtleshell-ios/1.7.4` on iPhone iOS 26.5 |
 | **turtleshell-web** | ✅ **complete four-cycle PLUS in-surface admin-reply round-trip (more complete than omens or iris portal individually)** | FB-00045 (initial round-trip) + FB-00048 (onboarding + Athena chat on default cluster `api-int` + body "eos-4 testing on default cluster" + cross-surface admin reply written from within ts-web itself "i got it and rsponded from within turtleshell-web itself" → Status Responded). First Athena agent activity in prod ledger. |
 | **iris portal** | ✅ substantive (signup + admin UI + cluster spawn + cross-surface admin-reply WRITE leg); originating feedback round-trip from iris portal itself TBD | iris signup + spawned CL-00005 `eos-4` cluster + wrote AdminResponse on FB-00046 |
 
