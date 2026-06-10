@@ -226,6 +226,8 @@ The unifying primitive across EOS-4 inputs: **the merge IS the operative gesture
 
 ### Verification evidence
 
+**Live brain HEAD Pantheon image (as of 2026-06-10 ~14:00 UTC):** `git-2fec78e6`. Confirmed via `zeus/scripts/cluster.sh provision` output during the `eos-4` cluster spawn (alpha-org `og_node_beta_1`, CL-00005). This is the NEW image that `post-merge-docker.yml` produced from the latest `brain/1.7.x.x` merge — proves §2.2 (post-merge Pantheon image build) ✅ validated.
+
 **Source production state (Steward verbatim 2026-06-10):** *"brain/1.7.x.x is deployed to production for olympus-grid, olympus-616, and turtleshell-web.... many other parts actually..."*
 
 The brain-IS-production claim is therefore in flight across a substantially broader surface area than the SF-side trio (olympus-grid + iris portal + olympus-gpt). EOS-4 §13 captures the parts the Steward has explicitly attested + the parts attested via SOQL evidence. Inclusive-by-default per §1.2 operational rule.
@@ -240,28 +242,35 @@ The brain-IS-production claim is therefore in flight across a substantially broa
 | Criterion | Status | Evidence |
 |---|---|---|
 | §2.1 Submodule pointer reconcile + parent brain bump | ✅ validated (Steward 2026-06-10) | Parent submodule bump landed; brain SHA = `a53453a` family per the olympus-grid squash. Full submodule-discipline snippet run TBD. |
-| §2.2 Post-merge Pantheon image build | 🟡 in flight | `post-merge-docker.yml` fired on parent merge; ECR image presence TBD this pass. |
-| §2.3 `zeus-deploy.yml` rolls `olympus-int` | 🟡 in flight | Rollout TBD this pass. |
+| §2.2 Post-merge Pantheon image build | ✅ validated (Steward 2026-06-10) | New brain HEAD image `git-2fec78e6` is in ECR — confirmed via `cluster.sh provision` output during the `eos-4` cluster spawn ("Pantheon image: git-2fec78e6"). |
+| §2.3 `zeus-deploy.yml` rolls `olympus-int` | ❌ **NOT YET** — gap surfaced 2026-06-10 | `api-int` (= `olympus-int`) ECS task definition is still at `git-fd03cbd2` (the 2026-05-31 EOS-1+EOS-2 closure SHA). Live brain HEAD image is `git-2fec78e6`. The `olympus-int` cluster has NOT been redeployed. Logged as EOS-3 §13 D9 (operational-pattern question: auto vs. manual cluster redeploy). **This gap blocks §2.8 unified brain=production assertion.** |
 | §2.4 CDN rollback reconcile | ❌ not yet | `olympus-int-cdn` `UPDATE_ROLLBACK_COMPLETE` still pending unstick. |
 | §2.5 Managed-package build on merge-to-brain | ✅ validated | `main-beta-package-build.yaml` produced the package version that PR #282 carries → installed downstream. |
-| §2.6 Install on `og_beta_1` | ✅ validated (Steward 2026-06-10) | `og_node_beta_1__Feedback__c.FB-00045` exists in alpha-org with attached `.jsonl` — proves the install is live AND functional. |
+| §2.6 Install on `og_beta_1` | ✅ validated (Steward 2026-06-10) | `og_node_beta_1__Feedback__c.FB-00045` exists in alpha-org with attached `.jsonl` — proves the install is live AND functional. Iris admin UI at `app.olympus-grid.com/admin/clusters` further proves the install is operationally exercised (cluster list + Spawn A Cluster works). |
 | §2.7 Install on `og_beta_2` (canary parity) | ❌ not yet | Zero rows in `og_node_beta_2__Feedback__c` last 2 days. Either canary install lag, or Steward only exercised `og_node_beta_1` so far. |
-| §2.8 Brain = production assertion across both chains | 🟡 partial | SF-side anchored by §2.6 evidence. Pantheon-side anchor pending §2.2/§2.3/§2.4. Both-chain unified assertion not yet attestable end-to-end. |
-| §2.9 Invariant B (EOS-1 holds) — iris portal + olympus-gpt + turtleshell-web + any in-scope surface | 🟡 partial | **turtleshell-web ✅** attested via FB-00045 (`AppKey='turtleshell'`, body "looks like it worked", session log `session_20260610_104709.jsonl` 5.29 KB) — moved from "bonus" to **first-class evidence** per Steward 2026-06-10 scope-inclusive correction. iris portal + olympus-gpt not yet attested against prod. |
-| §2.10 Invariant C (EOS-2 holds) — spawn via `og_beta_1` | 🟡 partial | The screenshot of `turtleshell.ai/app/chat` showing cluster selector at `api-int` with Athena responding through the Ares→Hermes→Athena chain IS evidence that EOS-2's reachability claim holds against `api-int` (the prod canonical cluster). A fresh test-realm spawn via `og_beta_1` iris admin UI not yet attempted; that would close §2.10 strictly. |
+| §2.8 Brain = production assertion across both chains | ❌ **NOT YET** | SF-side anchored ✅ by §2.6. Pantheon-side BROKEN — §2.3 gap means `olympus-int` runs `git-fd03cbd2`, not brain HEAD `git-2fec78e6`. The unified assertion `brain HEAD SHA == olympus-int ECS task image SHA` is FALSE today. Newly-spawned clusters (like the in-flight `eos-4`) ARE at brain HEAD, but `olympus-int` itself is not. **Brain-IS-production holds for newly-spawned cluster boundary, NOT for the live api-int cluster.** This is the gap EOS-4 §2.3 + D9 must close. |
+| §2.9 Invariant B (EOS-1 holds) — iris portal + olympus-gpt + turtleshell-web + any in-scope surface | 🟢 mostly ✅ | **iris portal ✅** — signup flow completed in production for `homer@cloudpremise.com` at `app.olympus-grid.com` (the consumer-loop precursor). **turtleshell-web ✅** — FB-00045 round-trip. **olympus-gpt** — not yet attested against prod. |
+| §2.10 Invariant C (EOS-2 holds) — spawn via `og_beta_1` | ✅ validated (Steward 2026-06-10) | **CL-00005 `eos-4` cluster SPAWNED from production iris admin UI** at `app.olympus-grid.com/admin/clusters` under `homer@cloudpremise.com` against alpha-org `og_node_beta_1`. Stack prefix `olympus-eos-4`, endpoint `api-eos-4.turtleshell.ai`, Pantheon image `git-2fec78e6`. Provisioning in flight via `zeus/scripts/cluster.sh provision` (the universal Wizard-of-Oz provisioner). Status will flip Pending → Live within ~15 min wall-clock per the iris UI message. **This is the EOS-2 mechanism exercised in production for the first time** (prior EOS-2 closure was against the alpha-org's canonical `api-int` row, this is a brand-new spawn). |
 | §2.11 Invariant D (EOS-3 from-void holds) — iris portal + olympus-gpt | ❌ not yet | Awaits the EOS-3 §2.4 + §2.8 closures against the EOS-3 scratch. |
 | §2.12 Rollback by `git revert` | ❌ not yet | No revert exercised. |
 | §2.13 Future-merge by-construction propagation | ❌ not yet | Awaits a second EOS-4-era merge to demonstrate. |
 
-**Anchor evidence — first surface fully attesting EOS-1+2+3+4 against production:** turtleshell-web FB-00045 (alpha-org `og_node_beta_1`, 2026-06-10 10:48:13 UTC). Cross-references EOS-3 §13 "Second cross-cycle re-attestation" block. **This is the first concrete proof that the merge-to-brain chain produces a production state satisfying prior cycles' invariants for at least one consumer surface.**
+**Anchor evidence — surfaces attesting EOS-1+2+3+4 against production as of 2026-06-10:**
+
+| Surface | Evidence | Cross-ref |
+|---|---|---|
+| **turtleshell-web** (consumer cosmos-logos surface) | FB-00045 in `og_node_beta_1__Feedback__c` 2026-06-10 10:48:13 UTC with attached `.jsonl` (5.29 KB), cluster selector showing `api-int` at `turtleshell.ai/app/chat` | EOS-3 §13 "Second cross-cycle re-attestation" |
+| **iris portal** (admin SF surface) | Signup ✅ at `app.olympus-grid.com`; admin Clusters UI lists `api-int` + spawned a fresh `eos-4` cluster (CL-00005) via the production Spawn A Cluster flow under `homer@cloudpremise.com`; Pantheon image `git-2fec78e6` confirmed as brain HEAD | EOS-3 §13 "Third cross-cycle re-attestation" |
+
+**Gap blocking EOS-4 closure (open as of 2026-06-10):** the `olympus-int` cluster (= `api-int` Cluster__c row CL-00004) is still at `git-fd03cbd2`. Live brain HEAD is `git-2fec78e6`. The §2.3 zeus-deploy-rolls-olympus-int chain has not advanced the live cluster. **This is the long pole for EOS-4 §2.8 unified brain=production assertion.** See §13 D9 and EOS-3 §13 D9 for the operational-pattern question (auto-redeploy vs Steward-triggered after fresh-cluster validation).
 
 ### §1.1 deviations observed during EOS-4 (the bug accumulator)
 
 > Same discipline as EOS-3 §13 — every error / warning surfaced during EOS-4 verification gets logged here. EOS-4 does NOT gate on this list — it gates on §2.1-§2.13.
 
 | # | Bug | Where surfaced | Severity | Triage target | Notes |
-|---|-----|----------------|----------|---------------|-------|
-| *(none yet)* | | | | | |
+|-----|-----|----------------|----------|---------------|-------|
+| D9 | **Existing live `olympus-int` cluster did not auto-redeploy to brain HEAD when brain advanced.** Live brain HEAD Pantheon image = `git-2fec78e6` (proven by `eos-4` cluster being provisioned at that SHA). `olympus-int` (= `api-int` CL-00004) is still at `git-fd03cbd2` (the 2026-05-31 EOS-1+EOS-2 closure SHA). EOS-4 §1.1 brain-IS-production invariant requires live clusters to advance with brain. | Iris admin Clusters page at `app.olympus-grid.com/admin/clusters` 2026-06-10, two Cluster__c rows side-by-side at different SHAs. | **HIGH — gates EOS-4 §2.3 + §2.8 closure** | **EOS-4 itself.** Either (a) `zeus-deploy.yml` is supposed to auto-roll `olympus-int` on every brain merge and isn't — needs fix; OR (b) the operational pattern is Steward-triggered after validating brain HEAD on a fresh cluster (which is what the `eos-4` cluster spawn is staging for), in which case §2 needs to formalize the manual-redeploy step. **Needs Steward direction on which intended pattern.** | The Wizard-of-Oz `cluster.sh provision` pattern (per memory `project_cluster_architecture_v1_2026_05_29.md`) explicitly chose a user-triggered model for cluster *creation*. Whether the same model applies to live-cluster *advancement* is the question. |
 
 ### Feedback that emerged from THIS cycle (seed for the next one)
 - *(rolling)*
