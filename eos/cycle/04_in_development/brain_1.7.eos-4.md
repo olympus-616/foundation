@@ -207,4 +207,60 @@ The unifying primitive across EOS-4 inputs: **the merge IS the operative gesture
 *PENDING.*
 
 ## §13 Closeout
-*PENDING.*
+
+*Filled at end of cycle. Doc goes immutable after this. **Rolling updates allowed while in `04_in_development/`**; the section snapshots when the doc moves to `05_verifying/` and immutability locks at the move to `06_shipped/`.*
+
+### What shipped
+- *(rolling)*
+
+### What deferred (and why)
+- *(rolling)*
+
+### What surprised
+- *(rolling)*
+
+### Verification evidence
+
+**Source production state:**
+- **Pantheon-side:** parent submodule bump landed 2026-06-10 (per memory `project_eos_3_validation_cycle.md`). Pantheon image at brain HEAD propagating through `post-merge-docker.yml` → `zeus-deploy.yml` → `olympus-int` ECS. (Live SHA / wall-clock TBD on this commit's rolling-evidence pass.)
+- **SF-side:** olympus-grid PR #282 squash-merged to `brain/1.7.x.x` (commit `a53453a`). Managed package installed on alpha-org `og_node_beta_1` (verified) and `og_node_beta_2` (canary, parity TBD).
+
+**Per-criterion validation table** (rolling; queried 2026-06-10):
+
+| Criterion | Status | Evidence |
+|---|---|---|
+| §2.1 Submodule pointer reconcile + parent brain bump | ✅ validated (Steward 2026-06-10) | Parent submodule bump landed; brain SHA = `a53453a` family per the olympus-grid squash. Full submodule-discipline snippet run TBD. |
+| §2.2 Post-merge Pantheon image build | 🟡 in flight | `post-merge-docker.yml` fired on parent merge; ECR image presence TBD this pass. |
+| §2.3 `zeus-deploy.yml` rolls `olympus-int` | 🟡 in flight | Rollout TBD this pass. |
+| §2.4 CDN rollback reconcile | ❌ not yet | `olympus-int-cdn` `UPDATE_ROLLBACK_COMPLETE` still pending unstick. |
+| §2.5 Managed-package build on merge-to-brain | ✅ validated | `main-beta-package-build.yaml` produced the package version that PR #282 carries → installed downstream. |
+| §2.6 Install on `og_beta_1` | ✅ validated (Steward 2026-06-10) | `og_node_beta_1__Feedback__c.FB-00045` exists in alpha-org with attached `.jsonl` — proves the install is live AND functional. |
+| §2.7 Install on `og_beta_2` (canary parity) | ❌ not yet | Zero rows in `og_node_beta_2__Feedback__c` last 2 days. Either canary install lag, or Steward only exercised `og_node_beta_1` so far. |
+| §2.8 Brain = production assertion across both chains | 🟡 partial | SF-side anchored by §2.6 evidence. Pantheon-side anchor pending §2.2/§2.3/§2.4. Both-chain unified assertion not yet attestable end-to-end. |
+| §2.9 Invariant B (EOS-1 holds) — iris portal + olympus-gpt | 🟡 partial | turtleshell-web (bonus surface for invariant B) attested via FB-00045 (`AppKey='turtleshell'`, body "looks like it worked", session log `session_20260610_104709.jsonl` 5.29 KB). iris portal + olympus-gpt not yet attested against prod. |
+| §2.10 Invariant C (EOS-2 holds) — spawn via `og_beta_1` | 🟡 partial | The screenshot of `turtleshell.ai/app/chat` showing cluster selector at `api-int` with Athena responding through the Ares→Hermes→Athena chain IS evidence that EOS-2's reachability claim holds against `api-int` (the prod canonical cluster). A fresh test-realm spawn via `og_beta_1` iris admin UI not yet attempted; that would close §2.10 strictly. |
+| §2.11 Invariant D (EOS-3 from-void holds) — iris portal + olympus-gpt | ❌ not yet | Awaits the EOS-3 §2.4 + §2.8 closures against the EOS-3 scratch. |
+| §2.12 Rollback by `git revert` | ❌ not yet | No revert exercised. |
+| §2.13 Future-merge by-construction propagation | ❌ not yet | Awaits a second EOS-4-era merge to demonstrate. |
+
+**Anchor evidence — first surface fully attesting EOS-1+2+3+4 against production:** turtleshell-web FB-00045 (alpha-org `og_node_beta_1`, 2026-06-10 10:48:13 UTC). Cross-references EOS-3 §13 "Second cross-cycle re-attestation" block. **This is the first concrete proof that the merge-to-brain chain produces a production state satisfying prior cycles' invariants for at least one consumer surface.**
+
+### §1.1 deviations observed during EOS-4 (the bug accumulator)
+
+> Same discipline as EOS-3 §13 — every error / warning surfaced during EOS-4 verification gets logged here. EOS-4 does NOT gate on this list — it gates on §2.1-§2.13.
+
+| # | Bug | Where surfaced | Severity | Triage target | Notes |
+|---|-----|----------------|----------|---------------|-------|
+| *(none yet)* | | | | | |
+
+### Feedback that emerged from THIS cycle (seed for the next one)
+- *(rolling)*
+
+### Memory updates
+- See `~/.claude/projects/-Users-gregory-dev-repos-olympus-616/memory/project_eos_3_validation_cycle.md` (updated 2026-06-10 by Steward to reflect "Squashed to brain on olympus-grid (PR #282 → `a53453a`) + olympus-616 parent. NOT closed — prod deploy IS the EOS-4 truth-claim").
+- See `project_eos_3_4_parallel_relaxation.md` (the 2026-06-10 further mutex relaxation).
+- See `project_omens_repo_equals_guardians_appkey.md` (locked 2026-06-10).
+
+### Cycle close commit
+- Working branch: `@alchemisthomer/neuralpathway/3ec3881-c9cd409-20260610043832-eos-4` (foundation PR #35 — stays open until both EOS-3 and EOS-4 are validated in production per Steward 2026-06-10).
+- Steward sign-off: **{Steward initials}** **{date}**
