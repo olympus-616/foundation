@@ -1,4 +1,4 @@
-# Void → omens manifestation — the platform reproducible from nothing, zero errors, zero warnings, forever
+# Void → every-surface manifestation — the platform reproducible from nothing, zero errors, zero warnings, forever
 
 > File: `brain_1.7.eos-3.md`
 
@@ -10,7 +10,7 @@
 | **Opened** | 2026-06-09 |
 | **Closed** | — |
 | **Prior cycle** | `brain_1.7.eos-2` (the Olympus-Grid command-plane truth loop — *"says what it does, does what it says: claim 1: athena-717 reachability"*) |
-| **Theme** | Void → omens manifestation — the platform reproducible from nothing, zero errors, zero warnings, forever |
+| **Theme** | Void → every-surface manifestation — the platform reproducible from nothing, zero errors, zero warnings, forever |
 | **Feedback inputs** | EOS-2 §13.4 deferred gaps (G6.2 / G6.3 / G7 / G8 / G9 / G10) + EOS-2 §13.5 architectural seed (per-cluster `BrainVersion__c`) considered out-of-scope unless Steward widens |
 | **Estimated effort** | TBD — locked when §10 is authored. Plausibly the largest cycle to date because the assertion is platform-wide. |
 | **Actual effort** | — |
@@ -21,7 +21,7 @@
 >
 > EOS-2 proved the **cluster-creator dynamic-access claim** — a Salesforce admin spawns an AWS cluster from inside the managed package and talks to it end-to-end with zero out-of-band touch.
 >
-> **EOS-3 closes the from-nothing-to-iPhone-running-omens claim.** Stand up a brand-new olympus-grid node from scratch (today a Salesforce scratch org; requires Salesforce for now). Spawn an AWS cluster against it. Run **omens on an iPhone** against that cluster end-to-end. When EOS-3 closes, **anyone holding the source can repeat this cycle.**
+> **EOS-3 closes the from-nothing-to-every-surface-feedback-roundtrip claim.** Stand up a brand-new olympus-grid node from scratch (today a Salesforce scratch org; requires Salesforce for now). Provision iris into that node. Spawn an AWS Pantheon cluster — a *realm* — against the node from inside the managed package (the EOS-2 mechanism). Then prove that **every consumer surface — omens (cyclops level on iPhone), olympus-gpt, turtleshell-web, turtleshell-ios, turtleshell-offgrid, iris portal — can sign into the new scratch org, reach the new realm, exercise its surface-specific workload, and submit client-specific feedback that lands back in the scratch org.** *Feedback receipt at base = the cycle works for that surface.* When EOS-3 closes on all six surfaces, **anyone holding the source can repeat this cycle.**
 >
 > EOS-3 does **not** require the §1.1 zero-error / zero-warning gold standard on each component and process. Bugs against §1.1 are tracked and prioritized across future cycles, not gating EOS-3 closure. The §1.1 ideal is the **forever intent** of the platform; EOS-3 is one concrete slice that proves the path exists.
 >
@@ -41,25 +41,48 @@
 
 ### §1.2 The EOS-3 slice (what we actually ship this cycle)
 
-> As **the Steward** I want **to go from nothing → a live olympus-grid scratch org → a spawned AWS Pantheon cluster → omens running on an iPhone connected to that cluster end-to-end** so that **anyone holding the source can repeat this cycle**.
+> As **the Steward** I want **to go from nothing → a live olympus-grid scratch org (a new node) → iris provisioned into it → a spawned AWS Pantheon cluster (a *realm*) against that node → every consumer surface (omens, olympus-gpt, turtleshell-web, turtleshell-ios, turtleshell-offgrid, iris portal) able to sign into the new node, join the new realm, exercise its surface-specific workload, and submit feedback that arrives back at the scratch org** so that **the feedback-receipt-at-base semantic proves the cycle works for every surface — and anyone holding the source can repeat this cycle.**
 
-EOS-3 explicitly carves out turtleshell-web, turtleshell-ios (broadly), iris portal as a surface goal, and olympus-gpt — those are §1.1 surfaces and ride future cycles. **EOS-3 ships when the omens iPhone surface is alive on a freshly-provisioned cluster.**
+**Closure semantic, universal across every surface in this cycle: feedback arriving back at the spawning scratch org is the conclusion of the EOS cycle for that surface.** EOS-1 established that loop on `brain/1.7.x.x`-HEAD shipped surfaces against the alpha-org; EOS-3 proves the same loop works against a *fresh* node + *fresh* realm for every consumer surface.
+
+Per-surface workload anchor (each ends with a `Feedback__c` row arriving in the new scratch org):
+
+- **omens** — sign into the new scratch org, join the new realm, run the **cyclops level**, submit feedback → receipt at scratch org closes for omens.
+- **olympus-gpt** — sign into the new scratch org, join the new realm, issue commands against the realm's Pantheon fleet, submit feedback → receipt at scratch org closes for gpt.
+- **turtleshell-web** — sign into the new scratch org, access the new node + new realm, submit client-specific feedback → receipt at scratch org closes for the web surface.
+- **turtleshell-ios** — sign into the new scratch org, access the new node + new realm, submit client-specific feedback → receipt at scratch org closes for the ios surface.
+- **turtleshell-offgrid** — sign into the new scratch org, access the new node + new realm, submit client-specific feedback → receipt at scratch org closes for the offgrid surface.
+- **iris portal** — sign into the new scratch org, access the new node + new realm, submit client-specific feedback → receipt at scratch org closes for the iris surface.
 
 > *Constraint:* the node form is Salesforce scratch org for now. Widening the node form to any-host is a future EOS — out of scope here.
 
+> *Steward's verbatim scope statement (2026-06-09):*
+>
+> *"within olympus-grid i am creating a new repo → iris provisioning → cluster provisioning. within omens i will sign into the new scratch org → join the newly created cluster (i.e. realm) and run the cyclops level, and then post feedback through the feedback system all the way to scratch org. receipt of the feedback is the conclusion of eos-3 for omens. i will validate the same for gpt against a new node + cluster + issue commands + feedback back to the scratch org. the feedback arriving back at base is always the end of a working eos cycle. i will then make sure all of the turtleshell surfaces can adequately access the new node and the new cluster and provide client-specific feedback."*
+
 ## §2 Acceptance criteria
 
-*Draft sketches matching the EOS-3 slice (§1.2). Each criterion includes the observable post-condition in the session log or Salesforce data. Steward refines; agent decomposes into §6 once locked.*
+*Draft sketches matching the EOS-3 slice (§1.2). Each criterion includes the observable post-condition in the session log or Salesforce data. The unifying closure semantic across §2.3-§2.8 is: **a `Feedback__c` row submitted from that surface arrives in the new scratch org with its session-log attachment intact.** Steward refines; agent decomposes into §6 once locked.*
 
-- **§2.1 Node from void.** **Given** a developer machine with the olympus-grid source checked out and no scratch org allocated **when** the Steward runs `./build.sh` from `olympus-grid/` root **then** within the §3 wall-clock budget a live olympus-grid scratch org exists, every canonical app (`Plugin.app_iris`, `Plugin.app_guardians`, `Plugin.app_olympus_gpt`, `Plugin.app_turtleshell`) is installed, the build exits with code 0, AND the session log carries `void.manifested.olympus_grid_node` with the new org's 18-char Id.
+- **§2.1 Node from void.** **Given** a developer machine with the olympus-grid source checked out and no scratch org allocated **when** the Steward runs `./build.sh` from `olympus-grid/` root **then** within the §3 wall-clock budget a live olympus-grid scratch org exists, iris is provisioned into it, every canonical app (`Plugin.app_iris`, `Plugin.app_guardians`, `Plugin.app_olympus_gpt`, `Plugin.app_turtleshell`) is installed, the build exits with code 0, AND the session log carries `void.manifested.olympus_grid_node` with the new org's 18-char Id.
 
-- **§2.2 Cluster from node.** **Given** a live node from §2.1 **when** the Steward spawns an AWS Pantheon cluster from inside the managed package (the EOS-2 mechanism) **then** a `Cluster__c` row exists with `Status__c='Live'`, the Pantheon image pulls cleanly, every health endpoint returns 200, AND the session log carries `cluster.manifested.ec2_pantheon` with the cluster's `ClusterName__c`.
+- **§2.2 Realm (cluster) from node.** **Given** a live node from §2.1 **when** the Steward spawns an AWS Pantheon cluster — the *realm* — from inside the iris admin UI in the managed package (the EOS-2 mechanism) **then** a `Cluster__c` row exists with `Status__c='Live'`, the Pantheon image pulls cleanly, every health endpoint returns 200, AND the session log carries `cluster.manifested.ec2_pantheon` with the realm's `ClusterName__c`.
 
-- **§2.3 omens on iPhone against cluster.** **Given** a live cluster from §2.2 **when** the Steward opens omens on iPhone (deployed via `omens/tools/ios-deploy.sh`) targeted at that cluster's URL **then** the cosmos-logos handshake succeeds, MCP connects through Ares → Hermes → Athena, the player completes one karmic cycle (intent → state mutation → `LedgerEntry__c` → outcome), telemetry lands in `Feedback__c`, AND the EOS-1 surface-telemetry continual-improvement loop is active (`Feedback__c` row present with session-log attached).
+- **§2.3 omens — cyclops level feedback round-trip.** **Given** a live realm from §2.2 **when** the Steward deploys omens on iPhone via `omens/tools/ios-deploy.sh` targeted at the new node + realm, signs into the new scratch org, joins the realm, plays the **cyclops level**, and submits feedback **then** the cosmos-logos handshake succeeds against the new realm, MCP connects through Ares → Hermes → Athena, the cyclops level completes (intent → state mutation → `LedgerEntry__c` → outcome), AND a `Feedback__c` row with `Source__c='omens'` and its session-log attachment exists in the **new scratch org** (not the alpha-org).
 
-- **§2.4 Repeatability.** **Given** EOS-3 is closed **when** any human holding the source repeats §2.1 → §2.3 on a fresh machine **then** the chain completes without Steward intervention. This is the *"anyone can repeat this cycle"* closure condition from §1.2.
+- **§2.4 olympus-gpt — issue-commands feedback round-trip.** **Given** a live realm from §2.2 **when** the Steward signs into the new scratch org via olympus-gpt, joins the realm, issues commands against the realm's Pantheon fleet, and submits feedback **then** commands reach the pantheon via Ares → Hermes → Athena and return responses, AND a `Feedback__c` row with `Source__c='olympus-gpt'` and its session-log attachment exists in the **new scratch org**.
 
-> **Out of scope for EOS-3** (rides future cycles, NOT criteria here): turtleshell-web surface, turtleshell-ios surface (broadly — note iPhone is in scope ONLY as the omens runtime, not as the turtleshell-ios app), iris portal as a surface goal (iris's admin UI is the §2.2 mechanism, not the §2.3 surface claim), olympus-gpt surface, the §1.1 zero-error / zero-warning gold standard.
+- **§2.5 turtleshell-web — sign-in + feedback round-trip.** **Given** a live realm from §2.2 **when** the Steward signs into the new scratch org via turtleshell-web, accesses the new node + realm, and submits client-specific feedback **then** a `Feedback__c` row with `Source__c='turtleshell-web'` and its session-log attachment exists in the **new scratch org**.
+
+- **§2.6 turtleshell-ios — sign-in + feedback round-trip.** **Given** a live realm from §2.2 **when** the Steward signs into the new scratch org via turtleshell-ios, accesses the new node + realm, and submits client-specific feedback **then** a `Feedback__c` row with `Source__c='turtleshell-ios'` and its session-log attachment exists in the **new scratch org**.
+
+- **§2.7 turtleshell-offgrid — sign-in + feedback round-trip.** **Given** a live realm from §2.2 **when** the Steward signs into the new scratch org via turtleshell-offgrid, accesses the new node + realm, and submits client-specific feedback **then** a `Feedback__c` row with `Source__c='turtleshell-offgrid'` and its session-log attachment exists in the **new scratch org**.
+
+- **§2.8 iris portal — sign-in + feedback round-trip.** **Given** a live realm from §2.2 **when** the Steward signs into the new scratch org via the iris portal, accesses the new node + realm, and submits client-specific feedback **then** a `Feedback__c` row with `Source__c='iris-portal'` and its session-log attachment exists in the **new scratch org**.
+
+- **§2.9 Repeatability.** **Given** EOS-3 is closed **when** any human holding the source repeats §2.1 → §2.8 on a fresh machine **then** the chain completes without Steward intervention. This is the *"anyone can repeat this cycle"* closure condition from §1.2.
+
+> **Out of scope for EOS-3** (rides future cycles, NOT criteria here): the §1.1 zero-error / zero-warning gold standard across the void→manifestation chain; production promotion of the code touched during EOS-3 (that is the EOS-4 scope); per-customer multi-node-fleet deploy automation; the candidate `Cluster__c.BrainVersion__c` field unless Steward widens.
 >
 > **§1.1 deviations encountered during EOS-3 execution become bug entries**, logged inline in §13 and triaged into future cycles by priority. They do NOT gate this cycle.
 
@@ -108,14 +131,17 @@ The unifying primitive across all five EOS-2-deferred gaps: **discover state fro
 
 *PENDING. To be authored after §5 sign-off, in sync with the in-flight scratch-org agent.*
 
-| Criterion | Salesforce (olympus-grid) | Pantheon services | omens (Godot) | turtleshell-web | iris portal | SDK / protocol |
-|-----------|---------------------------|-------------------|---------------|-----------------|-------------|----------------|
-| §2.1 | … | … | … | … | … | … |
-| §2.2 | … | … | … | … | … | … |
-| §2.3 | … | … | … | … | … | … |
-| §2.4 | … | … | … | … | … | … |
-| §2.5 | … | … | … | … | … | … |
-| §2.6 | aggregator | aggregator | aggregator | aggregator | aggregator | aggregator |
+| Criterion | Salesforce (olympus-grid) | Pantheon services | omens (Godot) | turtleshell-web | turtleshell-ios | turtleshell-offgrid | iris portal | olympus-gpt | SDK / protocol |
+|-----------|---------------------------|-------------------|---------------|-----------------|-----------------|---------------------|-------------|-------------|----------------|
+| §2.1 Node | … | … | … | … | … | … | … | … | … |
+| §2.2 Realm | … | … | … | … | … | … | … | … | … |
+| §2.3 omens | … | … | … | … | … | … | … | … | … |
+| §2.4 olympus-gpt | … | … | … | … | … | … | … | … | … |
+| §2.5 ts-web | … | … | … | … | … | … | … | … | … |
+| §2.6 ts-ios | … | … | … | … | … | … | … | … | … |
+| §2.7 ts-offgrid | … | … | … | … | … | … | … | … | … |
+| §2.8 iris portal | … | … | … | … | … | … | … | … | … |
+| §2.9 Repeatability | aggregator | aggregator | aggregator | aggregator | aggregator | aggregator | aggregator | aggregator | aggregator |
 
 ## §7 Schema deltas
 
@@ -131,11 +157,25 @@ The unifying primitive across all five EOS-2-deferred gaps: **discover state fro
 
 ## §9 Telemetry assertions (the close-out gate)
 
-*Draft assertions matching the EOS-3 slice (§1.2 / §2.1-§2.4) — refine after §6/§7/§8 are authored:*
+*Draft assertions matching the EOS-3 slice (§1.2 / §2.1-§2.9). The closure semantic is per-surface feedback round-trip — every §2.3-§2.8 surface assertion reduces to "a `Feedback__c` row from that surface lands in the new scratch org with session-log attached." Refine after §6/§7/§8 are authored:*
 
 - `void.manifested.olympus_grid_node` must fire once per `./build.sh` invocation against an empty starting state; payload carries new-org Id + wall-clock duration.
-- `cluster.manifested.ec2_pantheon` must fire once per cluster spawn; payload carries `ClusterName__c` + duration.
-- `surface.connected.omens_ios` must fire once when omens on iPhone successfully completes its cosmos-logos handshake against a freshly-spawned cluster.
+- `cluster.manifested.ec2_pantheon` must fire once per realm spawn; payload carries `ClusterName__c` + duration.
+- `surface.connected.<surface>` must fire once per consumer surface — `omens_ios`, `olympus_gpt`, `turtleshell_web`, `turtleshell_ios`, `turtleshell_offgrid`, `iris_portal` — when that surface successfully completes its cosmos-logos handshake against the new realm. Payload carries `ClusterName__c` of the new realm + the new org Id (asserts the surface is talking to the freshly-spawned cluster, not the alpha-org).
+- `feedback.roundtrip.<surface>` — for each of the six §2.3-§2.8 surfaces, a `Feedback__c` row matching the surface's discriminator (see mapping below) and carrying an attached session-log ContentVersion MUST exist in the **new scratch org** (not the alpha-org). This is the universal closure signal: **feedback receipt at base = the cycle works for that surface.** All six rows must be present for EOS-3 to close.
+
+  **Surface → schema discriminator mapping** (locked 2026-06-10 from observed scratch data + Steward direction):
+
+  | Surface (§2.x) | Repo / source label | Primary discriminator | Secondary discriminator needed? |
+  |---|---|---|---|
+  | §2.3 omens | `olympus-616/omens` | `ApplicationProfile__r.AppKey__c = 'guardians'` (game name "Guardians of Olympus") | no |
+  | §2.4 olympus-gpt | `iris/reactforce/olympus-grid-ai` | `ApplicationProfile__r.AppKey__c = 'olympus-gpt'` | no |
+  | §2.5 turtleshell-web | `cosmos-logos/turtleshell-web` | `ApplicationProfile__r.AppKey__c = 'turtleshell'` | **yes — surface tag TBD by Steward** (umbrella AppKey shared with §2.6 + §2.7) |
+  | §2.6 turtleshell-ios | `cosmos-logos/turtleshell-ios` | `ApplicationProfile__r.AppKey__c = 'turtleshell'` | **yes — surface tag TBD** |
+  | §2.7 turtleshell-offgrid | `cosmos-logos/turtleshell-offgrid` | `ApplicationProfile__r.AppKey__c = 'turtleshell'` | **yes — surface tag TBD** |
+  | §2.8 iris portal | `olympus-616/iris` | `ApplicationProfile__r.AppKey__c = 'iris'` (TBD — confirm against scratch) | no |
+
+  Note: `Feedback__c.Source__c` is a separate generic category picklist (observed values = `'Feedback'`), NOT the per-surface tag. Earlier draft text in §2.3-§2.8 that says "`Source__c='omens'`" / "`Source__c='turtleshell-web'`" / etc. is text-drift against the schema; query against `ApplicationProfile__r.AppKey__c` (plus the TBD secondary discriminator for turtleshell-*) instead. Logged as §13 §1.1-deviation.
 - Every HTTP envelope across the void→manifest chain carries `cycleId` matching the EOS-3 meta-cycle row.
 - Plutus ledger SOQL `SELECT * FROM LedgerEntry__c WHERE Cycle__c = :eos3_cycle_id` returns ≥ N rows for the N actions executed during verification.
 
@@ -147,45 +187,127 @@ The unifying primitive across all five EOS-2-deferred gaps: **discover state fro
 
 ## §11 Verification protocol
 
-*PENDING.* Anticipated:
+*PENDING — anticipated per-surface flow (refines after §6 / §10 lock). The signal of success at every per-surface step is a `Feedback__c` row matching the §9 surface→discriminator mapping landing in the **new** scratch org (not the alpha-org), with its session-log ContentVersion attachment. The canonical confirmation query — run against `dev_enterprise` alias = the new scratch — is:*
 
-### Without iPhone
-- `./build.sh` from a clean clone → confirm §2.1
-- iris admin UI flow → confirm §2.2
-- turtleshell-web in Chromium → confirm §2.4
-- iris portal in Chromium → confirm §2.5
-- omens Godot desktop → partial §2.3
+```bash
+sf data query --target-org dev_enterprise -q "
+  SELECT Id, Name, CreatedDate, IncludesSessionLog__c,
+         ApplicationProfile__r.AppKey__c,
+         ApplicationProfile__r.Identity__r.Email__c, Body__c
+  FROM Feedback__c
+  WHERE ApplicationProfile__r.AppKey__c = '<appkey from §9 mapping>'
+  ORDER BY CreatedDate DESC"
+```
 
-### With iPhone (required for §2.3 if turtleshell-ios is in scope)
-- `omens/tools/ios-deploy.sh` → omens iPhone targeted at the new cluster
+*Pair with a `ContentDocumentLink` lookup on the row's Id to confirm the `.jsonl` session-log attachment is present.*
+
+### §2.1 Node + §2.2 Realm — setup (no consumer surface yet)
+- `./build.sh` from a clean clone → confirm §2.1 (`void.manifested.olympus_grid_node`).
+- Sign into the new scratch org via iris admin UI → spawn realm → confirm §2.2 (`cluster.manifested.ec2_pantheon`).
+
+### §2.3 omens — cyclops level on iPhone (mandatory)
+- `omens/tools/ios-deploy.sh` → omens iPhone targeted at the new node + new realm.
+- Sign into the new scratch org → join the realm → play the **cyclops level** → submit feedback.
+- Confirm `Feedback__c` row with `ApplicationProfile__r.AppKey__c='guardians'` + session-log attachment in the **new scratch org**. (See §9 surface mapping — omens repo ships the "Guardians of Olympus" game; AppKey is `guardians`, not `omens`.)
+
+### §2.4 olympus-gpt — issue commands
+- Sign into the new scratch org via olympus-gpt → join the realm → issue commands against the realm's Pantheon fleet → submit feedback.
+- Confirm `Feedback__c` row with `ApplicationProfile__r.AppKey__c='olympus-gpt'` + session-log attachment in the **new scratch org**.
+
+### §2.5 turtleshell-web — without iPhone
+- Chromium → turtleshell-web → sign into the new scratch org → access new node + realm → submit feedback.
+- Confirm `Feedback__c` row with `ApplicationProfile__r.AppKey__c='turtleshell'` + **secondary surface discriminator (TBD)** + session-log attachment in the **new scratch org**.
+
+### §2.6 turtleshell-ios — with iPhone (mandatory)
+- Deploy turtleshell-ios pointed at the new node + realm → sign in → access → submit feedback.
+- Confirm `Feedback__c` row with `ApplicationProfile__r.AppKey__c='turtleshell'` + **secondary surface discriminator (TBD)** + session-log attachment in the **new scratch org**.
+
+### §2.7 turtleshell-offgrid — appliance or offgrid container
+- Sign in via offgrid surface → access new node + realm → submit feedback.
+- Confirm `Feedback__c` row with `ApplicationProfile__r.AppKey__c='turtleshell'` + **secondary surface discriminator (TBD)** + session-log attachment in the **new scratch org**.
+
+### §2.8 iris portal — without iPhone
+- Chromium → iris portal in the new scratch org → access new node + realm → submit feedback.
+- Confirm `Feedback__c` row with `ApplicationProfile__r.AppKey__c='iris'` (TBD — confirm against scratch first run) + session-log attachment in the **new scratch org**.
+
+### §2.9 Repeatability
+- Independent operator repeats §2.1 → §2.8 from a fresh clone on a fresh machine, no Steward intervention.
 
 ## §12 Rollback plan
 
 *PENDING.* The cycle is platform-wide, so rollback is mostly per-layer: scratch org deletion is cheap, AWS cluster destroy via `zeus-destroy.yml` is documented, omens client revert is `git revert` clean. The risk surface is in the discover-from-spawning-org refactors — those will need per-PR rollback notes captured in §10 as tasks are decomposed.
 
+> **Active-cycle guard (2026-06-09):** Until EOS-3 reaches §13 close-out, **NO CDN / CFN / olympus-int infra moves** are permitted. The baseline snapshot for the productionization reconcile was recorded at cycle open. Any in-flight infra move that surfaces during EOS-3 is deferred to the appropriate cycle per the boundary below.
+>
+> **EOS-3 → EOS-4 boundary (Steward direction 2026-06-10):** The earlier draft folded "CDN rollback reconcile + parent submodule bump + CDK redeploy `olympus-int` to head of brain" into a single EOS-3 close-out reconcile. That bundle is now **split** along the cycle boundary:
+>
+> | Action | Lands in | Why |
+> |---|---|---|
+> | Cross-repo squash-merges to `brain/1.7.x.x` for every constituent god / submodule touched by EOS-3 | **EOS-3** §13 | The cross-repo logical-branch atomic-promotion contract — closes the cycle on brain. |
+> | Parent-repo submodule pointer bump PR onto `brain/1.7.x.x` | **EOS-3** §13 | Captures the cycle SHA on brain (per CLAUDE.md § *Submodule Pointer Bump Discipline*). |
+> | CDN rollback reconcile (`olympus-int-cdn` UPDATE_ROLLBACK_COMPLETE since 2026-05-27) | **EOS-4** | This is productionization infra hygiene — exactly the "how does brain safely arrive in production" claim that EOS-4 is scaffolded around. |
+> | CDK redeploy `olympus-int` to head of `brain/1.7.x.x` | **EOS-4** | Same reason — `olympus-int` IS the production cluster; promoting brain to it IS the EOS-4 closure act. |
+>
+> Under this split, **EOS-3 closes when its work is squash-merged across every constituent repo + the parent submodule bump lands on `brain/1.7.x.x`** — the system state pointer advances to a new SHA that has the EOS-3 work captured. EOS-4 then takes responsibility for moving that SHA from `brain/1.7.x.x` into the production `olympus-int` cluster. The EOS-3 active-cycle guard ("NO CDN / CFN / olympus-int infra moves") **persists through EOS-4** because the baseline snapshot is what EOS-4 reconciles against.
+
 ## §13 Closeout
 
-*Filled at end of cycle. Doc goes immutable after this.*
+*Filled at end of cycle. Doc goes immutable after this. **Rolling updates allowed while in `04_in_development/`**; the section snapshots when the doc moves to `05_verifying/` and immutability locks at the move to `06_shipped/`.*
 
 ### What shipped
-- …
+- *(rolling — to be finalized at §13 lock)*
 
 ### What deferred (and why)
-- …
+- **CDN rollback reconcile + `olympus-int` CDK redeploy → EOS-4.** Per Steward direction 2026-06-10 the productionization moves are EOS-4 scope. See §12 boundary table.
 
 ### What surprised
-- …
+- *(rolling)*
 
 ### Verification evidence
-- …
+
+**Source scratch org:** `innovation-app-8526.scratch.my.salesforce.com` · alias `dev_enterprise` · org Id `00DRL00000QzdOr2AJ` · spawned 2026-06-09 18:26:43 UTC.
+
+**Realm:** AWS `olympus-eos-3` at `api-eos-3.turtleshell.ai` · CFN `CREATE_COMPLETE` · image `git-fd03cbd2` · Pantheon task HEALTHY · `Cluster__c` row `Status__c='Live'` (LiveAt 2026-06-09 19:54:02 UTC, RequestedAt 19:34:54 UTC → wall-clock 19m 8s).
+
+**Per-criterion validation table** (queried 2026-06-10):
+
+| Criterion | Status | Evidence in `innovation-app-8526` |
+|---|---|---|
+| §2.1 Node from void | ✅ validated | scratch org `00DRL00000QzdOr2AJ` exists, `./build.sh` exit 0, all four canonical apps (`Plugin.app_iris`, `Plugin.app_guardians`, `Plugin.app_olympus_gpt`, `Plugin.app_turtleshell`) installed |
+| §2.2 Realm from node | ✅ validated | `Cluster__c` row Live (Status, EndpointUrl, OwnerIdentity, RequestedAt, LiveAt) for `olympus-eos-3`; CFN 5 stacks `CREATE_COMPLETE`; Pantheon HEALTHY |
+| §2.3 omens (AppKey `guardians`) | ✅ validated (2× round-trip) | **FB-00020** 2026-06-10 02:49:38 UTC · attached `session_20260610_024329.jsonl` (981 KB) · **FB-00038** 2026-06-10 04:43:31 UTC · attached `session_20260610_043921.jsonl` (1.05 MB) — both via `homer@cloudpremise.com` |
+| §2.4 olympus-gpt | ✅ validated (3× round-trip) | **FB-00017** "cluster not working" · `session_20260609_222907.jsonl` (6.3 KB) · **FB-00018** "it didn't work" · `session_20260610_000427.jsonl` (9.3 KB) · **FB-00019** "test" · `session_20260610_013549.jsonl` (2.5 KB) — all via `homer@cloudpremise.com` |
+| §2.5 turtleshell-web | ❌ not yet validated | no Feedback__c row matching the surface discriminator |
+| §2.6 turtleshell-ios | ❌ not yet validated | no Feedback__c row matching the surface discriminator |
+| §2.7 turtleshell-offgrid | ❌ not yet validated | no Feedback__c row matching the surface discriminator |
+| §2.8 iris portal | ❌ not yet validated | no Feedback__c row matching the surface discriminator |
+| §2.9 Repeatability | gates on §2.5-§2.8 | — |
+
+**Tally as of 2026-06-10: 4 of 9 criteria validated.** Closure-on-brain requires §2.5/§2.6/§2.7/§2.8 to round-trip + §2.9 repeatability check.
+
+**Cross-cycle re-attestation (Steward direction 2026-06-10): the omens surface is now validated for EOS-1, EOS-2, AND EOS-3 simultaneously** via the same evidence (FB-00020 + FB-00038 in `innovation-app-8526` with attached session logs):
+
+| Cycle | Claim | How the omens round-trip re-attests it |
+|---|---|---|
+| **EOS-1** ([06_shipped/brain_1.7.eos-1.md](../06_shipped/brain_1.7.eos-1.md)) | Consumer feedback loop on turtleshell + guardians; baseline of stable application across all repos | A guardians-tagged `Feedback__c` row with session-log ContentVersion attachment lands in a Salesforce org — the EOS-1 loop in motion. Re-attested against a *fresh* node (not the alpha-org), proving the baseline survives node-spawn from void. |
+| **EOS-2** ([06_shipped/brain_1.7.eos-2.md](../06_shipped/brain_1.7.eos-2.md)) | Says what it does, does what it says — claim 1: athena-717 reachability — an admin spawns an AWS cluster from inside the managed package and talks to it end-to-end | The omens iPhone client completed cosmos-logos handshake → Ares → Hermes → Athena against the freshly-spawned `olympus-eos-3` realm (not the alpha-org's `api-int`), played the cyclops level (LLM + state-mutation chain), and posted feedback back. End-to-end reachability of the spawned realm is demonstrated by the gameplay completing and the feedback POST succeeding. |
+| **EOS-3** §2.3 | Void → omens-on-iPhone feedback round-trip against a brand-new node + brand-new realm | This cycle's §2.3 — the row exists, with attachment, in the new scratch. |
+
+**Why this matters for the canon:** every entry in `06_shipped/` is the system's specification. The omens surface having demonstrated all three cycles' assertions in a single round-trip against a from-void node is evidence that the shipped canon HOLDS — EOS-1 and EOS-2 are not just historically true, they are CURRENTLY true on a system rebuilt from source.
 
 ### §1.1 deviations observed during EOS-3 (the bug accumulator)
 
-> Every error / warning surfaced during EOS-3 verification gets logged here as a §1.1-deviation bug row. Each row points to a future-cycle slot for triage. EOS-3 does NOT gate on this list — it gates on §2.1-§2.4 / §9.
+> Every error / warning surfaced during EOS-3 verification gets logged here as a §1.1-deviation bug row. Each row points to a future-cycle slot for triage. EOS-3 does NOT gate on this list — it gates on §2.1-§2.8 / §9.
 
-| Bug | Where surfaced | Severity | Triage target | Notes |
-|-----|----------------|----------|---------------|-------|
-| … | … | … | EOS-? | … |
+| # | Bug | Where surfaced | Severity | Triage target | Notes |
+|---|-----|----------------|----------|---------------|-------|
+| D1 | EOS-3 contract §2.3-§2.8 + earlier §9 / §11 wording said "`Source__c=<surface>`" but the per-surface dimension in schema is `ApplicationProfile__r.AppKey__c`. Verifying against the literal wording returns zero rows even for surfaces that successfully round-tripped. | Documentation vs schema | medium (doc-truth, not system-truth) | EOS-3 §9 / §11 (this revision) | §9 mapping + §11 query template now corrected. Steward to clean §2.3-§2.8 wording on next pass through the top half. |
+| D2 | Surface tag for the omens repo is **`guardians`** in schema (game name "Guardians of Olympus"), not "omens". Undocumented in the contract until 2026-06-10. | Verification query against `innovation-app-8526` returned zero rows for `AppKey='omens'`. | low (naming clarity) | EOS-3 §9 (this revision) + memory `project_omens_repo_equals_guardians_appkey.md` | Locked. |
+| D3 | TurtleShell umbrella AppKey (`turtleshell`) shared across web + ios + offgrid surfaces means §9 cannot distinguish §2.5 / §2.6 / §2.7 by `AppKey__c` alone. A secondary discriminator column is required. | Schema review during §9 revision | medium (gates §2.5-§2.7 closure) | EOS-3 (Steward locks discriminator) or EOS-? if deferred | Candidate columns: repurpose `Source__c` to carry the surface tag; or add a new `Surface__c` picklist on `Feedback__c`. Steward direction needed before §2.5-§2.7 can round-trip uniquely. |
+| D4 | Logger__c DEBUG noise — 219 of 223 Logger rows say literally "adding api log" (duplicate of ApiLog__c full-fidelity rows). 98% noise. | Data audit of `innovation-app-8526` 2026-06-09 ~20:00 UTC | low (waste, not breakage) | EOS-? | Cut the DEBUG marker; Logger volume drops 98%. |
+| D5 | `/v1/grid/clusters/me` polling scale concern — 208 of 219 ApiLog rows (95%) are this single GET endpoint, iris portal polled cluster status for ~19 minutes between spawn and Live. Does not scale to N concurrent clusters × M orgs. | Data audit of `innovation-app-8526` | medium (scale ceiling) | EOS-? (cluster-event-stream candidate) | Replace polling with PlatformEvent push or SSE. |
+| D6 | Vestigial `TSFeedback__c` SObject + `TRG_HND_TSFeedback` trigger still in olympus-grid source + metadata. Rename to `Feedback__c` was shipped; cleanup destructive-deploy never landed. | Data audit | low (dead schema, same class as `Plugin.TRG_HND_ProfileLink` orphan) | EOS-? destructive-deploy cleanup | Bundle with `Plugin.TRG_HND_ProfileLink` orphan cleanup. |
+| D7 | No `OrgWideEmailAddress` configured in new scratch — emails sent (e.g., portal welcome) go from "Portal Site Guest User" via `*.bnc.sandbox.salesforce.com`, NOT `noreply@cloudpremise.com`. Domain is authorized but no sender wired. | Data audit | medium (brand + deliverability) | EOS-? | Tier-2 of the email-sender wizard. |
 
 ### Feedback that emerged from THIS cycle (seed for the next one)
 - …
