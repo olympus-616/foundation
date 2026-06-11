@@ -1,6 +1,22 @@
 # Says what it does, does what it says — claim 1: athena-717 reachability
 
 > File: `brain_1.7.eos-2.md`
+>
+> ---
+>
+> **Canonical Steward attestation statement for EOS-2 (added 2026-06-10 as annotation; the body of this shipped doc is immutable history):**
+>
+> *"I attest the software can create the necessary resources in order for it to scale. I attest the compute resources can be destroyed without losing data integrity of the system."*
+>
+> **Two-part attestation — BOTH HALVES NOW FORMALLY ATTESTED 2026-06-10 (combined evidence from this shipped doc + the EOS-3+EOS-4 cycle pair's D19 closure).**
+>
+> **(A) "Create resources in order for it to scale"** — the original shipped closure (§13 below) demonstrates the athena-717 spawn mechanism (Salesforce admin spawns AWS cluster from inside managed package, ending in `Cluster__c.Status__c='Live'` + ≥1 `llm.turn` LedgerEntry stamped with `ClusterName__c = <spawned cluster>`). Re-attested repeatedly during the 2026-06-10 EOS-3+4 cycle pair across `eos-3`, `eos-4`, and a fresh second eos-4 spawn — all from inside the managed package, all reaching Live state under 20 min wall-clock.
+>
+> **(B) "Compute resources can be destroyed without losing data integrity"** — formally attested 2026-06-10 21:40 UTC via the scratch `eos-3` cluster (CL-00013) destruction. BEFORE/AFTER SObject-count comparison demonstrated zero historical data loss: LedgerEntry__c 269→269, Feedback__c 8→8, ApplicationProfile__c 5→5, Identity__c 2→2, Logger__c 880→880, ContentDocument 9→9; only `Cluster__c` 1→0 (intentional). AWS state: ECS cluster `olympus-eos-3` deleted, 4 of 5 CFN stacks DELETE_COMPLETE, SSM `/olympus/eos-3/*` empty, Secrets Manager cleaned, endpoint `api-eos-3.turtleshell.ai` HTTP 000 / DNS unresolvable. (The 5th CFN stack `olympus-eos-3-edge` remains CREATE_COMPLETE per CLAUDE.md's "Known Issue: Edge Stack" — intentional carve-out of `cluster.sh terminate`, not a data-integrity concern.)
+>
+> **Steward verbatim formal attestation 2026-06-10 21:40 UTC:** *"i would attest that eos-2 is validated and the system can spawn its own work resources."*
+>
+> Full validation evidence + procedure in EOS-3 §13 D19 (RESOLVED). Added per the Steward's five-statement framing 2026-06-10; the immutable closure record below is unchanged.
 
 | | |
 |---|---|
