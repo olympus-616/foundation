@@ -9,6 +9,8 @@
 > *"I attest the software creates a recursive loop of AI-generated software that is visible to the AI that built it."*
 >
 > Sharpest single-sentence statement of EOS-1's truth-claim. The shipped closure (§13) demonstrates the consumer-feedback-loop baseline that instantiates this property; the canonical statement above is the abstract invariant the baseline points at. Added per the Steward's five-statement framing 2026-06-10; the immutable closure record below is unchanged.
+>
+> **Formal EOS-1 re-attestation 2026-06-11 01:12 UTC (verbatim Steward declaration):** *"eos-1 is validated."* — declared after FB-00058 round-tripped from inside the alpha-org Lightning Experience admin context via the iris-turtleshell popup (the D17-fix integrated experience). This is the strongest EOS-1 attestation position the platform has produced: the AI agents that built the popup (iris-agent + the post-D16 turtleshell-web cluster-picker pattern) wrote code that landed in production; the user (Steward as alpha-org admin) used it inside SF Lightning Experience; the feedback row + session log + thread UI are visible to the user AND to future agent sessions in the SF backend. The recursive loop closes. Full evidence in EOS-3 §13 §2.8 iris portal row. The body of this shipped doc remains unchanged; this re-attestation is the EOS-3+4 cycle pair's formal closure of EOS-1's truth-claim against production.
 
 | | |
 |---|---|
