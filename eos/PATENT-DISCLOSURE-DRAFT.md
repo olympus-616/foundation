@@ -146,6 +146,43 @@ The combination of (a) folder-state kanban, (b) cross-repo atomic deployment, (c
 
 ---
 
+## 5b. Claim 7 stub — GitHub-folder-as-governance-kanban (opened 2026-06-11 by EOS-4.1)
+
+> **Status:** STUB — pending fuller decomposition once EOS-4.1 ships and the EOS app is observable in production. Treat the precise mechanics below as confidential operational discipline until IP counsel reviews this claim alongside Claims 1-6.
+
+**Working title:** *"System and method for governance-as-code on a version-control substrate — using folder structure as kanban state, repository visibility as authorization model, and version-control pull requests as the atomic unit of governance transition."*
+
+**The inventive combination claimed:**
+
+1. **Folder-as-lane.** A version-control folder containing other folders is rendered as a kanban board where each subfolder is a swimlane and each file within is a card. The folder tree IS the kanban state — there is no separate database holding lane membership.
+
+2. **Repository-visibility-as-authorization.** Read access to the kanban is identical to read access to the underlying repository, inherited automatically from the version-control system's existing security model (public repository = public kanban; private repository = signed-in-with-repository-access kanban). No separate ACL is maintained.
+
+3. **Pull-request-as-transition.** Every kanban state transition — dragging a card from one lane to another, editing a card's contents, creating a new card — is committed to the repository as a pull request against the kanban's base branch. The PR becomes the durable, attributable, reviewable, and revertible record of the governance action.
+
+4. **AI-attestation-as-PR-comment.** Autonomous AI agents publish attestations (state-change claims with evidence references) as comments on the relevant pull request via the version-control system's commenting API, creating a unified human + AI audit log on the same artifact.
+
+5. **Frontmatter-as-control-mapping.** Each card carries YAML frontmatter listing the compliance controls (e.g., SOC-2 CC1.1, CC7.2) it touches. A dashboard reads frontmatter across the entire kanban to render a control × cycle coverage heatmap with each cell linking to the cycle's evidence section as the auditable source.
+
+6. **Self-referential governance.** The kanban tool itself is governed by an instance of itself — the repository containing the kanban app's source has its own `eos/cycle/` folder which is the kanban that governs the app's evolution. Auditors observe that the governance tool's compliance is governed by the same controls it is auditing.
+
+**Combined with Claims 1-6, the result is:** a governance methodology (Claims 1-6) for which the working artifact (Claim 7) is the kanban itself, the kanban is governed by the methodology, and the artifact-of-the-artifact (the kanban tool deployed via the methodology) attests its own deployment by being used to manage its own cycle.
+
+**Prior art to distinguish from (initial pass; counsel to expand):**
+- GitHub Projects / GitLab Boards — separate state store outside the repository; not folder-as-lane; not edit-as-PR.
+- ZenHub / Jira on top of GitHub issues — issues are the cards, not files in folders; no folder-as-state property.
+- GitBook / VuePress / mdBook — rendered docs from repository markdown; no kanban semantics; no governance transitions.
+- "Wiki" features on GitHub / GitLab — pages, not folders-as-lanes; no PR-as-edit semantics (most wikis bypass PR review).
+- Docusaurus or similar docs-as-code platforms — viewer, not interactive governance tool.
+
+**Why this combination is novel:** the conjunction of (a) folder-as-state, (b) visibility-inheritance for authorization, (c) PR-as-transition, (d) AI-attestation as first-class participant, (e) frontmatter-as-compliance-mapping, and (f) self-referential governance is not present in any prior tooling we are aware of. Counsel to confirm.
+
+**Filing strategy:** consider filing Claim 7 as a CIP (continuation-in-part) of the main EOS methodology application once provisional priority is established, OR as a separate divisional if counsel deems the kanban-tooling claim sufficiently distinct from the methodology claim to warrant its own family.
+
+**Steward operational note (2026-06-11):** EOS-4.1 is the cycle that operationalizes Claim 7. The cycle's §13 closure (verified by the cycle itself moving through the kanban in the live app) becomes the working demonstration of inventive utility, suitable for inclusion in a continuation-in-part filing as enablement evidence.
+
+---
+
 ## 6. Suggested next steps
 
 1. Counsel review (US, then PCT for international).

@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "lanes": [
+    {
+      "folder": "00_backlog",
+      "label": "Backlog",
+      "description": "Cycle ideas, not yet planned. Includes attested-roadmap (eos-6..12) + proposed candidates (cand-a..l).",
+      "color": "neutral-500",
+      "allowedTransitionsTo": ["01_planning"]
+    },
+    {
+      "folder": "01_planning",
+      "label": "Planning",
+      "description": "Steward authoring §1-§5 (story / criteria / NFRs / feedback / approval gate).",
+      "color": "amber-600",
+      "allowedTransitionsTo": ["02_design", "04_in_development", "07_aborted"]
+    },
+    {
+      "folder": "02_design",
+      "label": "Design",
+      "description": "Agent decomposing §6-§12 (layer impact / schema / contracts / telemetry / execution plan).",
+      "color": "amber-500",
+      "allowedTransitionsTo": ["03_ready", "01_planning", "07_aborted"]
+    },
+    {
+      "folder": "03_ready",
+      "label": "Ready",
+      "description": "Both halves approved; ready to execute.",
+      "color": "lime-500",
+      "allowedTransitionsTo": ["04_in_development", "07_aborted"]
+    },
+    {
+      "folder": "04_in_development",
+      "label": "In Development",
+      "description": "In flight; §10 plan being worked through across all touched repos.",
+      "color": "sky-500",
+      "allowedTransitionsTo": ["05_verifying", "07_aborted"]
+    },
+    {
+      "folder": "05_verifying",
+      "label": "Verifying",
+      "description": "Code shipped; §9 telemetry assertions being validated against the next play-cycle session log.",
+      "color": "violet-500",
+      "allowedTransitionsTo": ["06_shipped", "04_in_development", "07_aborted"]
+    },
+    {
+      "folder": "06_shipped",
+      "label": "Shipped",
+      "description": "Closed + immutable. Together, these ARE the system specification.",
+      "color": "emerald-500",
+      "allowedTransitionsTo": []
+    },
+    {
+      "folder": "07_aborted",
+      "label": "Aborted",
+      "description": "Steward killed pre-shipment; rationale recorded in §13.",
+      "color": "rose-500",
+      "allowedTransitionsTo": []
+    }
+  ],
+  "mutex": {
+    "single_open_cycle": true,
+    "single_steward_relaxation": "Under single-Steward mode, the Steward may scaffold the next cycle's planning doc in 01_planning while the current cycle is in 04_in_development. The next cycle still cannot enter 04_in_development until the prior reaches 06_shipped. Strict mutex re-engages when republic-616 ships."
+  },
+  "filename_pattern": "brain_{major.minor}.eos-{N}(.{M})?.md",
+  "sub_attestation_form_added": "2026-06-11 by EOS-4.1 — eos-{N}.{M} for recursive properties of cycle N"
+}

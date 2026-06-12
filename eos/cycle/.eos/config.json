@@ -1,0 +1,8 @@
+{
+  "name": "olympus-616 platform EOS cycle kanban",
+  "displayLabel": "Olympus EOS",
+  "defaultBranch": "brain/1.7.x.x",
+  "description": "The canonical end-of-session continual-improvement cycle kanban for the entire olympus-616 universe. One cycle at a time (single-open-cycle mutex). Each cycle doc travels from 00_backlog → 06_shipped or 07_aborted.",
+  "schema_version": "1.0",
+  "introduced_by_cycle": "brain_1.7.eos-4.1"
+}
