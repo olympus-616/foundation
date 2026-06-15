@@ -65,7 +65,9 @@ The next ordinal is determined by reading the highest `eos-{N}` across all stage
 
 The file is the single source of truth from the moment the cycle opens until it closes. Steward writes the top half (the **what + why**). The alchemisthomer agent writes the bottom half (the **how + verify**). Both edit in place; both keep the doc up to date until the cycle is shipped + verified.
 
-When the cycle closes, the doc moves to `06_shipped/` and becomes **immutable history** — future cycles reference it but don't edit it.
+When the cycle closes, the doc moves to `06_shipped/` and becomes **append-only history** — evidence that further affirms or strengthens an already-attested claim may be added (e.g. a new row in §1.1 documenting a post-ship deviation against a closed sub-claim like D20 naive-builder reproducibility); the existing history is never edited or deleted. **The Steward (as architect) blocks any change that mutates or removes prior content; when republic-616 lights up, this canon will be affirmed by multi-party governance.**
+
+The distinction matters: shipped doc edits cluster into two kinds — those that *change* a closed truth-claim (forbidden: e.g. flipping a §2.x verdict, rewriting §13 closeout text, deleting a deviation row) and those that *add evidence* to an already-closed truth-claim (allowed: e.g. appending a deviation row, attaching a later session-log excerpt, linking a forward cycle that further proves the claim). The append-only-evidence pattern is what makes a shipped doc continue to function as a living ledger of the claim it attested, without compromising the karmic-accounting tractability (Patent claim 3 / claim 6) that the single-SHA-per-state model depends on.
 
 ## Kanban folder structure
 
