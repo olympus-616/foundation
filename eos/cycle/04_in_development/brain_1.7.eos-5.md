@@ -6,7 +6,7 @@
 |---|---|
 | **Branch family** | `brain/1.7.x.x` |
 | **Cycle ordinal** | `eos-5` (5th on this branch family) |
-| **Status** | `Planning` — Steward authoring §1-§5. **Cycle does NOT enter `04_in_development/` until EOS-4 is validated to production** (Steward direction 2026-06-10). |
+| **Status** | `In Development` — Steward verbal direction 2026-06-15: *"i am starting"* + *"you can move the cycle to in progress and you can capture my asserts that we will be validating to ensure the system meets the financial and reporting and security requirements to go live."* EOS-4 precondition satisfied (in `06_shipped/` 2026-06-11). §5 ticked via verbal sign-off below. EOS-5 is **the first assertion cycle** — Steward verbal framing 2026-06-15: *"the assertions are what will hold the repos together as i pull it all apart to add in the necessary plumbing... i must expose each app back to its bones."* The §9 assert set is the contract that holds cross-repo coherence during the bones-surgery. Runner automation deferred (*"we can do the automation validation later... this is not critical path"* — Steward 2026-06-15); §9 is the spec, the Steward executes the plumbing manually with §9 as the bar. |
 | **Opened** | 2026-06-10 |
 | **Closed** | — |
 | **Prior cycle** | `brain_1.7.eos-4` (the `brain/1.7.x.x` IS the stable production environment cycle) |
@@ -202,13 +202,13 @@ The two passes together define EOS-5 as the **financial-truth-loop closure** tha
 
 ## §5 Steward approval gate
 
-- [ ] Story locked (§1)
-- [ ] Criteria locked (§2)
-- [ ] NFRs locked (§3)
-- [ ] **EOS-4 has validated to production (precondition for §5 sign-off per Steward direction 2026-06-10)**
-- [ ] Approved to execute — signed: **{Steward initials}** **{date}**
+- [x] Story locked (§1) — §1.1 canonical attestation locked 2026-06-10; security scope-broadening noted in §9 per Steward verbal direction 2026-06-15
+- [x] Criteria locked (§2) — Blocks A-ROYALTY / A-RAILS / B-LE / B-ALL / C drafted; security criteria captured forward in §9 against EOS-7/10/11/CAND-E/F/I attestation set (Steward may later formalize as §2 Block D)
+- [x] NFRs locked (§3) — anticipated categories listed; concrete budgets will be refined in §10 as the accounting work surfaces per-surface latency/cost numbers
+- [x] **EOS-4 has validated to production** — EOS-4 in `06_shipped/` 2026-06-11 (co-closed with EOS-3); precondition satisfied
+- [x] Approved to execute — signed: **GWH (verbal direction)** **2026-06-15**
 
-> *Single-open-cycle global mutex:* EOS-5 cannot enter `04_in_development/` until EOS-4 reaches `06_shipped/` (or, under explicit Steward direction, parallel with EOS-4 per the 2026-06-10 relaxation pattern — but Steward's stated direction is *"after eos-4 is validated to production"* which implies sequential, not parallel). Until then this doc lives in `01_planning/` and the Steward iterates §1-§5 in place. Forward: republic-616 multi-party §5 vote re-engages the strict mutex.
+> *Single-open-cycle global mutex:* EOS-4 reached `06_shipped/` 2026-06-11; EOS-5 enters `04_in_development/` 2026-06-15 per the canonical sequential pattern. Forward: republic-616 multi-party §5 vote re-engages the strict mutex (today the four ticks above are Steward-as-architect; under republic-616 they become a vote tally with cycle ROI / completion accounting visible to all signers).
 
 ---
 
@@ -236,15 +236,99 @@ The two passes together define EOS-5 as the **financial-truth-loop closure** tha
 - `GET /v1/billing/balance` — surface-queryable token balance.
 - `POST /v1/billing/tithe/distribute` — periodic (cron-triggered? event-driven?) tithe-distribution actor.
 
-## §9 Telemetry assertions
-*PENDING. Anticipated signatures:*
+## §9 Telemetry assertions — the EOS-5 contract for launch-go-live
 
-- `revenue.checkout.<rail>.<surface>` — fires when a checkout session is created.
-- `revenue.payment.<rail>.<surface>` — fires when payment settles.
-- `revenue.mint.<surface>` — fires when tokens land in the user's balance.
-- `revenue.consume.<event_type>` — fires per llm.turn / equivalent.
-- `revenue.tithe.<cause>` — fires per cause-attribution event.
-- `revenue.payout.<cause>` — fires per period payout.
+> **Captured 2026-06-15 per Steward verbal direction:** *"capture my asserts that we will be validating to ensure the system meets the financial and reporting and security requirements to go live."* The assert set is organized into three buckets — **F**inancial, **R**eporting, **S**ecurity — each labeled `§9.{bucket}{N}`. Every assert is a concrete probe (SOQL, log signature, code-grep, or HTTP behavior) that produces a single pass/fail answer against a named environment scope.
+>
+> **Operating principle (Steward 2026-06-15):** *"the assertions are what will hold the repos together as i pull it all apart to add in the necessary plumbing."* The assert text is the contract anchored in foundation/eos/cycle/; the implementations live in the per-repo bones-surgery. As each assert flips from RED to GREEN the cycle progresses. Automation runner is **NOT** built in this cycle — Steward executes each probe manually against the dev environment (which is opened at high frequency per Steward 2026-06-15). Automation lands in a later cycle.
+>
+> **Back-references:** every assert names the §2 criterion or backlog statement (EOS-7/10/11, CAND-*) it proves.
+>
+> **Severity:** **RED** = blocks cycle close. **YELLOW** = warn / defer to a follow-up cycle. **GREEN** = passing baseline (informational).
+>
+> **Env scope:** `alpha-org` (production Salesforce) · `og_node_beta_1` / `og_node_beta_2` (managed-package install targets) · `dev_enterprise` (current scratch) · `olympus-int` Pantheon (production AWS cluster) · `olympus-eos-4` Pantheon (second prod cluster from EOS-4) · `code` (static analysis across all repos at `brain/1.7.x.x` HEAD).
+
+### Validated surfaces (§9.V) — the cycle's continuous-validation register (Steward verbal direction 2026-06-15, FIRST assert)
+
+> **Steward verbatim 2026-06-15:** *"the first assertion that we must validate is the following applications must all run from one instance of olympus-grid and will all be validated throughout the eos-cycle as 'validated surfaces' as we have validated our software upgrade across each surface."*
+>
+> **The validated-surfaces assert is the foundational §9 entry — it precedes financial, reporting, and security because none of those buckets are meaningful per-surface until the surface is confirmed running against the same `olympus-grid` instance the cycle's accounting work is targeting.** Each named surface flips from RED to GREEN as the bones-surgery for that surface lands AND the surface independently confirms it's consuming the current `olympus-grid` managed-package install AND emitting the AppSource-tagged ledger writes / cosmos-logos handshakes / cluster-routing that §9.F + §9.R + §9.S require of it.
+>
+> **One instance of olympus-grid** = whichever managed-package install the cycle is targeting at any given time (today: `og_node_beta_1` + `og_node_beta_2` as the production alpha-org pair; scratch `dev_enterprise` for in-flight validation). The assert: every surface in the table below transacts against THAT instance, not a stale/forked one.
+>
+> **Continuous-validation pattern (Steward 2026-06-15):** unlike the financial/reporting/security asserts which fire at cycle-close, §9.V re-runs at every milestone of the bones-surgery — every time the Steward exposes one surface back to its bones and rebuilds it, the §9.V register updates for that surface (RED → YELLOW partial → GREEN validated). The register itself is the cycle's progress dashboard.
+
+| # | Surface | What "validated" means for this surface | Probe (live env: prod or scratch as named per milestone) | Status |
+|---|---|---|---|---|
+| §9.V1 | **olympus-gpt interface** | Surface routes chat through the current `olympus-grid` instance's cluster registry; emits `AppSource__c='olympus-gpt'` on every LedgerEntry; cosmos-logos handshake completes pre-MCP; Stripe revenue path active per §9.F1 | (a) Browser network tab shows API calls to one of the registered cluster hosts; (b) SOQL: `SELECT COUNT(Id) FROM LedgerEntry__c WHERE AppSource__c='olympus-gpt' AND CreatedDate=TODAY` > 0; (c) `cosmos.handshake.complete` log signature present in session | RED |
+| §9.V2 | **templeathena interface** | (Surface scope to confirm — Steward to identify which interface "templeathena" names: the Athena demo UI at `:3402`, a temple-themed sub-surface of olympus-gpt, or a distinct surface) — once identified: surface routes through current `olympus-grid` instance, emits `AppSource__c='templeathena'` on LedgerEntry | (a)–(c) same shape as §9.V1 with `AppSource__c='templeathena'` | RED (scope-clarification pending) |
+| §9.V3 | **iris portal interface** | The `app.olympus-grid.com` portal hosting iris React bundle routes through current `olympus-grid` instance (no managed-package drift); consumer-side feedback path works (post-D17); cluster-picker shows the current cluster registry; Plutus event stream is cluster-specific; emits `AppSource__c='iris-portal'` on every LedgerEntry | (a) `Plugin.iris.md-meta.xml` + `Plugin.iris_deployment_app.md-meta.xml` `bundleId` matches current iris build; (b) SOQL: `SELECT COUNT(Id) FROM LedgerEntry__c WHERE AppSource__c='iris-portal' AND CreatedDate=TODAY` > 0; (c) feedback submitted from iris portal lands in `Feedback__c` with cross-surface admin-reply round-trip per EOS-1 §2.8 sharpened definition | RED |
+| §9.V4 | **turtleshell-web** | Web surface routes through current `olympus-grid` instance; emits `AppSource__c='turtleshell-web'` distinguishably from `turtleshell-ios` / `turtleshell-offgrid` despite shared `AppKey__c='turtleshell'`; Stripe revenue path active per §9.F1; single token economy holds with iOS sibling per §9.F3 | (a) Browser network tab confirms current cluster registry; (b) SOQL: `WHERE AppSource__c='turtleshell-web'` > 0; (c) cross-surface token balance equals turtleshell-ios balance for same Identity (§9.F3) | RED |
+| §9.V5 | **turtleshell-ios** | iOS surface routes through current `olympus-grid` instance; emits `AppSource__c='turtleshell-ios'`; Apple IAP revenue path active per §9.F2; cosmos-logos handshake uses `apple-cryptokit` format; deploys via `omens/tools/ios-deploy.sh` discipline per memory `feedback_omens_ios_deploy_script_is_canonical.md` (script is canonical — never hand-roll) | (a) iOS console shows correct cluster host; (b) SOQL: `WHERE AppSource__c='turtleshell-ios'` > 0; (c) `apple-cryptokit` handshake log signature present | RED |
+| §9.V6 | **omens** (the game — guardians AppKey per memory `project_omens_repo_equals_guardians_appkey.md`) | iOS game surface routes through current `olympus-grid` instance; emits `AppSource__c='omens'` (or whatever surface-discriminator pairs with `ApplicationProfile__r.AppKey__c='guardians'`); plays correctly post-bones-surgery | (a) `IdentityNodes.cs ScratchDev.AuthUrl/IdentityUrl` match current scratch (per memory `feedback_scratch_org_url_drift_pattern.md`); (b) SOQL: `WHERE AppSource__c='omens'` or `WHERE ApplicationProfile__r.AppKey__c='guardians'` > 0; (c) Plutus event stream from omens session lands | RED |
+| §9.V7 | **olympus-grid Salesforce home page** | The Salesforce admin home (`Olympus_Grid_Home` Lightning App / 5-tile Launchpad + Sign-Me-In per memory `project_eos_3_validation_cycle.md`) renders against current managed-package install; admin actions emit `AppSource__c='olympus-grid-home'` (or equivalent) on any LedgerEntry that admin actions generate | (a) Launchpad loads with current `LaunchpadCtrl` + `ogPanelLaunchpad` + `ogPanelSetUp` bundle; (b) SOQL: admin action → `AuditLog__c` row per §9.S11; (c) admin sees current cluster registry through Sign-Me-In | RED |
+| §9.V8 | **turtleshell iris portal plugin for Salesforce** (the iris-turtleshell popup that brought iris portal to EOS-1 parity per memory `project_iris_turtleshell_eos_1_parity_2026_05_26.md` and EOS-3 §13 D17 resolution) | The iris portal's embedded turtleshell experience inside Salesforce routes through current `olympus-grid` instance; emits a distinguishable `AppSource` (currently TBD — likely `iris-portal-turtleshell` or `turtleshell-iris`) so cross-surface ledger aggregation can separate it from the standalone iris-portal surface | (a) `Plugin.app_turtleshell.md-meta.xml` surface entry deployed and active; (b) SOQL: `WHERE AppSource__c=<iris-turtleshell-discriminator>` > 0 — discriminator name to be locked by Steward when first row is written; (c) handshake + feedback submission both work from inside the SF-embedded experience | RED |
+
+**§9.V close-criterion:** EOS-5 cannot close until every row above is GREEN under the production env scope (`og_node_beta_1` + `og_node_beta_2`) AND repeatable against `dev_enterprise` scratch. A surface stuck at RED at cycle-close blocks the cycle — there is no partial-launch for "5 of 8 surfaces validated"; the launch-go-live bar is unanimous validation per Steward 2026-06-15.
+
+**Sub-asserts the §9.V table depends on (forward-references that gate it):**
+- §9.R1 (AppSource populated) gates §9.V1–V8 (b) probes; without AppSource populated, the SOQL probes return zero on every surface and the table cannot turn green.
+- §9.S8 (cosmos-logos handshake) gates §9.V1, V3, V4, V5, V6, V8 (c) probes — every surface that uses MCP tools needs the handshake to pre-fire.
+- §9.F1/F2 (Stripe / Apple revenue rails) gate the "revenue path active" half of §9.V1, V3, V4, V5 — surfaces without a wired payment path cannot fully validate.
+
+The validated-surfaces register is the cycle's living progress dashboard; its rows flip independently as the Steward's bones-surgery on each surface lands and the surface confirms itself.
+
+### Financial asserts (§9.F) — Half A revenue rails + royalty engine
+
+- **§9.F1 — Stripe webhook → LedgerEntry credit (§2.A1).** SOQL on `alpha-org`: `SELECT COUNT(Id) FROM LedgerEntry__c WHERE EventType__c='payment.stripe' AND CreatedDate=TODAY` ≥ count of Stripe webhook events observed in CloudWatch `/aws/ecs/olympus-int/pantheon` (and `/olympus-eos-4/pantheon`) for the same window. **RED.**
+- **§9.F2 — Apple IAP receipt → LedgerEntry credit (§2.A2).** SOQL: `SELECT COUNT(Id) FROM LedgerEntry__c WHERE EventType__c='payment.apple' AND TransactionId__c != null AND CreatedDate=TODAY` ≥ count of validated StoreKit receipts observed server-side. Idempotency: zero duplicate `TransactionId__c` values. **RED.**
+- **§9.F3 — Single token economy holds (§2.A3).** For any test Identity X with purchases across surfaces: `SELECT SUM(CreditAmount__c) - SUM(DebitAmount__c) FROM LedgerEntry__c WHERE Identity__c='X'` returns the same balance regardless of which cluster's surface queries it. **RED.**
+- **§9.F4 — Consumption metering writes per turn (§2.A4 / §2.B7).** Every `llm.turn` line in Pantheon CloudWatch produces a `LedgerEntry__c` debit within 30 s with matching `RequestId__c`. SOQL: `SELECT COUNT(Id) FROM LedgerEntry__c WHERE EventType__c='llm.turn' AND CreatedDate=LAST_N_DAYS:1` matches CloudWatch `llm.turn` count. **RED.**
+- **§9.F5 — Royalty calculation at write time (§2.A-ROY.3).** SOQL: `SELECT COUNT(Id) FROM LedgerEntry__c WHERE EventType__c='llm.turn' AND TitheAmount__c=null AND CreatedDate > 2026-06-15` = 0. Every consumption event has its tithe attributed at write time. **RED.**
+- **§9.F6 — RoyaltyConfiguration__c row exists for tithe (§2.A-ROY.1, §2.A-ROY.2).** SOQL: `SELECT COUNT(Id) FROM RoyaltyConfiguration__c WHERE RoyaltyType__c='tithe' AND Percentage__c=7.0 AND Active__c=true AND PayoutDestination__c != null` ≥ 1. The 7% tithe is a configured row, not hardcoded. **RED.**
+- **§9.F7 — No hardcoded tithe logic (§2.A-ROY.1).** Code-grep against `olympus-grid/force-app/**/*.cls` and `**/*.trigger` for literal `0.07` / `7%` / hardcoded `tithe` outside the royalty engine returns 0 matches. (Engine file is the single exception, by name.) **RED.**
+- **§9.F8 — Royalty disbursement executed at cadence (§2.A-ROY.4).** `RoyaltyPayout__c` rows with `Status__c='executed'` exist for each configured `PayoutCadence__c`; aggregate disbursed equals aggregate `TitheAmount__c` accumulated per `PayoutDestination__c` since the last payout. **RED.**
+- **§9.F9 — Tithe destination maps to a cosmic-7 cause (§2.A6, memory `feedback_cosmic_seven_canonical.md`).** Every `RoyaltyPayout__c` row with `RoyaltyType__c='tithe'` has `PayoutDestination__c` resolving to one of: Oceans / Water / Food / Healthcare / Shelter / Education / AI-for-Those-in-Need. **RED.**
+- **§9.F10 — Book balances (§2.B8).** `SUM(CreditAmount__c) - SUM(DebitAmount__c) - SUM(TitheAmount__c)` per `Identity__c` matches the user's displayed balance + outstanding obligations on every surface, within rounding tolerance ≤ 0.01 token. **RED.**
+- **§9.F11 — Autonomous failure handling (§2.A5).** Stripe webhook 5xx is retried with backoff and eventual idempotent ingest; Apple receipt re-validation handles `RECEIPT_*` retry codes; balance-exhausted soft-fail shows a graceful UX without Pantheon crash. Audit: synthetic-failure test produces 0 unrecovered events. **RED.**
+- **§9.F12 — "Reduction of human suffering" brand frame structurally present (§2.A-ROY.5).** Every consumer-facing payout email + every `RoyaltyPayout__c` row + every `RoyaltyConfiguration__c.Description__c` for tithe carries the canonical framing. Grep for "tithe" or "7%" in templates returns 0 occurrences without "reduction of human suffering" (or canonical equivalent) within the same record/template. **YELLOW** (brand-discipline; doesn't gate technical close but gates Steward sign-off).
+
+### Reporting asserts (§9.R) — Half B every-record attribution + observability
+
+- **§9.R1 — AppSource__c populated on all forward LedgerEntry__c (§2.B4).** SOQL: `SELECT COUNT(Id) FROM LedgerEntry__c WHERE AppSource__c=null AND CreatedDate > 2026-06-15` = 0. Baseline as of 2026-06-10 EOS-3 probe: ~232 rows null = 100%. **RED.** *Closes EOS-3 §13 D12.*
+- **§9.R2 — Cycle__c FK populated on all forward LedgerEntry__c (§2.B2).** SOQL: `SELECT COUNT(Id) FROM LedgerEntry__c WHERE Cycle__c=null AND CreatedDate > 2026-06-15` = 0. Prerequisite: §9.R3a — the `Cycle__c` SObject must exist in `og_node_beta_1` / `og_node_beta_2`. **RED.** *Closes EOS-3 §13 D10.*
+- **§9.R3 — Identity__c FK populated on all forward LedgerEntry__c (§2.B3).** SOQL: `SELECT COUNT(Id) FROM LedgerEntry__c WHERE Identity__c=null AND CreatedDate > 2026-06-15` = 0. **RED.** *Closes EOS-3 §13 D14.*
+- **§9.R4 — RequestId__c populated on all forward LedgerEntry__c (§2.B5).** SOQL: `SELECT COUNT(Id) FROM LedgerEntry__c WHERE RequestId__c=null AND CreatedDate > 2026-06-15` = 0. **RED.** *Closes EOS-3 §13 D13.*
+- **§9.R5 — Cause__c populated on every consumption event (§2.A4).** SOQL: `SELECT COUNT(Id) FROM LedgerEntry__c WHERE EventType__c='llm.turn' AND Cause__c=null AND CreatedDate > 2026-06-15` = 0. **RED.** *Closes EOS-3 §13 D11.*
+- **§9.R6 — Every-SObject attribution audit (§2.B-ALL.1).** For each custom SObject in production (`Feedback__c`, `Cluster__c`, `ApplicationProfile__c`, `Identity__c`, `Cycle__c`, `Memory__c`, `ApiLog__c`, `Logger__c`, `Conversation__c`, `Messages__c`, `RoyaltyConfiguration__c`, `RoyaltyPayout__c`, every Portal / Process / Chronos object): the per-SObject required-attribution-column set (created-by/at, modified-by/at, plus context FKs where applicable: Identity, ApplicationProfile, Cluster, Cycle, RequestId, AppSource) is populated on 100% of rows created after 2026-06-15. Artifact: `docs/eos-5-attribution-matrix.md` produced as a per-SObject table. **RED.**
+- **§9.R7 — Per-surface aggregation correctness (§2.B4.b).** For each surface attested in EOS-3+4 (omens, turtleshell-web, turtleshell-ios, olympus-gpt, iris portal post-D17, turtleshell-offgrid): `SELECT SUM(DebitAmount__c) FROM LedgerEntry__c WHERE AppSource__c='<surface>' AND CreatedDate=:window` matches the activity observed on that surface in that window, cross-checked against (a) the surface's own session-log count of activity events and (b) CloudWatch event counts on the surface's serving cluster. Sum-across-surfaces equals sum-without-AppSource-filter. **RED.**
+- **§9.R8 — Cross-cluster aggregation per Identity is consistent (§2.B-ALL.4).** For an Identity active on both `olympus-int` and `olympus-eos-4`: SOQL aggregations rolled across both clusters produce a single per-Identity total that matches the union of cluster-local CloudWatch event counts. **RED.**
+- **§9.R9 — End-to-end traceability (§2.C1).** Every `X-Request-ID` observed in a client session-log produces (a) a matching entry in the cluster-local Ares/Hermes/god log and (b) ≥ 1 `LedgerEntry__c` row with the matching `RequestId__c`. Sample size: 100 random RequestIds per surface per cluster, 0 misses. **RED.**
+- **§9.R10 — Every-SObject "manageable" affordance (§2.B-ALL.2).** Every custom SObject has at least one admin/operations affordance — UI screen in iris admin, named SOQL report, or CLI tool — that a Steward/admin can use to inspect rows. Audit: per-SObject coverage table in `docs/eos-5-attribution-matrix.md`. **YELLOW** (operational, not financial close-gate).
+- **§9.R11 — Every-SObject "monitorable" affordance (§2.B-ALL.3).** Each SObject has row-count growth tracked in a dashboard + anomalous-row-creation alert. Mnemosyne / Plutus / CloudWatch carry the load. **YELLOW.**
+- **§9.R12 — Repeatability against scratch + sandbox (§2.C2).** Independent operator on a fresh machine running only source-controlled materials repeats §9.F1–F10 + §9.R1–R8 against a fresh scratch + Stripe/Apple sandbox. Same closure semantic as EOS-3 §2.9. **RED.**
+
+### Security asserts (§9.S) — Authority / sovereignty / launch-go-live bar
+
+> **Scope-broadening per Steward verbal direction 2026-06-15:** *"financial and reporting and security requirements to go live."* Security was not in EOS-5 §2 as authored; captured here as forward-pulled launch-bar criteria drawn from EOS-7 (Authority — least privilege via Identity__c), EOS-10 (Sovereignty — no committed secrets / start-up injection), EOS-11 (Sovereignty — steward not a data handler), CAND-E (tenant isolation), CAND-F (identity verified not merely authorized), CAND-I (PCI scope minimization). Steward may later formalize as §2 Block D; until then §9.S is the operative spec. **No assert here introduces a new SObject or service — every probe is verifiable against current production once the bones-surgery completes.**
+
+- **§9.S1 — No committed secrets (EOS-10).** `git grep -E '(API_KEY|SECRET|TOKEN|PRIVATE_KEY|sk_live_|sk_test_|AKIA)[A-Za-z0-9_-]{15,}' brain/1.7.x.x` across olympus-616 parent + every submodule returns 0 matches outside known-safe placeholders (test fixtures explicitly marked, `.env.example`). **RED.**
+- **§9.S2 — Production keys injected at start-up (EOS-10).** Pantheon container env-vars for `COSMOS_LOGOS_*_PRIVATE_KEY`, `OG_SIGNING_CERT`, `STRIPE_SECRET_KEY`, `APPLE_SHARED_SECRET`, etc., are populated from SSM at ECS task-start; **not present in CloudFormation templates committed to zeus/cdk**; **not visible in Docker image layers** (`docker history` shows no secret material). **RED.**
+- **§9.S3 — Least privilege via Identity__c (EOS-7).** Every Pantheon `/v1/*` endpoint reads `x-user-identity` from Ares cookie-stripped header and authorizes against `Identity__c` before any data access. Audit: synthetic request with no `x-user-identity` returns 401 from 100% of business endpoints; synthetic request with a valid-but-unprivileged Identity returns 403 from privileged endpoints. **RED.**
+- **§9.S4 — Steward not a data handler by default (EOS-11).** Steward's `Identity__c` row has no automatic access to any other Identity's `LedgerEntry__c` / `Feedback__c` / `Conversation__c` / `Messages__c` rows unless the target Identity has explicitly granted via a `ProfileRelationship__c` row of an allowed type. Probe: SOQL as Steward → query Identity Y's data → returns 0 rows in the absence of an active relationship. **RED.**
+- **§9.S5 — Tenant isolation across nodes and clusters (CAND-E).** Any request bearing Identity X's auth that targets Identity Y's data returns 403 (or empty). Audit: cross-Identity data-leak test sweep across every `/v1/*` endpoint × every SObject × both clusters returns 0 leaks. **RED.**
+- **§9.S6 — Identity is verified, not merely authorized (CAND-F).** Every `Identity__c` row in production has either (a) a completed email-link verification + active `TurtleshellProfile__c` in `Active` status, or (b) an IdP-backed verification record. No "ghost identities" with no verification path. SOQL: `SELECT COUNT(Id) FROM Identity__c WHERE VerificationStatus__c != 'verified' AND IsActive__c=true` = 0. **RED.**
+- **§9.S7 — JWT validation on every Pantheon endpoint.** Every `/v1/*` endpoint validates the JWT against `OG_SIGNING_CERT` before processing. Audit: request with no JWT or expired JWT returns 401 from 100% of business endpoints (health endpoints excluded). **RED.**
+- **§9.S8 — Cosmos-logos handshake completes before MCP unlock.** Every session that uses MCP tools (omens, turtleshell-web, turtleshell-ios, iris portal) completes the X25519 sealed-box (or apple-cryptokit) handshake first. Audit: log signature `cosmos.handshake.complete` precedes every `mcp.tool.call` per session. **RED.**
+- **§9.S9 — TLS-only at every prod edge.** No prod endpoint accepts HTTP; only HTTPS. Pantheon ALBs + Salesforce alpha-org + `og_node_beta_1` + `og_node_beta_2` return 308 or 301 to HTTPS for any HTTP request. **GREEN baseline expected** (already enforced via zeus/cdk + SF site config); assert exists to prevent regression. **RED on regression.**
+- **§9.S10 — PCI scope minimization (CAND-I).** No card data touches the platform — Stripe Checkout / Apple StoreKit only. Audit: `git grep -E '(pan|card_?number|cvv|cvc|primary_account)' brain/1.7.x.x` across all repos returns 0 matches outside the Stripe / Apple SDK references and explicitly-named tests. **RED.**
+- **§9.S11 — Audit trail on every customer-affecting admin action (CAND-K).** Every admin action that modifies a customer's `Identity__c` / `LedgerEntry__c` / `TurtleshellProfile__c` writes an `AuditLog__c` row identifying the admin Identity + target Identity + before/after state + timestamp. SOQL: each admin action category has ≥ 1 corresponding `AuditLog__c` row per occurrence. **RED.**
+
+### How §9 closes the cycle
+
+EOS-5 closes when every **RED** assert above resolves to **GREEN** under the named env scope, verified by the Steward executing the probe directly (no runner — automation deferred per Steward 2026-06-15). YELLOW asserts are tracked but do not block cycle close; they become a follow-up cycle's RED set. **The §13 closeout captures the final pass-state of every assert + the date each one flipped to GREEN.**
+
+A future cycle will lift §9 into runner code (`foundation/eos/cli/eos-assert` or equivalent) so each assert is re-runnable on demand against any environment. That cycle will inherit the green set as its baseline.
 
 ## §10 Execution plan
 *PENDING.*
