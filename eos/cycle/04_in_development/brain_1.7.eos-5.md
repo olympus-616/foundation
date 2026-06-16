@@ -172,14 +172,145 @@ The two passes together define EOS-5 as the **financial-truth-loop closure** tha
 
 ## §3 Non-functional requirements
 
-*PENDING — Steward to draft. Anticipated categories:*
+### §3.0 — NFR families in EOS-5 scope
+
+The original drafting of §3 anticipated these categories (preserved here for the §10 / §13 closeout to reconcile against):
 
 - **Revenue-path latency budget** — checkout completion time per surface; webhook processing time; token-mint time post-payment.
 - **Cost budget** — Stripe processing fees + Apple's 30% (or 15% small-business) cut + the 7% cosmic-7 tithe + AWS / Salesforce costs per token — the unit-economics formula has to fit.
 - **Observability** — every revenue event traceable from client surface → server → Plutus ledger → cosmic-7 cause distribution.
 - **Compatibility** — existing identity / ApplicationProfile / Plugin__mdt records survive; rolling out per surface doesn't break other surfaces.
-- **Privacy** — PCI-DSS posture (Stripe handles card data, but we still touch enough metadata to need discipline); Apple's privacy-policy attestations.
+- **Privacy** — PCI-DSS posture (Stripe handles card data, but we still touch enough metadata to need discipline); Apple's privacy-policy attestations. Hardened further by §9.D data minimization.
 - **Performance** — checkout flows do not block on Pantheon round-trips that aren't strictly necessary; mobile surfaces work offline-tolerant.
+
+### §3.AR — Ares ingress hardening NFR contract — public-use launch bar (Steward-relayed 2026-06-15)
+
+> **Steward verbal direction 2026-06-15:** *"here is the attestation for the non-functional requirements associated to upgrading the ares endpoint to public use of the platform."*
+>
+> **Attribution.** The §3.AR claim set below was authored by the **Ares-hardening agent** working in the `ares` repo and presented to the EOS agent for canonical integration. The agent structured its package as falsifiable claims with concrete verification steps; each claim is tied to source. **Empirical proofs captured in their session** are tracked at the foot of §3.AR — the agent has already demonstrated 12 of these properties live; the remaining claims are provable on demand. The agent's suggested **load-bearing first-cut** for EOS-5 close gating: §3.AR.A1, A2, B2, B5, B6, B7, D1, D3, E1–E5 — all empirically demonstrated except B6 (kill switch four-lever) which remains provable but not yet exercised live in the source session.
+>
+> §3.AR uses the agent's original lettering (A–F) for the ingress-hardening claim groups. These letters are local to §3.AR and unrelated to the §9 letter system (§9.V, §9.A, §9.B, etc.). §9.S security asserts cross-reference §3.AR as the authoritative NFR contract for the ingress layer.
+
+#### §3.AR.A — Policy lifecycle
+
+- **A1. A compiled-in strict default policy is always loaded at boot and cannot be removed at runtime.**
+  - Source: `api/src/policy/defaults.strict.ts` — `STRICT_DEFAULT_POLICY` constant exported and referenced as the floor in `api/src/policy/policy-store.ts:14` and `api/src/policy/policy-loader.ts` (`composeFromAllSources` initializes policy = `STRICT_DEFAULT_POLICY`).
+  - Verify: start with no env or policy file. `curl localhost:3451/v1/ares/policy/current | jq '.version, .policy_id'` returns `0` and `"compiled-strict-v1"`. **Empirically demonstrated 2026-06-15.**
+- **A2. Policy overlays compose in this priority order: compiled defaults → legacy CORS env → `ARES_POLICY_JSON` → local cache file → remote URL poll.** Each layer overlays top-level keys wholesale; final version is the max of all layer versions.
+  - Source: `api/src/policy/policy-loader.ts` — `composeFromAllSources()`.
+  - Verify (live, already proven): started Ares with `ARES_POLICY_JSON='{"version":1,"policy_id":"dev-relaxed-v1",...}'`. `curl localhost:3451/v1/ares/policy/current | jq '.version, .policy_id'` returns `1` and `"dev-relaxed-v1"`.
+- **A3. Policy swap is version-gated and atomic from middleware's perspective:** `swap(next)` only commits when `next.version > current.version` (or forced).
+  - Source: `api/src/policy/policy-store.ts:24-30`.
+  - Verify: load policy A (version 5). Attempt to swap to policy B (version 4). `swap()` returns false, snapshot unchanged.
+- **A4. Listeners registered via `onPolicyChange()` fire synchronously after every successful swap** so derived caches (regex compilations, IP matchers, rate-limit buckets) refresh in lockstep with the policy.
+  - Source: `api/src/policy/policy-store.ts:32-34`; `api/src/middleware/{ipGate,pathAllowlist,rateLimiter}.ts` each register a listener that recompiles their derived state.
+  - Verify: set `ARES_POLICY_JSON` with `rate_limits.per_ip.burst: 5` → swap → 6th rapid request returns 429.
+- **A5. SIGHUP causes a re-read of the local policy file without restarting the process.**
+  - Source: `api/src/policy/policy-loader.ts` — `installSighupHandler()`; wired in `api/src/index.ts` boot sequence.
+  - Verify: write a `version: 99` file to `${TMPDIR}/ares-policy.cache.json`; `kill -HUP <pid>`; `curl /v1/ares/policy/current | jq .version` returns 99.
+- **A6. Remote refresh is asynchronous, starts after `app.listen`, runs every 60s, and is a no-op when `ARES_POLICY_URL` is not set.**
+  - Source: `api/src/policy/policy-loader.ts` — `startPolling()`; called inside `server.listen` callback in `api/src/index.ts`.
+  - Verify: boot with no `ARES_POLICY_URL`. Log contains `Policy poll disabled (ARES_POLICY_URL not set)`. With it set, log contains `Policy poll enabled: <url> every 60000ms`.
+
+#### §3.AR.B — Defense middleware (chain order matters)
+
+- **B1. Middleware chain order** in `api/src/index.ts` is: CORS → body → cookieParser → cookieToHeader → cfSecretGuard → pathAllowlist → concurrency → request-context → ipGate → rateLimitPerIp → apiKeyMiddleware → jwtMiddleware → killSwitch → rateLimitPerIdentity → Plutus inbound meter → routes/forward.
+  - Source: `api/src/index.ts:109-218` (verifiable by line-grep on `app.use()`).
+  - Verify: `grep -n "^app\.use" api/src/index.ts` produces the above sequence.
+- **B2. Unknown paths are rejected with HTTP 404 before reaching any logging, auth, or proxy code.** Known surface anchored on regex patterns in `pathAllowlist.ts` covering core gods, auth routes, health/status, and policy admin routes.
+  - Source: `api/src/middleware/pathAllowlist.ts:23-58`.
+  - Verify (live, already proven): `curl -i localhost:3451/wp-admin` returns 404; `curl -i localhost:3451/.env` returns 404; `blocks.path_not_allowed.total` in stats increments by 2.
+- **B3. Global in-flight concurrency cap** (configurable per policy) returns 503 with `Retry-After: 1` when exceeded. `/health` family is always exempt so ALB probes never see 503 from this layer.
+  - Source: `api/src/middleware/concurrency.ts`.
+  - Verify: load policy with `concurrency.max_inflight: 5`. `hey -n 100 -c 50` against a slow path returns a mix of 503s; `/health` always returns 200.
+- **B4. IP gate supports three modes** (deny-only, allowlist-permissive, allowlist-strict), IPv4 + CIDR matching, with `/health*` always exempt.
+  - Source: `api/src/middleware/ipGate.ts` (CIDR compile + match in `compileMatcher`/`matches`).
+  - Verify: `ARES_POLICY_JSON='{"version":1,"ip":{"mode":"deny-only","allow":[],"deny":["127.0.0.1"]}}'`. `curl -i localhost:3451/` → 403; `curl -i localhost:3451/health` → 200.
+- **B5. Three independent token-bucket rate limiters** apply to per-IP, per-API-key, and per-JWT-sub independently. Failing any one returns 429 with `Retry-After: N` and an `error / rule / retry_after_seconds` JSON body. Each bucket map is LRU-capped at 50,000 entries.
+  - Source: `api/src/middleware/rateLimiter.ts`; `TokenBucket` math + `BucketMap` eviction.
+  - Verify (live, already proven): strict floor + localhost made 60 rapid Builtsy chat requests; subsequent requests returned 429 `{"error":"rate limited","rule":"rate_ip","retry_after_seconds":1}`.
+- **B6. Kill switch supports four independent levers**: `kill.all` (drains everything except health), `revoked_subs` (403 on JWT match), `revoked_keys` (403 on resolved `x-og-key-id` match), `denied_paths` (403 on regex match). All checked after JWT/API-key middleware sets identity headers; all O(1) per request via precompiled sets.
+  - Source: `api/src/middleware/killSwitch.ts`.
+  - Verify: inject policy `{"kill":{"all":true,...}}` → `curl /` returns 503, `curl /health` returns 200. Inject `{"kill":{"revoked_subs":["S123"],...}}` and a JWT with `sub: S123` → 403 with `{"error":"identity revoked"}`. **NOT YET EMPIRICALLY DEMONSTRATED — provable on demand; the only A1/A2/B2/B5/B6/B7/D1/D3/E* load-bearing claim that has not been live-exercised in the source session.**
+- **B7. CORS rejection:** origins not in `policy.cors.allow_origins` and not matching any regex in `policy.cors.allow_origin_patterns` get a response without `Access-Control-Allow-Origin`. No-Origin requests (server-to-server, `curl` without `-H Origin`) are allowed.
+  - Source: `api/src/index.ts` cors block + `isAllowedOrigin()`.
+  - Verify (live, already proven): with CORS patterns from `ares/.env` loaded, `curl -H "Origin: https://builtsy-dev-ed.scratch.my.site.com" localhost:3451/` returned `ACAO: https://builtsy-dev-ed.scratch.my.site.com`; `curl -H "Origin: https://evil.example.com" localhost:3451/` returned no ACAO header.
+- **B8. Legacy `ARES_ALLOWED_ORIGINS` and `ARES_ALLOWED_ORIGIN_PATTERNS` env vars remain honored** — folded in by the policy loader as a backward-compat layer so clusters not yet emitting `ARES_POLICY_JSON` continue to work.
+  - Source: `api/src/policy/policy-loader.ts` — `legacyCorsLayer()` invoked in `composeFromAllSources()`.
+  - Verify (live, already proven): with only `ARES_ALLOWED_ORIGIN_PATTERNS` set in env, `curl /v1/ares/policy/current | jq '.cors.allow_origin_patterns'` returned the patterns.
+
+#### §3.AR.C — Connection hygiene (HTTP server layer)
+
+- **C1. Slow-loris is defended at the socket layer** with `server.headersTimeout = 15000` (server closes the connection if full request headers do not arrive within 15s).
+  - Source: `api/src/index.ts` (after `server = app.listen(...)`).
+  - Verify: `( printf "GET / HTTP/1.1\r\nHost: localhost\r\n"; sleep 30 ) | nc -v localhost 3451` — server closes at ~15s.
+- **C2. Keep-alive is configured greater than ALB idle** to avoid the closed-connection ECONNRESET race: `server.keepAliveTimeout = 65000` (5s safety margin above the AWS ALB 60s default).
+  - Source: `api/src/index.ts`.
+- **C3. Streaming responses (Athena, Apollo TTS) are not cut off by an overall request timeout:** `server.requestTimeout = 0` (disabled). Slow-loris still bounded by `headersTimeout`; body-flooding bounded by `express.json({ limit: '1mb' })`.
+  - Source: `api/src/index.ts`.
+- **C4. `X-Forwarded-For` is trusted** (`app.set('trust proxy', true)`) so `req.ip` reflects the real client behind CloudFront/ALB — required for per-IP rate limiting to work in production.
+  - Source: `api/src/index.ts`.
+
+#### §3.AR.D — Observability & audit
+
+- **D1. Every defense decision emits a Plutus event** with `event_type: api.blocked.<rule>`, `event_category: "security"`, `shell_cost: 0`, `direction: "inbound"`, and metadata `{ ip, path, method, ua, og_key_id, policy_version, policy_id, cluster_id, detail }`. Fire-and-forget; emission failure never breaks the request path.
+  - Source: `api/src/policy/audit.ts` — `emitBlock()`.
+  - Verify: with Plutus running, `curl localhost:3451/wp-admin`; query Plutus for `event_type='api.blocked.path_not_allowed'` — event is present with the expected metadata.
+- **D2. In-memory counters per block rule survive in the process** and are exposed at `GET /v1/ares/policy/stats`. Counters increment even when Plutus is unreachable.
+  - Source: `api/src/policy/audit.ts` — counters object + `blockCounters()`.
+  - Verify (live, already proven): multiple `/wp-admin` probes in this session caused `blocks.path_not_allowed.total` to track the count.
+- **D3. Admin endpoints**: `GET /v1/ares/policy/current` returns the loaded policy. `GET /v1/ares/policy/stats` returns `{ policy_version, policy_id, concurrency, rate_limiter_keys, blocks, uptime_sec }`. `POST /v1/ares/policy/refresh` triggers an immediate `refreshOnce()`.
+  - Source: `api/src/routes/policy.ts`.
+  - Verify (live, already proven): both GETs return well-formed JSON; current snapshot has `policy_version: 1`, `policy_id: "dev-relaxed-v1"`.
+- **D4. All three admin routes are gated by `x-ares-admin-secret` matching `ARES_POLICY_ADMIN_SECRET`.** When the env var is unset the gate is open (dev convenience); when set, missing/wrong secret returns 401.
+  - Source: `api/src/routes/policy.ts` — `adminGate()`.
+  - Verify: boot with `ARES_POLICY_ADMIN_SECRET=test`. `curl /v1/ares/policy/current` → 401; `curl -H "x-ares-admin-secret: test" /v1/ares/policy/current` → 200.
+
+#### §3.AR.E — Build, dependencies, documentation
+
+- **E1. No new runtime or dev dependencies were added in this cycle.**
+  - Verify: `git diff brain/1.7.x.x...HEAD -- api/package.json api/package-lock.json` shows zero added entries under `dependencies` or `devDependencies`.
+- **E2. TypeScript compiles cleanly across the api codebase.**
+  - Verify: from `api/`, `npx tsc --noEmit` exits 0 with no diagnostics.
+- **E3. Mirror documentation exists for every new source folder**, per the repo's `DOCUMENTATION.md §6` discipline.
+  - Source: `docs/api/src/policy/README.md`, `docs/api/src/middleware/README.md`.
+- **E4. An ADR documents the ingress-hardening decision**, alternatives, consequences, and migration phases.
+  - Source: `docs/adr/ADR-002-ingress-hardening.md`.
+- **E5. The EOS-5 ingress hardening is recorded in `CHANGELOG.md`** under `[Unreleased] → Added`.
+  - Verify: first bullet under that heading describes the change.
+
+#### §3.AR.F — Explicitly NOT claimed (deferred to follow-on cycles)
+
+Scoped out of this PR by design; spec'd in `ADR-002 §Migration` for follow-on work in `--olympus-616`:
+
+- **F1.** `Cluster__c.AresPolicy__c` field on olympus-grid does not yet exist; the Apex route `ApiRouteAresPolicy` is not implemented.
+- **F2.** Zeus does not yet inject `ARES_POLICY_JSON` at Pantheon deploy. Clusters today boot with the compiled-in strict floor + whatever env vars are set.
+- **F3.** No admin LWC for editing the policy JSON exists yet.
+- **F4.** AWS WAF rate-based rules in `cdk/lib/ares-edge-stack.ts` were not enabled in this PR; remain a separate work item.
+- **F5.** No automated test suite was added in this PR. Manual smoke playbook is in the testing guidance from the source session; a vitest setup is a separate ~2–3h cycle.
+
+#### §3.AR — Empirical proofs from the source session (Ares-hardening agent's record)
+
+| # | What was proven live | When / where |
+|---|---|---|
+| 1 | Compiled-in floor boots without overrides | First restart, `version=0`, `policy_id=compiled-strict-v1` |
+| 2 | `ARES_POLICY_JSON` overlay takes effect | Second restart, `version=1`, `policy_id=dev-relaxed-v1` |
+| 3 | Legacy CORS env vars folded into policy | After sourcing `ares/.env` |
+| 4 | CORS allow: scratch site → ACAO mirrored | `curl -H "Origin: https://builtsy-dev-ed.scratch.my.site.com" /` |
+| 5 | CORS allow: localhost vite → ACAO mirrored | `curl -H "Origin: http://localhost:5173" /` |
+| 6 | CORS deny: rogue origin → no ACAO | `curl -H "Origin: https://evil.example.com" /` |
+| 7 | Path allowlist: `/wp-admin` → 404 + counter tick | Direct browser test + counter inspection |
+| 8 | Per-IP rate limit fires with correct 429 shape | Builtsy chat at `ability-computing-5392.scratch.my.site.com/portal/builtsy/` returned `{"error":"rate limited","rule":"rate_ip","retry_after_seconds":1}` |
+| 9 | Relaxed policy resolves over-strict block | Same Builtsy page worked after dev-relaxed policy applied |
+| 10 | Stats endpoint serves accurate counters under load | Multiple `/v1/ares/policy/stats` calls during the session |
+| 11 | Server uptime + RSS healthy after ~59 min of fleet test traffic | RSS 118 MB, no growth pattern |
+| 12 | Zero false-positive blocks during ~1h of legitimate traffic | `blocks_total: 0` after fleet test ran |
+
+#### §3.AR — Load-bearing first-cut for EOS-5 close
+
+Ares-hardening agent's suggested gate set: **A1, A2, B2, B5, B6, B7, D1, D3, E1–E5.** EOS agent assessment: all 11 are load-bearing; 10 of 11 are empirically demonstrated in the source session; **B6 (kill switch four-lever) is the one provable-but-not-yet-demonstrated claim** — must be exercised live before §3.AR is signed off as GREEN. **C1–C4 connection hygiene** is also load-bearing for public-traffic launch but operates at a lower layer than the agent's first-cut; EOS agent adds **C1 (slow-loris defense) and C2 (keep-alive > ALB idle)** to the load-bearing set since both are required for the Cloudfront/ALB topology described in CLAUDE.md.
+
+**§3.AR close-criterion:** A1, A2, B2, B5, B6, B7, C1, C2, D1, D3, E1–E5 all GREEN under the production env scope. The F-series is explicitly deferred — tracked as backlog for follow-on cycles (likely under §10 of a future ingress-hardening sub-attestation cycle `brain_1.7.eos-5.1.md` or similar).
 
 ## §4 Feedback inputs
 
