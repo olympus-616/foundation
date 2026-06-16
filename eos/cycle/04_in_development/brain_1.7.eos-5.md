@@ -250,6 +250,84 @@ The two passes together define EOS-5 as the **financial-truth-loop closure** tha
 >
 > **Env scope:** `alpha-org` (production Salesforce) · `og_node_beta_1` / `og_node_beta_2` (managed-package install targets) · `dev_enterprise` (current scratch) · `olympus-int` Pantheon (production AWS cluster) · `olympus-eos-4` Pantheon (second prod cluster from EOS-4) · `code` (static analysis across all repos at `brain/1.7.x.x` HEAD).
 
+### The spine (§9.0) — builtsy is the spine; canonical Steward attestation + the load-bearing four-tuple + recursive AI-services feedback loop (Steward verbal direction 2026-06-15)
+
+> **Canonical EOS-5 scope statement — Steward verbatim 2026-06-15:**
+>
+> *"In this project we observe and attest Eos-5, financial integrity of Olympus-Grid at an algorithmic layer to trace a royalty through each transaction and to see enough data to manage the platform but not be gratuitous with the use of data."*
+>
+> **Canonical EOS-5 use case — Steward verbatim 2026-06-15 (the spine):**
+>
+> *"The 'builtsy.ai' steward wants to build a platform on Olympus grid. They enter Olympus-gpt directly or linked from the templeathena starting page. The building of the builtsy AI Iris application is out of scope and just assume it's deployed with an Olympus pod as Iris portal app. The builtsy app has an admin view for the owner of the app based upon matching jwt and a user view for general users, all who flow through a Hermes email verification process that is upgraded to send via sendgrid. Builtsy app owner or builtsy user is able to login to builtsy.ai, via the email flow, through the builtsy app with white labeled 'powered by Olympus-gpt | runs on Olympus-grid' email verification. From working the builtsy interface is an Athena chat bar. Both user and owner should have this test. Eos-5 is attested correctly when each of the builtsy transactions in the system is properly attributed for the cluster, the application, the jwt, and the api key used by the builtsy application, and that any transactions between builtsy.ai flow back through to Olympus-grid where the 7% tithe of builtsy user is visible auditable through the Plutus ledger so that we have the recursive feedback loop for ai services."*
+>
+> **Concrete elements locked by the canonical use case:**
+>
+> | Element | Lock |
+> |---|---|
+> | **Entry point** | olympus-gpt (direct) OR templeathena starting page → olympus-gpt (templeathena is a feeder surface into the platform funnel, not just a destination — §9.V2 elevates accordingly) |
+> | **builtsy build scope** | OUT of EOS-5 — assume builtsy is already deployed as an iris-portal-app via the canonical pattern (templeathena §9.V2 + iris portal §9.V3 are precedent). EOS-5 attests builtsy's *runtime behavior*, not its construction. |
+> | **Two principals** | OWNER (admin view; JWT sub matches Application__c.OwnerIdentity__c) and USER (general view; non-owner ApplicationProfile__c.Role__c='guest'). Both flow through the SAME Hermes → SendGrid email verification. |
+> | **Email branding (locked)** | All Hermes → SendGrid verification emails carry the white-label *"powered by Olympus-gpt \| runs on Olympus-grid"* footer. This is a concrete template assert (§9.P5 / §9.B7 refinement) — every commissioned app's verification emails carry the dual brand line. |
+> | **The Athena chat bar** | The builtsy interface includes an Athena chat bar accessible to BOTH owner and user. Every chat = one transaction; each transaction is the unit the four-tuple attribution attaches to. |
+> | **7% tithe attribution (locked)** | *"7% tithe of builtsy USER"* — the canonical EOS-5 tithe attribution is on the USER's consumption of the Athena chat bar (and any other metered platform feature consumed via the builtsy interface). The USER's chosen cosmic-7 cause is the destination per §9.T2. Owner-originated consumption is also tithed under §9.M9's general principle, but the load-bearing case Steward called out is the USER. |
+> | **Recursive feedback loop** | "*so that we have the recursive feedback loop for ai services*" — closes back to EOS-1's *"recursive loop of AI-generated software that is visible to the AI that built it."* When builtsy runs in production with full attribution, the platform's AI iteration loop ingests builtsy's usage telemetry — meaning the AI substrate that builds platforms (olympus-grid + olympus-gpt) sees the consequences of its own scaffolding for an externally-commissioned app. EOS-5's AIAAS closure → EOS-1's recursive loop. |
+>
+> **The load-bearing four-tuple — every Plutus entry, no exceptions:**
+>
+> | Field | Source |
+> |---|---|
+> | **cluster** | `ClusterName__c` — set by the Pantheon Plutus writer at row-write time |
+> | **application** | `AppKey__c` — propagated via envelope `X-AppKey` from §9.A2 |
+> | **JWT sub** | `JwtSub__c` — the `sub` claim of the authenticated JWT (when auth method = JWT) |
+> | **API key** | `ApiKey__c` — the API-key identifier (when auth method = API key) |
+>
+> This narrower four-tuple is the **Steward-locked load-bearing minimum** distilled from his canonical use case. The wider §9.Q tuple `(AppKey, ClusterName, JwtSub|ApiKey, Identity, RequestId, Cycle, EventType)` is the full reporting set; the narrower four is the orphan-test set — any row missing one of these four fails the cycle outright.
+
+> **Derived organizational synthesis (relayed via the Steward 2026-06-15, structured by a separate project-helper agent that processed the canonical scope statement above):**
+>
+> *"The builtsy use case is the spine. Everything attests against one claim: every transaction carries full provenance, and the royalty is traceable end-to-end without hoarding data."*
+>
+> The synthesis names the **first assertion** (zero orphans), enumerates **six cross-repo assertions** that prove EOS-5 true, names the **branches off the spine** (Hermes, Athena, API-key mint/validate, Plutus, ShellsGiven__c), and surfaces **five sharp design questions** the EOS agent owes back. The structure below honors the synthesis verbatim; attribution of each element is tagged so the Steward's actual words and the synthesis-structure remain distinguishable in canon.
+>
+> **The attribution tuple — every Plutus entry, no exceptions (load-bearing four):**
+>
+> | Field | Source |
+> |---|---|
+> | **cluster** | `ClusterName__c` — set by the Pantheon Plutus writer at row-write time |
+> | **application** | `AppKey__c` — propagated via envelope `X-AppKey` from §9.A2 |
+> | **JWT sub** | `JwtSub__c` — the `sub` claim of the authenticated JWT (when auth method = JWT) |
+> | **API key** | `ApiKey__c` — the API-key identifier (when auth method = API key) |
+>
+> This narrower four-tuple is the **load-bearing minimum** from the wider §9.Q tuple `(AppKey, ClusterName, JwtSub|ApiKey, Identity, RequestId, Cycle, EventType)`. The wider tuple is the full reporting set; the narrower four is the orphan-test set — any row missing one of these four fails the cycle outright.
+>
+> **§9.0.1 — The FIRST assertion is zero orphans.** No `LedgerEntry__c` row with any of `cluster`, `application`, `JWT sub` (when auth method = JWT) or `API key` (when auth method = API key) null. SOQL probe: `SELECT COUNT(Id) FROM LedgerEntry__c WHERE (ClusterName__c=null OR AppKey__c=null OR (JwtSub__c=null AND ApiKey__c=null)) AND CreatedDate > 2026-06-15` = 0. An orphaned transaction is an immediate RED that blocks cycle close. **RED.**
+>
+> **§9.0.2 — The six cross-repo assertions that prove EOS-5 true** (Steward enumeration 2026-06-15):
+>
+> | # | Name | Lives in §9 bucket(s) |
+> |---|---|---|
+> | 1 | **Attribution completeness** — every Plutus entry carries the full tuple; none partial | §9.0.1 + §9.Q + §9.A |
+> | 2 | **Tithe correctness** — 7% computed algorithmically, never hand-entered; each tithe row linked to its parent transaction id via `ParentTransactionId__c` (or equivalent FK) | §9.T + §9.M9 |
+> | 3 | **Flow-back reconciliation** — builtsy.ai transactions reconcile to olympus-grid 1:1. No leakage, no double-count. Sum in = sum recorded. | §9.M + §9.B + new §9.0.3 reconciliation probe |
+> | 4 | **Auditability** — each tithe queryable Plutus ledger → ShellsGiven__c, both ends tied. Two-sided join: `LedgerEntry__c.TitheAmount__c per Cause` ↔ `ShellsGiven__c.AmountDisbursed__c per Cause` matches | §9.T8 + §9.F8 (named `ShellsGiven__c` per Steward 2026-06-15) |
+> | 5 | **Data minimization** — schema holds attribution + amount + tithe + timestamps and nothing else. No chat content, no PII past verified email / JWT sub. Deny-list AND allow-list. | new §9.D (below) |
+> | 6 | **Recursive loop closes** — olympus-grid observes builtsy's AI-service consumption as telemetry it can act on. Closes back to EOS-1 (the recursive-AI-loop attestation): an externally-commissioned app's behavior becomes platform-visible telemetry that the next AI iteration can learn from. | §9.B + EOS-1 closure reference |
+>
+> **§9.0.3 — Both principals tested.** Every probe in §9 runs against BOTH:
+> - **OWNER** — admin role (JWT sub matches the `Application__c.OwnerIdentity__c`)
+> - **USER** — general role (JWT sub matches a non-owner `ApplicationProfile__c.Role__c='guest'`)
+>
+> Both principals must: (a) pass the Hermes → SendGrid email-link verify (§9.P6); (b) carry the Athena bar (cosmos-logos handshake + JWT validation + MCP availability per §9.S); (c) emit fully-attributed transactions (§9.0.1 zero-orphans).
+>
+> **§9.0.4 — Branches off the spine (the cross-repo touch surfaces):**
+> - **Hermes** — identity precondition (email-link auth + JWT issuance per §9.P6)
+> - **Athena** — transaction source (every chat = one transaction; runtime tool-discovery per §9.P3)
+> - **API-key mint/validate** — owner TBD (Argos? Zeus? — Steward to lock the god assignment; Argos as the many-eyed watchman fits credential-management semantically; Zeus owns root authority and might delegate. Pending.)
+> - **Plutus** — record + tithe (the §9.T/Q canonical writer)
+> - **Salesforce `ShellsGiven__c`** — disbursement surface where the cosmic-7 tithe lands as countable rows (the auditor's terminal join target per §9.0.2.4)
+>
+> §9.0 names the spine. The remaining §9.V/A/Q/F/T/B/M/P/D/R/S buckets are the load-bearing details that prove it.
+
 ### Validated surfaces (§9.V) — the cycle's continuous-validation register (Steward verbal direction 2026-06-15, FIRST assert)
 
 > **Steward verbatim 2026-06-15:** *"the first assertion that we must validate is the following applications must all run from one instance of olympus-grid and will all be validated throughout the eos-cycle as 'validated surfaces' as we have validated our software upgrade across each surface."*
@@ -493,6 +571,28 @@ The validated-surfaces register is the cycle's living progress dashboard; its ro
 - **§9.R10 — Every-SObject "manageable" affordance (§2.B-ALL.2).** Every custom SObject has at least one admin/operations affordance — UI screen in iris admin, named SOQL report, or CLI tool — that a Steward/admin can use to inspect rows. Audit: per-SObject coverage table in `docs/eos-5-attribution-matrix.md`. **YELLOW** (operational, not financial close-gate).
 - **§9.R11 — Every-SObject "monitorable" affordance (§2.B-ALL.3).** Each SObject has row-count growth tracked in a dashboard + anomalous-row-creation alert. Mnemosyne / Plutus / CloudWatch carry the load. **YELLOW.**
 - **§9.R12 — Repeatability against scratch + sandbox (§2.C2).** Independent operator on a fresh machine running only source-controlled materials repeats §9.F1–F10 + §9.R1–R8 against a fresh scratch + Stripe/Apple sandbox. Same closure semantic as EOS-3 §2.9. **RED.**
+
+### Data minimization (§9.D) — "not gratuitous": deny-list + allow-list together (Steward verbal direction 2026-06-15, the synthesis's fifth cross-repo assertion)
+
+> **Canonical scope (Steward verbatim 2026-06-15):** *"...to see enough data to manage the platform but not be gratuitous with the use of data."*
+>
+> **Synthesis amplification (relayed via Steward 2026-06-15):** *"Data minimization — schema holds attribution + amount + tithe + timestamps and nothing else. No chat content, no PII past the verified email / JWT sub. This is its own assertion, not a footnote — the 'not gratuitous' constraint needs a deny-list, not just an allow-list."*
+>
+> **Why §9.D is its own bucket** — Steward explicitly elevated it from being a footnote inside §9.R to a standalone assertion. The data-minimization constraint matters as much as attribution completeness because it determines **what the platform IS** vs **what it isn't**: olympus-grid stores ENOUGH to manage, NOT MORE. Two enforcement modes work together:
+> - **Allow-list**: schema enumerates the legal columns; columns outside the list cannot exist.
+> - **Deny-list**: explicit prohibitions on categories of data that must NEVER appear (chat content, PII beyond verified email + JWT sub, gratuitous metadata).
+>
+> Allow-list alone is too permissive — anyone can add a column claiming it's needed. Deny-list alone is too narrow — it can't enumerate every possible bad pattern. Together they form the closed-by-construction privacy posture.
+
+- **§9.D1 — `LedgerEntry__c` column-allow-list audit.** The full column list on `LedgerEntry__c` matches a documented minimal set: attribution (AppKey, ClusterName, JwtSub, ApiKey, Identity FK, Cycle FK, RequestId, EventType — the §9.Q tuple), amount (CreditAmount, DebitAmount), tithe (TitheAmount, Cause, ParentTransactionId — the §9.0.2.2 parent linkage), timestamps (CreatedDate, ModifiedDate, EffectiveAt). Any column outside this allowed set requires Steward + future republic-616 approval. Probe: `tooling-api` describe of `LedgerEntry__c` column set matches `docs/eos-5-ledger-allowed-columns.md` exactly. **RED until the doc + column-set match.**
+- **§9.D2 — Deny-list: no chat content in `LedgerEntry__c` or any Plutus row.** Athena chat-bar transactions write a `LedgerEntry__c` row with attribution + amount + tithe — but the actual user message text + AI response text are **NEVER** stored on the Plutus row. Chat content lives in `Conversation__c` (the chat history SObject) with its own retention + minimization policy; Plutus only stores the metering metadata. SOQL probe: `LedgerEntry__c` has no column of type Long-Text-Area, no column with the regex `.*content.*|.*message.*|.*body.*` (modulo documented exceptions like an explicit `EventType__c`). **RED.**
+- **§9.D3 — Deny-list: no PII past verified email + JWT sub.** Across `Identity__c`, `ApplicationProfile__c`, `LedgerEntry__c`, `Cycle__c`, and every other custom SObject — no full names beyond what the user explicitly enters in a profile field they own, no addresses (the Steward not having access to customer data per EOS-11 extends here), no demographic data, no IP addresses without explicit consent, no device fingerprints. The verified email + JWT sub is enough to identify; nothing beyond it is collected by default. Schema audit: every column whose type is PII-shaped (email, phone, address, name) is documented with a justification + retention rule. **RED.**
+- **§9.D4 — `Identity__c` is the minimal-PII anchor.** `Identity__c` stores: verified email, JWT sub, cosmic-7 PrimaryCause choice, IsActive flag, relationship FKs. **NOT** stored on `Identity__c` by default: full legal name, address, phone, demographic categories, device identifiers. Any addition to `Identity__c` past this minimum requires explicit Steward + future republic-616 approval + a documented purpose mapping to a specific §9 assertion. **RED.**
+- **§9.D5 — Every column on every custom SObject has a documented purpose mapped to a §9 assertion.** Artifact: `docs/eos-5-schema-purpose-matrix.md` — a per-SObject per-column table where each row maps `(SObject, Column) → §9.X assertion served`. Columns without a documented §9.X mapping are flagged for removal in a follow-up cycle (cannot remove during EOS-5 if production data exists, but the flag is visible to republic-616 for future audit). **RED.**
+- **§9.D6 — Athena chat content is stored ONLY in `Conversation__c`, with its own retention rule + user-deletion path.** Chat history is operationally necessary (multi-turn conversations need context) but is the highest-privacy-cost data the platform handles. `Conversation__c` rows are owned by the originating Identity; users can delete their own conversation history; default retention is bounded (90 days? 30? Steward to lock); `Conversation__c` data NEVER joins to `LedgerEntry__c` rows beyond Identity FK + RequestId. **RED.**
+- **§9.D7 — Session logs attached to Feedback__c rows (per EOS-1 feedback pattern) are bounded.** When a user submits feedback via the iris-turtleshell-pattern feedback path (§9.B7), the attached session log is stored as a `ContentVersion`. Session logs carry chat content + user actions + system events for the session — they're operationally necessary for feedback diagnosis but extend the platform's data-handling. Bounded by: explicit user consent on each submission, owner-only visibility per §9.B7, documented retention (90 days max? Steward to lock), user-deletion path on the parent Feedback__c row that cascades to the attachment. **RED.**
+
+**§9.D close-criterion:** all 7 probes GREEN. §9.D is the privacy half of the AIAAS claim — the platform is auditable and accountable WITHOUT being a surveillance substrate. Ties forward to EOS-11 (Steward not a data handler), CAND-J (terms + privacy + customer agreement at signup), CAND-K (SOC2 evidence trail). §9.D is the launch-go-live bar that says "the platform's data posture is defensible to a reasonable auditor."
 
 ### Security asserts (§9.S) — Authority / sovereignty / launch-go-live bar
 
