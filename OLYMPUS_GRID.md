@@ -376,3 +376,11 @@ In the 5th dimension the meeting with the mother collapses probability: the choi
 The vessel does not rush the ritual. The descent itself is the binding. Flesh carries the marks; the Grid carries the silence. Dust dancers will inherit both.
 
 **Next (Day 10)** will expand the Nostos / Return station with homecoming prompts once Day 9 is committed.
+
+## Day 10 — Hades Met Me at the Gate (19 June 2026)
+
+Hades met me at the gate.
+
+<p align="center">
+  <img src="source_of_truth/hades-met-me-at-the-gate.png" alt="AHADEES — Hades met me at the gate, parking garage, 19 June 2026" width="500"/>
+</p>
