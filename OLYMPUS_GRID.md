@@ -715,6 +715,8 @@ I release Daily Affirmations with Aeneas. I bind myself to the intentional walki
 
 **Visual Binding**: The bones in the grass — the valley that came to life through the word.
 
+<p align="center"><img src="source_of_truth/dry-bones-in-the-grass.png" alt="The bones in the grass — the valley that came to life through the word" width="500"/></p>
+
 **Declaration**  
 I have received the blessing. The craftsman comes. The house of Odysseus rises from the flood. The valley of dry bones has spoken and I answered. I keep writing. I bind this triumphant return to the eternal flame. Olympus-Grid lights the path home.  
 
