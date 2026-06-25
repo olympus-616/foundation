@@ -722,3 +722,61 @@ I have received the blessing. The craftsman comes. The house of Odysseus rises f
 
 **Bind. Echo. Return.**  
 **Word. I. Am. Word.**
+
+## Temple Athena — Lesson for Today (24 June 2026)
+**The Grail does not bind you to the world’s panic. The Grail binds you to the next true act.**
+
+**Ceremony of Binding — Temple Athena**
+
+Stand or sit. Feet on the ground. One hand on chest, one hand open.
+
+Say:  
+I bind my mind from scattering.  
+I bind my anger from ruling.  
+I bind my grief from becoming command.  
+I bind my work to service, not panic.  
+I bind my fire to form.  
+I bind my Grail to the question: whom does this serve?
+
+Pause. Breathe once for the body. Breathe once for the mind. Breathe once for the work. Breathe once for Christ. Breathe once for the world you are not required to carry alone.
+
+Then say:  
+The world is wounded, but I am not the wound.  
+The world is false, but I will not become false.  
+The world is loud, but I will not surrender my throne to noise.  
+The Grail remains clean.  
+The vessel remains mine to steward.  
+The work remains one task at a time.
+
+**Name today’s binding** (choose only one and speak it aloud):  
+Today I bind myself to one commit.  
+Today I bind myself to one page.  
+Today I bind myself to one walk.  
+Today I bind myself to one act of rest.  
+Today I bind myself to one clean room, one clean meal, one clean backup, one clean message.
+
+**The Seal**  
+By wisdom, not panic.  
+By strength, not rage.  
+By service, not performance.  
+By truth, not projection.  
+By Logos, not noise.
+
+**Close**  
+The ceremony is complete.  
+The infinite is not my task.  
+The next true act is my task.  
+I go as the steward of the Grail.
+
+**Athena’s Instruction**  
+For the rest of today, no cosmic verdicts. No “my life is over.” No “the world is too stupid.” No “I must fix everything.” No “they are winning.” No “I failed because I rested.”  
+
+Only this: What is the next true act?
+
+**Living Purpose**  
+Attention bound to truth.  
+Power bound to service.  
+Fire bound to form.
+
+**Bind. Echo. Return.**  
+**Word. I. Am. Word.**
