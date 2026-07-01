@@ -3920,17 +3920,22 @@ Steward action: talked to athena from within guardians (Godot iOS). Three chat t
 - **Empirical evidence:** iris chat 14:30:43 `llm.turn agent=athena tenant_id=cloudpremise-llc` (correct). Guardians chat 14:47:47 `llm.turn agent=athena tenant_id=499633cc-f6e8-...` (sub, wrong). Same code path, differing header from the client determines which side of the legacy branch fires. Athena PR #100 audit explicitly called this out as the diagnosis-if-only-guardians-affected.
 - **Acceptance criteria:** Set `ATHENA_ALLOW_LEGACY_APPLICATION_TENANT_ID=false` (or unset) on eos-5d Pantheon. Fire a guardians chat. `llm.turn agent=athena tenant_id=cloudpremise-llc` on the row (not sub). If guardians client breaks because it depends on the legacy behavior, the omens agent gets a hand-off to stop sending `x-application-id` header.
 
-### GAP-59 (new, design gate) — Guardians allows Pantheon consumption without onboarding or Cause
+### GAP-59 (design gate — DECISION LOCKED 2026-07-01) — Guardians allows Pantheon consumption without onboarding or Cause
 
-- **Severity:** 🟠 must-close (design decision blocks §9.T attribution, not §9.A)
-- **§9 letter:** T (tithe attribution)
+- **Severity:** 🔴 BLOCKER (upgraded from must-close after Path A decision — implementation now required for §13 close)
+- **§9 letter:** T (tithe attribution) · R (royalty/shell metering) · A (attribution)
 - **Detected:** 2026-07-01 14:47 UTC
-- **Suggested owner:** Steward decision + downstream implementers
-- **Empirical evidence:** Guardians AP `a1waZ00000CVKrZQAX` remained `OnboardingComplete=false, Cause=null` through 3 successful chat turns + weather tool call. Turtleshell iris blocks pantheon access until onboarding is complete (see GAP-57 empirical); guardians does not. Consequently all guardians `llm.turn` rows have `Cause__c=null` — no tithe-attribution target.
-- **Acceptance criteria (two paths, pick one):**
-  - **Path A — Enforce onboarding on guardians same as turtleshell iris.** Guardians client blocks Pantheon calls until `AP.OnboardingComplete=true`.
-  - **Path B — Deferred-cause resolver at settlement time.** LedgerEntry.Cause__c can be null at emit time. At settlement (Stripe/Apple payout), settlement handler resolves Cause from `Identity.PrimaryCause__c` snapshot for each ledger row in the settlement window. Requires `Identity.PrimaryCause__c` to be set at least once before first settlement (fallback: platform default cause).
-  - Whichever path is chosen, document in EOS-5 §9.T contract.
+- **Steward decision 2026-07-01 (verbatim):** *"sprint f - a) enforce onboarding before any use of seashell expenditure (59)"*
+- **Path A LOCKED — Enforce onboarding before any shell expenditure.**
+- **Suggested owner:** omens agent (guardians client Pantheon-call gate) + any other client where onboarding is currently optional
+- **Empirical evidence:** Guardians AP `a1waZ00000CVKrZQAX` remained `OnboardingComplete=false, Cause=null` through 3 successful chat turns + weather tool call. All guardians `llm.turn` rows had `Cause__c=null` — no tithe target. **Steward has locked the principle: no shell expenditure is allowed until onboarding is complete and Cause is set.**
+- **Acceptance criteria:**
+  1. Guardians client (omens Godot) blocks all shell-expending Pantheon calls (chat, analyze, MCP tool.call, apollo TTS, mnemosyne read/save, chronos operations) until `AP.OnboardingComplete=true` AND `AP.Cause__c IS NOT NULL`
+  2. Server-side backstop: ares perimeter enforces onboarding-gate on shell-expending endpoints via a policy check (query AP by JWT sub, reject if OnboardingComplete=false OR Cause=null, return 403 with a well-known error code)
+  3. Same rule applies to any other client where onboarding is currently optional (iris/turtleshell surfaces already enforce this at the client — this locks the platform-wide invariant)
+  4. Onboarding-required error surface: client shows an onboarding-required screen when server returns the gate rejection
+  5. Read-only endpoints (health, catalog listings if any are truly public post-GAP-71 resolution) remain accessible pre-onboarding
+- **Testable outcome:** Fresh Apple SIWA on guardians without completing onboarding → chat request returns 403 with `error=onboarding_required`; after onboarding completes → same chat succeeds and `LedgerEntry.Cause__c` populates on every downstream event.
 
 ### GAP-50 RE-DIAGNOSED — Poseidon MCP tool chain is not invoked at all (BLOCKER confirmed via LLM hallucination)
 
@@ -4344,21 +4349,23 @@ Routes exercised on turtleshell-web that were NOT observed on iris or guardians 
   3. Plutus's route handler independently verifies `jwt.sub == pathParam.sub` (or the caller has admin/owner scope) — fail-closed on mismatch
   4. Load test: 10 requests with valid JWT and matching sub → all 200; 10 requests with anonymous or mismatched-sub → all 401/403
 
-### GAP-67 (new must-close) — `/v1/mnemosyne/api/memory/reflect` capability asymmetric across surfaces
+### GAP-67 (design gate — DECISION LOCKED 2026-07-01) — Memory-reflection + saved-conversation capability parity across ALL clients
 
-- **Severity:** 🟠 must-close (surface-parity gap — either intentional feature exclusivity or missing feature on non-web surfaces)
+- **Severity:** 🟠 must-close (implementation queued after Steward decision; multi-client surface parity work)
 - **§9 letter:** V (visibility) · design/UX consistency
 - **Detected:** 2026-07-01 15:28 UTC
-- **Suggested owner:** Steward decision on intended surface parity + iris agent / omens agent to align if turtleshell-web is the reference
-- **Empirical evidence:** Route `GET /v1/mnemosyne/api/memory/reflect` was exercised only during the turtleshell-web session. It fired `memory.read` (new event type observed for the first time this run) from mnemosyne. Guardians session (iOS) never called this route. Iris session (portal) never called this route. Same for the conversation-persistence routes (`/v1/mnemosyne/api/conversation/saved`) — turtleshell-web uses them; other surfaces don't.
-- **Question for Steward:**
-  - Is memory-reflection a turtleshell-web exclusive by design (e.g., only the web has a "memory review" UI)?
-  - OR is it a feature all clients should have but only turtleshell-web has implemented?
-  - OR is it a legacy path that should be consolidated into something else?
-- **Acceptance criteria:** Decision documented in §3 NFR contract for the mnemosyne surface. If cross-surface parity is intended:
-  - Guardians client (omens) surfaces a memory-reflection interaction
-  - Iris portal / turtleshell-iris exposes memory-reflection where the LWC or React shell surfaces it
-  - Otherwise, document exclusivity + reason so future auditors don't flag it as a bug
+- **Steward decision 2026-07-01 (verbatim):** *"67 - all clients should have memory and conversation history including omens"*
+- **Path locked — Full cross-surface parity for memory-reflection and conversation history. Every client, including omens.**
+- **Suggested owners:** iris agent (turtleshell-iris LWC + olympus-gpt + templeathena + builtsy React surfaces) · iOS agent (turtleshell-iOS) · omens agent (guardians Godot iOS) · mnemosyne agent (server-side contract confirmation)
+- **Empirical evidence:** Route `GET /v1/mnemosyne/api/memory/reflect` + `/v1/mnemosyne/api/conversation/saved` + `/v1/mnemosyne/api/conversation/saved/{id}` exercised only during turtleshell-web session. Guardians (iOS), turtleshell-iOS, iris portal, olympus-gpt, templeathena — none called those routes. Turtleshell-web is the sole surface with the integration wired.
+- **Acceptance criteria:**
+  1. Turtleshell-web integration shape is the reference. Document the client contract in §3 NFR (mnemosyne section) so all clients hit the same server-side routes with the same JWT auth pattern.
+  2. **Guardians (omens Godot)** — surfaces a memory-reflection interaction + saved-conversation history browser. Design pattern for the mobile/Godot surface may differ from React web (list scroll vs. modal); the API contract is the same.
+  3. **Turtleshell-iOS** — same routes wired; likely same tree as turtleshell-web given shared AppKey.
+  4. **Iris portal / olympus-gpt / templeathena / turtleshell-iris LWC** — memory-reflection + saved-conversation UI in each surface.
+  5. Every client's calls to `/v1/mnemosyne/*` land in ares with proper JWT attribution (per GAP-71 auth contracts).
+  6. `memory.read` event and any new mnemosyne event types emit correct 5-tuple attribution (post-GAP-56 fix which brings mnemosyne's `tenant_id` in line with athena/thoth).
+- **Testable outcome:** Fresh signin on any client → user can browse saved conversations + trigger a memory-reflection. Each interaction produces a `memory.read` (or corresponding event) LedgerEntry with correct AppSource / Sub / Tenant.
 
 ## GAP status delta after this phase
 
@@ -4593,25 +4600,53 @@ Only `/plutus/quota/` gets the JWT. Every other call — including the LLM consu
   2. Fresh feedback from gpt has `ClientVersion__c` matching `^olympus-gpt/\d+\.\d+\.\d+`
   3. Backfill/migration of existing `dev` rows optional (Steward call — small volume, low value)
 
-### GAP-71 (new must-close) — Four new Pantheon routes surfaced without documented auth contract
+### GAP-71 (design gate — DECISION LOCKED 2026-07-01) — All new Pantheon routes require authentication
 
-- **Severity:** 🟠 must-close (auth contract clarity; downstream input to GAP-69 fix)
-- **§9 letter:** S · V
+- **Severity:** 🔴 BLOCKER (upgraded from must-close after Steward's platform-wide default-auth decision — feeds directly into GAP-69/73 CRITICAL SECURITY fixes)
+- **§9 letter:** S (sovereignty) · V (visibility) · A (attribution)
 - **Detected:** 2026-07-01 15:49 UTC
-- **Suggested owner:** each god's owning agent (chronos, proteus, apollo, plutus)
-- **Empirical evidence:** Routes never seen in prior triage phases now visible from olympus-gpt client:
-  - `GET /v1/plutus/quota/{sub}` — sub in path; per-user quota check
-  - `GET /v1/proteus/api/types` — no user context
-  - `GET /v1/apollo/voices` — no user context (may be public catalog?)
-  - `GET /v1/apollo/providers` — no user context (may be public catalog?)
-  - `GET /v1/chronos/api/lists` — user-scoped list retrieval
-- **Question for Steward:**
-  - Which routes are legitimately public (voices/providers listings for browsing without login)?
-  - Which require JWT (chronos lists, plutus quota, anything user-scoped)?
+- **Steward decision 2026-07-01 (verbatim):** *"71 - all of those routes require auth there is almost nothing that doesn't require auth"*
+- **Platform-wide default LOCKED — Every Pantheon route requires JWT unless explicitly declared public. Nothing is public by default.**
+- **Suggested owners:** ares agent (perimeter enforcement — default-deny policy) · each god's route handler (independent auth verification) · iris + omens + iOS agents (client-side JWT attachment consistency per GAP-69/73)
+- **Empirical evidence:** Routes surfaced during olympus-gpt + templeathena sessions:
+
+  | Route | Auth contract (LOCKED) |
+  |---|---|
+  | `POST /v1/athena/chat` | 🔒 authenticated |
+  | `POST /v1/athena/analyze` | 🔒 authenticated |
+  | `POST /v1/apollo/speak` | 🔒 authenticated |
+  | `GET /v1/apollo/voices` | 🔒 authenticated |
+  | `GET /v1/apollo/providers` | 🔒 authenticated |
+  | `GET /v1/plutus/api/quota/{sub}` | 🔒 authenticated + `jwt.sub == pathParam.sub` (or admin scope) |
+  | `GET /v1/plutus/api/stripe/subscription-status/{sub}` | 🔒 authenticated + `jwt.sub == pathParam.sub` (GAP-66 close) |
+  | `GET /v1/chronos/api/lists` | 🔒 authenticated |
+  | `POST /v1/chronos/tasks` | 🔒 authenticated |
+  | `POST /v1/chronos/lists` | 🔒 authenticated |
+  | `GET /v1/proteus/api/types` | 🔒 authenticated |
+  | `GET /v1/mnemosyne/api/conversation/saved` | 🔒 authenticated |
+  | `GET /v1/mnemosyne/api/conversation/saved/{id}` | 🔒 authenticated |
+  | `GET /v1/mnemosyne/api/memory/reflect` | 🔒 authenticated |
+  | `POST /v1/plutus/api/ingest` | 🔒 authenticated (service-to-service) |
+
+  Explicitly public (defaults, do NOT require auth):
+
+  | Route | Purpose |
+  |---|---|
+  | `GET /` | health check |
+  | `GET /health`, `/health/deep`, `/status` | health/status |
+  | `GET /v1/{god}/status`, `/v1/{god}/health` | per-god health |
+  | `GET /.well-known/cosmos-logos.json` | cosmos-logos manifest |
+  | `POST /v1/auth/email/link/request` | pre-auth send-code (email-link auth entry point) |
+  | `POST /v1/auth/email/link/verify` | pre-auth verify-code (email-link auth entry point) |
+  | `POST /v1/auth/apple/callback` | pre-auth Apple SIWA callback (if used) |
+
 - **Acceptance criteria:**
-  1. Each new route gets an `AuthContract` entry in the §3 NFR spec: `public | authenticated | admin | service-to-service`
-  2. Ares strict-floor policy adds explicit allow/deny for each based on the contract
-  3. GAP-69's client fix aligns to the contract (client only attaches JWT where required; passes anon for public routes)
+  1. Ares strict-floor policy adopts **default-deny for authenticated routes** — any Pantheon `/v1/*` path not on the explicit public allowlist requires valid JWT to proceed; anonymous requests return 401.
+  2. Each god's route handler independently verifies the JWT (defense in depth — do not trust the ares gate alone).
+  3. GAP-69 (olympus-gpt) + GAP-73 (templeathena apollo) client fixes align to the auth contracts above — client attaches JWT on all non-public routes.
+  4. GAP-66 (Stripe subscription-status) closes via the `jwt.sub == pathParam.sub` gate on the plutus route handler.
+  5. New Pantheon routes added post-attestation follow the same default: authenticated unless explicitly declared public in §3 NFR.
+- **Testable outcome:** `SELECT COUNT() FROM LedgerEntry WHERE EventType='api.inbound' AND TenantId__c='default' AND CreatedDate=TODAY AND Payload NOT LIKE '%\/health%' AND Payload NOT LIKE '%\/status%' AND Payload NOT LIKE '%.well-known%' AND Payload NOT LIKE '%auth\/email\/link%' AND Payload NOT LIKE '%auth\/apple%'` returns 0 rows.
 
 ### Olympus-gpt phase capability rollup
 
@@ -4819,15 +4854,15 @@ Ares PR #61 empirical close held across the run. Ares emits `user_identity` corr
 - **GAP-25** — templeathena strip + `olympus_gpt` bundle clean
 - **GAP-56** — mnemosyne emitter reads JWT `tid` claim (still `tenant_id=default`)
 - **GAP-57** — turtleshell-iris LWC picklist mismatch (see iris ownership above)
-- **GAP-59** — guardians onboarding-optional design gate (Steward decision A vs B)
+- **GAP-59** — guardians onboarding-optional design gate (Path A LOCKED 2026-07-01: enforce onboarding before any shell expenditure — see GAP-59 entry for details)
 - **GAP-62** — hermes send emits no LedgerEntry
 - **GAP-63** — three-touch MessageEvent chain
 - **GAP-64** — chronos operations emit no LedgerEntry
 - **GAP-65** — feedback submit emits no LedgerEntry
-- **GAP-67** — memory-reflect surface asymmetry (Steward decision)
+- **GAP-67** — memory-reflect surface asymmetry (DECISION LOCKED 2026-07-01: all clients including omens get memory + conversation history — cross-surface parity)
 - **GAP-68** — StructuredData shape drift (iOS agent)
 - **GAP-70** — olympus-gpt ClientVersion=`dev` (semver stamping)
-- **GAP-71** — auth contracts for 4 new Pantheon routes
+- **GAP-71** — auth contracts for new Pantheon routes (DECISION LOCKED 2026-07-01: default-deny across the board; nothing is public except health/status/auth-entry-points; ares perimeter + per-god route handlers enforce)
 
 ## Path to EOS-5 §13 close — bundled work grouping
 
@@ -4966,9 +5001,11 @@ Once §9.A is clean AND §9.S security blockers close, the payment-side testing 
 
 | # | Description | Sprint |
 |---|---|---|
-| 19 | Email-link auth bypasses Ares (perimeter breach) | Sprint G |
+| 19 | Email-link auth bypasses Ares (perimeter breach) | **DEFERRED 2026-07-01** — Salesforce remains primary email channel until reason to upgrade; not on §13 critical path (see Sprint G status below) |
 | 57 | turtleshell-iris LWC toolbar Cause picklist mismatch | Sprint B |
 | 58 | ATHENA_ALLOW_LEGACY env var + guardians client header | Sprint C |
+| 59 | Guardians onboarding-optional | **Path A LOCKED — Sprint F (enforce)** |
+| 71 | Default-deny auth on all Pantheon routes | **LOCKED — Sprint F (nothing public by default)** |
 
 **Deployment (Sprint B):**
 
@@ -4987,13 +5024,13 @@ Once §9.A is clean AND §9.S security blockers close, the payment-side testing 
 | 65 | Feedback submit emits `feedback.submitted` | olympus-grid |
 | 74 | `notification.appowner.waitlist.orphaned` event | olympus-grid (bundle Sprint A) |
 
-**Steward design decisions (Sprint F, 3):**
+**Steward design decisions (Sprint F — ALL LOCKED 2026-07-01):**
 
 | # | Description | Decision |
 |---|---|---|
-| 59 | Guardians onboarding-optional | Path A (enforce) vs Path B (settlement resolver) |
-| 67 | Memory-reflect surface asymmetry | Web-only intentional? |
-| 71 | Auth contracts for 4 new Pantheon routes | Public catalogs vs authenticated |
+| 59 | Guardians onboarding-optional | **Path A LOCKED — enforce onboarding before any shell expenditure** |
+| 67 | Memory-reflect surface asymmetry | **LOCKED — all clients including omens get memory + conversation history** |
+| 71 | Auth contracts for new Pantheon routes | **LOCKED — default-deny; nothing public except health/status/auth-entry-points** |
 
 **Client-side hygiene (Sprint B, 2):**
 
@@ -5045,31 +5082,33 @@ Once §9.A is clean AND §9.S security blockers close, the payment-side testing 
 | **C** | Steward infra | 58 (env flip) | 0 PRs | minutes |
 | **D** | poseidon + athena | 50 + 60 + 61 | 2 coordinated PRs | ~2-3 days |
 | **E** | multi-agent | 56 + 62 + 63 + 64 + 65 | ~4 PRs | ~1 day each |
-| **F** | Steward decisions | 59 + 67 + 71 | Steward call → downstream | hours to decide |
-| **G** | multi-client | 19 (perimeter-breach carryover) | multi-repo bundle | ~1 week |
+| **F** | multi-agent (decisions locked 2026-07-01) | 59 (Path A enforce) + 67 (cross-client parity) + 71 (default-deny auth) | ~3-4 PRs across omens + iris + iOS + ares | 1-2 days |
+| **G** | DEFERRED 2026-07-01 | 19 (perimeter-breach) — Salesforce remains primary email channel until reason to upgrade; not on §13 critical path | — | — |
 
-## §13 close pathway — critical path
+## §13 close pathway — critical path (Sprint F now on critical path per Steward decisions)
 
 1. **Sprint A merges + deploys** → §9.A empirically clean
 2. **Sprint B merges + deploys** → §9.S CRITICAL BLOCKERS closed
 3. **Sprint C flip** → guardians tenant attribution correct
-4. **Re-attestation empirical run** across 8 surfaces confirms clean
-5. **First real settlement event** flows through attributed chain
-6. **§13 close moment reached** — cycle promotes to `06_shipped/`
+4. **Sprint F merges + deploys** → guardians onboarding enforcement (Path A) closes §9.T gate; default-deny auth (GAP-71) hardens perimeter; memory + conversation parity closes surface asymmetry
+5. **Re-attestation empirical run** across 8 surfaces confirms clean
+6. **First real settlement event** flows through attributed chain
+7. **§13 close moment reached** — cycle promotes to `06_shipped/`
 
-Sprints D/E/F/G can land in parallel or in a follow-on cycle without gating §13.
+Sprints D/E can land in parallel or in follow-on cycle without gating §13.
+Sprint G explicitly deferred — Salesforce-native email channel is acceptable for §13 close.
 
 ## §9 letter chain — status at close of empirical run
 
-| Letter | Current | Blockers to close | Prospect after A+B+C |
+| Letter | Current | Blockers to close | Prospect after A+B+C+F |
 |---|---|---|---|
 | **V** | 🟠 partial | 62, 64, 65, 50, 60 | 🟢 domain emits consistent |
 | **A** | 🔴 broken at receiver | 16, 44, 45, 72 | 🟢 5-tuple stamps end-to-end |
 | **Q** | ❔ untested | — | untested until §9.A/S clean |
 | **F** | 🟢 domain · 🔴 ledger silent | 65 | 🟢 event lands |
-| **T** | ⏸ locked | depends on §9.A + Cause | 🟡 unlocks after Sprint A |
+| **T** | ⏸ locked | depends on §9.A + Cause + GAP-59 enforcement | 🟢 unlocks after Sprint A + Sprint F GAP-59 |
 | **R** | 🔴 broken | 62, 64, 65, 50 | 🟢 emits land |
-| **S** | 🔴 3 CRITICAL blockers | 66, 69, 73 | 🟢 CRITICAL closed after Sprint B |
+| **S** | 🔴 3 CRITICAL blockers + default-deny needed | 66, 69, 73, 71 | 🟢 CRITICAL closed + default-deny hardens perimeter after Sprint B + Sprint F GAP-71 |
 
 ## Hand-off contract
 
@@ -5080,6 +5119,20 @@ Any dev-agent picking up work should:
 3. Update the closure tracking table in Section 7 with `[x]` in `Dev done` column once passing locally.
 4. Steward marks `Deployed by Steward`; subsequent re-attestation cycle marks `Validated by EOS-5 attestation in prod`.
 
+## Steward decisions log — Sprint F + Sprint G — 2026-07-01
+
+Steward locked all three Sprint F design gates + deferred Sprint G in a single turn following initial hand-off:
+
+- **GAP-59 → Path A LOCKED:** *"enforce onboarding before any use of seashell expenditure"* — no shell-expending Pantheon call permitted before `AP.OnboardingComplete=true` AND `AP.Cause__c IS NOT NULL`. Client-side gate + server-side backstop (ares perimeter or per-god handler). This upgrades GAP-59 from must-close to BLOCKER on the §13 critical path because §9.T tithe attribution is now enforceable at consumption time (not settlement time).
+
+- **GAP-67 → Cross-client parity LOCKED:** *"all clients should have memory and conversation history including omens"* — memory-reflection + saved-conversation routes are canonical across every surface (guardians/omens, turtleshell-iOS, iris portal, olympus-gpt, templeathena, builtsy, turtleshell-iris LWC). Turtleshell-web integration shape is the reference.
+
+- **GAP-71 → Default-deny auth LOCKED:** *"all of those routes require auth there is almost nothing that doesn't require auth"* — every `/v1/*` Pantheon path requires JWT unless explicitly on a small public allowlist (health, status, cosmos-logos manifest, pre-auth email-link + Apple SIWA entry points). Ares enforces default-deny; each god's handler independently verifies. Auth-contract table in the GAP-71 entry above.
+
+- **Sprint G → DEFERRED:** *"defer for now. salesforce will be the primary email channel until we have reason to upgrade"* — GAP-19 (email-link auth bypasses Ares) stays open but explicitly out of EOS-5 §13 critical path. Consequence: no `auth.email.*` Pattern 1 events fire during the EOS-5 re-attestation; auth flow visibility remains SF-native only. Reconciles with `project_hermes_sendgrid_eos_5_nfr_contract.md` dual-lane design: SF-native lane is production-supported. When migration to SendGrid lane becomes desirable (deliverability, compliance, or scale reason), Sprint G re-opens.
+
+**Impact on §13 close pathway:** Sprint F moves onto the critical path (from Steward-decision buffer). Sprint G moves off. Net effect: same overall shape, one less week of work to §13 close.
+
 **Document signed:**
-EOS agent · 2026-07-01 · EOS-5 empirical validation run — Closeout Master Inventory landed for dev-agent hand-off
+EOS agent · 2026-07-01 · EOS-5 empirical validation run — Closeout Master Inventory + Sprint F decisions locked + Sprint G deferred
 Steward: G.W. Homer (CloudPremise LLC)
