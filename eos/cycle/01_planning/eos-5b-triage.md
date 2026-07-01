@@ -5133,6 +5133,65 @@ Steward locked all three Sprint F design gates + deferred Sprint G in a single t
 
 **Impact on §13 close pathway:** Sprint F moves onto the critical path (from Steward-decision buffer). Sprint G moves off. Net effect: same overall shape, one less week of work to §13 close.
 
+## Post-hand-off dev-agent corrections — 2026-07-01
+
+Three dev agents responded with corrections to attestation-agent (this doc) diagnoses. Recording here so the empirical record stays honest and the next re-attestation grades against the corrected shape, not the incorrect intermediate hypothesis.
+
+### olympus-grid agent — Sprint A + E landed on branch (waiting for iris deltas per one-PR misinterpretation; will open draft PR)
+
+Content on-branch:
+- **GAP-16 scope correction (og-agent)** — `LedgerWriterPeHandler.cls:112` already reads `env.get('user_identity/tenant_id/application_id/app_source')` correctly. Attestation-agent's "receiver-side plumbing" framing was inaccurate for the Platform Event path; receiver is correct. Empirical caveat: 2026-07-01 15:26+ Ares api.inbound rows had `user_identity` in JSON payload with `Sub__c=null` while `TenantId__c` populated off the same payload — if `LedgerWriterPeHandler` handles both Apex Platform Event AND Ares HTTP-ingest paths, empirical re-attestation post-Sprint-A deploy will settle whether the gap is inside olympus-grid's HTTP-ingest handler or in the Ares→og handoff between HTTP body parsing and PE envelope construction. **Leave GAP-16 open with this caveat**; regrade after Sprint A deploys.
+- **GAP-44** — `ApplicationRegistry.loadCache` unions `Application__c` rows onto `Plugin__mdt`-backed cache entries, stamping `appRecordId` so `AP.Application__c` FK backfill works for iris/guardians/olympus-gpt/turtleshell/templeathena.
+- **GAP-45** — `LedgerEntryEmitter.emit` auto-resolves attribution from `targetId` when Apex-trigger context has no request-scoped `TransactionContextAttribution`. `profile.*` / `identity.*` / `cluster.*` / `notification.appowner.*` all get 4-tuple stamped from the target row.
+- **GAP-72** — `alpha-org-data-seed.apex` adds templeathena `Application__c` (builtsy already present in seed).
+- **GAP-74** — `NOTIFICATION_APPOWNER_WAITLIST_ORPHANED` emit replaces silent-skip WARN log path in the owner-notification queueable.
+- **GAP-62** — `MESSAGE_SENT` emit in `HermesEmailSenderJob` + `ApiRouteHermesMessages` (SF-native lane).
+- **GAP-63** — `MessagesLifecycleAudit` helper + wired at 4 write sites — queued/sent `MessageEvent__c` + `message.event` ledger per lifecycle transition.
+- **GAP-65** — `FeedbackTrgHnd` — `feedback.submitted` on insert + `feedback.status_changed` on Status transitions.
+- **Bonus** — `alpha-org-eos5-wipe.apex` preserves ALL Identity/Tenant/Application per prior Steward direction.
+
+2,189 tests at 100% on the branch. Draft PR opening now that "one PR" scope-bundling is clarified (Sprint A + E in one og-repo PR; Sprints B/D land in their own repos).
+
+### athena env agent — GAP-58 corrected diagnosis
+
+Attestation-agent's original diagnosis: env var `ATHENA_ALLOW_LEGACY_APPLICATION_TENANT_ID=true` on eos-5d causes legacy fallback. Attestation-agent recommended fix: Steward-side env var flip.
+
+**Athena agent code-level audit CORRECTS this:**
+- `ATHENA_ALLOW_LEGACY_APPLICATION_TENANT_ID` is NOT set on the eos-5d task-def (verified via `aws ecs describe-task-definition`). Effective value is `false`. Env flip would be a no-op.
+- Real leak is code-level: `athena/api/src/utils/index.ts:321` in the **`athena.tool_call`** sub-event emit does `tenant_id: _emitCtx?.tenantId ?? _emitCtx?.applicationId ?? 'default'` — the middle rung silently bypasses the strict/legacy gate and stamps `x-application-id` header value directly into `tenant_id`.
+- Athena agent verified this is the ONLY leak surface: `llm.turn` (`server.ts:862`) and `athena.analyze` (`analyze.ts:131/168`) both read `reqCtx.tenantId` cleanly.
+
+**Attestation-agent event-type flag for grader after PR #101 deploys:**
+The attestation row I graded (2026-07-01 14:47:47) had `EventType__c='llm.turn'` with `payload.metadata={conversationId, totalChars, elapsedSeconds, appSource}` and `tenant_id=<sub>`. Athena agent audit says only `athena.tool_call` has the leak pattern. Two possibilities to distinguish empirically post-deploy:
+- (a) Attestation misidentified event_type; the leak row was actually `athena.tool_call` mis-attributed on my grep OR (a') another code path with the same pattern that the audit missed
+- (b) Guardians requests trigger Poseidon MCP `tool_call` events that landed in my scan window
+Empirical DoD: post-PR-#101 deploy + fresh guardians chat, `SELECT * FROM LedgerEntry WHERE ClusterName__c='eos-5d' AND CreatedDate=TODAY AND TenantId__c NOT IN ('cloudpremise-llc','default') GROUP BY EventType__c` should return 0 rows. If it doesn't, athena agent has another leak site to hunt.
+
+**PR link:** athena PR #101. Squash-merge → parent bump → CDK deploy on eos-5d.
+
+### athena/poseidon Sprint D — code paths fire correctly; blocked on JWT
+
+Athena/poseidon agent validated end-to-end against ngrok fleet:
+
+- Athena chat handler enters `MCP REGISTRY LOAD` path (fires on every `/v1/athena/chat`)
+- Registry fetch: `GET http://localhost:3451/v1/grid/master/v1/mcp/servers` through Ares → Hermes → apex-rest
+- Graceful empty on failure: chat proceeds tool-free instead of 500
+- `mcp.registry.loaded` emit fires even on empty result (`server.ts:498-536` sends `athena.chat.turn` envelope with `payload.subtype='mcp.registry.loaded'` + `mcp_registry.source='unavailable'` — distinguishes "athena didn't try" from "athena tried and got nothing")
+- Dispatch URL fix (commit `1ee16e6`): `POST http://localhost:3451/v1/poseidon/mcp/616/weather/mcp` with `tools/list` → HTTP 200 with `get_alerts` + `get_forecast` catalog
+- Poseidon metering emits `mcp.tool.call` with `args_hash + latency_ms + result_token_count + tenant_id-from-JWT-tid + parent_event_id` alongside legacy `tool.called`
+
+**Blocked on:** valid JWT for E2E validation. Dev-env stub JWT returns HTTP 401 from Ares (Ares only has the public cert `ares/api/certs/OG_Signing_Key.crt`; private key lives inside Salesforce).
+
+Two paths forward (Steward decides):
+1. **Steward pastes a fresh JWT** from turtleshell-web sign-in → agent re-runs Denver weather probe → confirms `tools[]` populates + `mcp.registry.loaded (source=sf)` + `mcp.tool.call` all land with matching `trace_id + parent_event_id` linkage
+2. **Ship as-is with structural claim**: "at the moment a request carries a valid JWT, the chain works"
+
+Attestation-agent recommends Path 1 (costs minutes; produces actual ledger evidence for §9.R re-attestation grading).
+
+### Iris agent
+
+Still awaiting Sprint B hand-off deliverables. Once received, Sprint F cross-cutting work (guardians onboarding-gate, cross-client memory parity, default-deny auth) starts clocking against multi-agent coordination.
+
 **Document signed:**
-EOS agent · 2026-07-01 · EOS-5 empirical validation run — Closeout Master Inventory + Sprint F decisions locked + Sprint G deferred
+EOS agent · 2026-07-01 · EOS-5 empirical validation run — Closeout Master Inventory + Sprint F decisions locked + Sprint G deferred + dev-agent corrections logged (GAP-16 scope caveat, GAP-58 code-level correction + event-type flag, Sprint D JWT-blocked)
 Steward: G.W. Homer (CloudPremise LLC)
