@@ -5188,10 +5188,64 @@ Two paths forward (Steward decides):
 
 Attestation-agent recommends Path 1 (costs minutes; produces actual ledger evidence for §9.R re-attestation grading).
 
-### Iris agent
+### Iris agent — Sprint B fully delivered across 4 PRs / 4 repos
 
-Still awaiting Sprint B hand-off deliverables. Once received, Sprint F cross-cutting work (guardians onboarding-gate, cross-client memory parity, default-deny auth) starts clocking against multi-agent coordination.
+All 7 assigned gaps closed:
+
+| Gap | Severity | PR | Fix summary |
+|---|---|---|---|
+| **GAP-69** | 🔴 CRITICAL | **iris #118** | `bestAuthHeaders()` + `credentials:'include'` on all 10 Pantheon fetches in `olympus-grid-ai` (chronos/apollo/proteus/ChatTester); session JWT fallback when dashboard credential empty |
+| **GAP-73** | 🔴 CRITICAL | **iris #118** | `x-user-identity: <token>` on `apolloFetchSpeech` (`templeathena/views/AthenaChat.tsx:490`) — mirrors working `/v1/athena/chat` pattern |
+| **GAP-57** | 🔴 BLOCKER | **iris #118** | `CAUSE_KEY_TO_API_NAME` map in `reactforce/turtleshell` OnboardingGate — tile short-codes (`'ai'`) → picklist API names (`'AI for Those in Need'`) at submit time |
+| **GAP-70** | 🟠 must-close | **iris #118** | `package.json` 0.0.0→1.7.4; `vite.config` injects `REACT_APP_VERSION`; feedback.ts prefixes `olympus-gpt/${APP_VERSION}` → matches `^olympus-gpt/\d+\.\d+\.\d+`. New bundle `.1.7.4.emor` |
+| **GAP-66** | 🔴 CRITICAL | **turtleshell-web #70** | `authHeaders()` helper (mirrors mnemosyne/web-client.ts) applied to all 6 plutus-client fetches; `x-user-identity` from `og_access_token` |
+| **GAP-68** | 🟠 must-close | **turtleshell-ios #29** | `AnyCodable.encode` default case recurses via `AnyCodable` for `[String: Any]`/`[Any]` instead of `JSONSerialization → String`; `Feedback.answers` now emits as nested object |
+| **GAP-75 (client)** | — | (no iris change needed) | Builtsy client URL was already correct; failure was 100% server-side |
+| **GAP-75 (server)** | 🔴 BLOCKER | **olympus-grid #305** | New `Plugin.app_builtsy.md-meta.xml` Application registration. `ApplicationRegistry` now resolves `AppKey='builtsy'` → sign-in send-code stops 404-ing |
+
+**Published bundle IDs (post-merge, prod):**
+- `olympus_gpt`: `.1.7.4.emor`
+- `templeathena`: `.dev.vjox`
+- `turtleshell` (iris-portal-app): `.dev.rmyv`
+
+**Attestation-agent grading of Sprint B delivery:**
+- GAP-75 split into client-vs-server halves is a nice diagnostic sharpening — the "route not deployed" symptom I reported came from server-side missing Plugin metadata, not client URL misconfiguration. Iris agent correctly divided the fix.
+- Bundle IDs for templeathena + turtleshell stayed `.dev.*` prefixed (not semver'd like `olympus_gpt` got via GAP-70). That's inside iris's stated scope (GAP-70 was olympus-gpt-only), but flagging as **hygiene follow-on**: the same semver-stamping treatment on templeathena/turtleshell iris-portal-app bundles closes the visibility gap for those surfaces too. Not on §13 critical path.
+
+### Cross-agent PR coordination — 5 PRs across 3 repos awaiting merge
+
+| PR | Repo | Sprint | State |
+|---|---|---|---|
+| og-agent Sprint A+E draft PR | olympus-616/olympus-grid | A + E | Draft (opening now) |
+| **iris #118** | olympus-616/iris | B (multi-gap) | Open |
+| **olympus-grid #305** | olympus-616/olympus-grid | B (builtsy server) | Open |
+| **turtleshell-web #70** | cosmos-logos/turtleshell-web | B (GAP-66) | Open |
+| **turtleshell-ios #29** | cosmos-logos/turtleshell-ios | B (GAP-68) | Open |
+| **athena PR #101** | olympus-616/athena | C (GAP-58 code-level) | Open |
+
+**Sequencing considerations:**
+
+1. **Two olympus-grid PRs racing** — og-agent's Sprint A+E draft + iris #305. Whichever lands second will need to rebase on top of the other. Neither depends on the other functionally; content is orthogonal (og = plumbing + emit, iris #305 = new Plugin metadata). Steward picks merge order.
+
+2. **Auth switch for cosmos-logos PRs** — `turtleshell-web #70` and `turtleshell-ios #29` live in the cosmos-logos org. Steward will need `gh auth switch --user root-of-trust` for merge + parent bump against those repos.
+
+3. **Deploy cascade after merges** — per CLAUDE.md deploy precedence:
+   - **First:** iris #118 landing → new iris bundles published to olympus-grid static resources (already reflected in iris agent's bundle-ID list)
+   - **Second:** olympus-grid #305 + og-agent's Sprint A+E → managed package build → alpha-org deploy
+   - **Third:** athena PR #101 → parent submodule bump → CDK redeploy on eos-5d Pantheon
+   - **Fourth:** turtleshell-web #70 + turtleshell-ios #29 land in cosmos-logos org (client apps consume the newly-clean backend)
+
+4. **Sprint F (Steward-decision-locked)** — guardians onboarding-gate + cross-client memory parity + default-deny auth work not yet assigned to concrete PRs. Recommendation: **hold Sprint F until Sprint A+B+C attestation re-run confirms clean**, then hand off Sprint F to omens+ares+iris+mnemosyne with confirmed §9.A/§9.S baseline. Prevents chasing moving-target diagnoses.
+
+### Re-attestation readiness check
+
+Attestation-agent is ready to run the re-attestation the moment:
+1. All 5 Sprint A/B/C PRs merge
+2. Deploys land (managed package on alpha-org + Pantheon on eos-5d)
+3. Steward exercises fresh signup + chat + analyze + feedback + MCP tool call on ≥3 surfaces
+
+If Steward pastes a fresh JWT (Sprint D unblock), Denver-weather probe validates §9.R MCP telemetry in the same run.
 
 **Document signed:**
-EOS agent · 2026-07-01 · EOS-5 empirical validation run — Closeout Master Inventory + Sprint F decisions locked + Sprint G deferred + dev-agent corrections logged (GAP-16 scope caveat, GAP-58 code-level correction + event-type flag, Sprint D JWT-blocked)
+EOS agent · 2026-07-01 · EOS-5 empirical validation run — Sprint B fully delivered (iris #118 + og #305 + turtleshell-web #70 + turtleshell-ios #29) — 5 PRs across 3 repos queued for merge — re-attestation stands ready
 Steward: G.W. Homer (CloudPremise LLC)
