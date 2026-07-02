@@ -5448,6 +5448,46 @@ This typology dimension should be documented in `foundation/eos/cycle/README.md`
 
 **§13 close pathway (unchanged):** money-from-guardians critical path intact; GAP-78 explicitly deferred.
 
+### GAP-79 (new, deferred to future traffic-classification / adaptive-response monitoring cycle) — Every ledger row must have declared purpose; unclassified traffic must trigger adaptive system response
+
+- **Severity:** 🟡 defer — out of EOS-5 scope; future monitoring-attestation cycle. **Foundational architectural principle**, not a hygiene item.
+- **§9 letter:** V (visibility) · S (sovereignty — active adversarial defense) · R (metering of even info-only traffic)
+- **Detected:** 2026-07-02 (Steward direction after attestation-agent repeatedly dismissed anonymous api.inbound rows as "background noise")
+- **Steward direction 2026-07-02 (verbatim, canonical):** *"there should be no unexplained traffic that does not divert to a queue for potential waste reconciliation or attack detection. in a perfect system each record of data would have meaning and purpose, or it would not exist. so if we were to detect inbound traffic i want the system to instantly evolve to respond to it, whether it is adding it to a queue for technical debt clean up, or adding it to a queue to research unidentified traffic. Perhaps it should trigger an ares flow to evaluate threats. something should happen, or the data row should be removed, or even better yet flagged on the record itself as Information Only - yet if there were a billion information only api calls i definitely need to know and i need to know very quickly or th system as to respond very quickly. i see a world of systems attacking olympus-grid to silence the technology and the claims i have set forth."*
+- **Empirical evidence:** Throughout the 2026-07-02 re-attestation, background anonymous api.inbound rows (cluster=api-int, user_identity=anonymous, tenant=default) have been persisting alongside signal traffic. Attestation-agent has been dismissing them as "noise from a local dev ares polling somewhere." **Steward's correction: this dismissal is architecturally wrong. There should be no such thing as ledger noise.**
+- **Core principle (Steward-verbatim, becomes canonical architectural axiom):** *"in a perfect system each record of data would have meaning and purpose, or it would not exist."*
+- **Design intent — every unclassified row routes to one of five buckets:**
+
+  | Bucket | Behavior | Trigger |
+  |---|---|---|
+  | **Information Only** | Row persists with `PurposeClass__c='InformationOnly'` flag; volume-anomaly detection per source | Known-benign patterns (health polls, catalog listings, pre-auth heartbeats) |
+  | **Technical Debt Queue** | Row queued for future code cleanup — some legacy caller emitting rows it shouldn't | Recognizable pattern that belongs to since-deprecated behavior |
+  | **Unidentified Traffic Research Queue** | Row queued for human/agent investigation | Pattern not matching any known classification |
+  | **Threat Evaluation (Ares flow)** | Row triggers Ares-side flow to evaluate for adversarial signal | Pattern matches suspicious heuristics (rate anomaly, path fuzzing, credential enumeration attempts) |
+  | **Delete** | Row removed as truly meaningless | Provably no purpose (e.g., corrupted payload with no upstream source) |
+
+- **Info-Only volume alerting requirement:** Even the safest bucket needs high-volume detection — *"if there were a billion information only api calls i definitely need to know and i need to know very quickly."* SLO: N info-only rows from single source in T seconds → alert fires within observable-response threshold.
+
+- **Threat model context (Steward-verbatim):** *"i see a world of systems attacking olympus-grid to silence the technology and the claims i have set forth."* Security posture MUST assume active adversarial pressure. Adaptive response to unexplained traffic is a **defense primitive**, not a hygiene item. This raises the bar on all downstream monitoring-attestation work: the system must be resilient to coordinated attacks, not just individual failures.
+
+- **Relationship to other gaps:**
+  - **GAP-78** (auth-fail observability) is a specific instance of this broader principle
+  - **GAP-19** (email-link auth bypasses Ares) becomes more urgent under this threat model — SF-native auth failures are silent
+  - **§9.S sovereignty** takes on a hardening dimension beyond the current CRITICAL BLOCKERs — even after GAP-66/69/73 close, the "everything is classified" principle keeps §9.S evolving
+  - **GAP-77** (cluster.* attribution) similar shape — deferred to future cycle, but part of the systemic "no data without purpose" push
+
+- **Acceptance criteria (for the future traffic-classification attestation cycle):**
+  1. `LedgerEntry__c.PurposeClass__c` (or equivalent classification column) is required and non-null on every row
+  2. Auto-classification rules exist for known benign patterns (documented + version-controlled ruleset)
+  3. Manual-review queue exists (SObject-backed) for unrecognized patterns with SLA on review time
+  4. Volume anomaly detection per PurposeClass with per-class SLO for detection time
+  5. Threat-eval Ares flow triggers on defined suspicious patterns (rate limits per source; path-fuzzing detection; auth failure clustering)
+  6. Delete-purge job for rows that reach 'no purpose established' terminal state after review
+  7. Steward dashboard: live `SELECT PurposeClass__c, COUNT(Id), MAX(CreatedDate) FROM LedgerEntry GROUP BY PurposeClass__c` view + per-class volume trend
+  8. Simulation harness: fire 1M anonymous requests from single source → 'Information Only' volume alert fires within SLO; fire 10K path-fuzz attempts → threat-eval Ares flow triggers within SLO
+
+- **First real monitoring-attestation cycle likely inherits BOTH GAP-78 + GAP-79** as scope seeds. GAP-79 is the broader architectural umbrella; GAP-78 is one specific instance under it.
+
 **Document signed:**
-EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-44/45/63 empirically CLOSED — GAP-77 (cluster.* multi-tenant attribution) + GAP-78 (auth-fail observability) surfaced + deferred per Steward direction — new EOS cycle typology dimension recognized: monitoring cycle of attestation for non-happy-path validation
+EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-44/45/63 empirically CLOSED — GAP-77 (cluster.* multi-tenant attribution) + GAP-78 (auth-fail observability) + GAP-79 (every ledger row must have declared purpose; unclassified traffic triggers adaptive response) surfaced + deferred per Steward direction — new EOS cycle typology dimension recognized: monitoring cycle of attestation for non-happy-path validation
 Steward: G.W. Homer (CloudPremise LLC)
