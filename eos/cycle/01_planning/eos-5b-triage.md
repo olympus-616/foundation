@@ -5776,6 +5776,83 @@ Guardians (omens Godot) client fetched 39 unique `/v1/heracles/omens/books/{myth
 
 Per GAP-79 discipline: these rows would classify as **Information Only** with volume alerting on burst rate. Per GAP-71 default-deny audit: heracles read paths need explicit `public` marking in §3 NFR contract so future audits don't flag them.
 
+### Guardians hermes send — 2026-07-02 15:17 UTC
+
+Steward sent 2 emails from guardians (omens Godot iOS) via hermes compose.
+
+**2 Messages__c rows landed:** HermesId `ccd0aa2a-...` (to homer@) + `6189238c-...` (to Greg@). Both Provider=`salesforce`, data.source=`omens-guardians`, Identity FK=homer, Status=sent.
+
+**Sprint E `message.sent` event CONFIRMED firing** with PII-safe payload:
+```json
+{body_bytes, subject_hash: SHA256, to_hash: SHA256, direction:"outbound",
+ channel:"email", provider:"salesforce", message_c_id, hermes_id}
+```
+Good PII hygiene — subject + recipient hashed, only body length exposed.
+
+**Also fires:** `message.event` (three-touch child, event=`sent`) per Message.
+
+**GAPs continuing on this signal:**
+- 🔴 **GAP-83 pattern continues** — both `message.sent` and `message.event` rows have Sub/AppId/Tenant/AppSource NULL despite `Messages__c.Identity__c` FK populated. Emitter needs to walk FK graph like GAP-45 fallback does for profile.*.
+- 🟠 **Three-touch on SF-native lane observed as 1-touch (`sent` only)** — no `queued` MessageEvent__c child. May be by-design (fire-and-forget on SF-native lane) or a regression from earlier turtleshell test. Should be documented in §3.HM contract as the SF-native carve-out shape.
+
+Zero `/v1/hermes/*` in Ares — SF-native lane bypasses Ares perimeter (by design; matches iris signin architecture).
+
+### Guardians chronos list + task — 2026-07-02 15:18–15:20 UTC
+
+Steward created a list + task from guardians (omens Godot). Empirical:
+
+**Ares saw 5 chronos requests, ALL ANONYMOUS:**
+
+| Time | Method | Path | col_Tenant | col_Sub | user_identity |
+|---|---|---|---|---|---|
+| 15:18:52 | GET | /v1/chronos/lists | default | NULL | anonymous |
+| 15:19:42 | POST | /v1/chronos/lists (create) | default | NULL | anonymous |
+| 15:19:43 | GET | /v1/chronos/tasks | default | NULL | anonymous |
+| 15:20:12 | POST | /v1/chronos/tasks (create) | default | NULL | anonymous |
+| 15:20:17 | PATCH | /v1/chronos/tasks/{id} (update) | default | NULL | anonymous |
+
+**Compare same-session same-client behavior on other routes:**
+
+| Route from guardians | Auth state |
+|---|---|
+| `/v1/athena/chat` | ✅ authenticated (col_Tenant=cloudpremise-llc, JWT lifted) |
+| `/v1/apollo/speak` | ✅ authenticated |
+| `/v1/apollo/music/generate` | ✅ authenticated |
+| **`/v1/chronos/*`** | ❌ **anonymous — omens client not sending JWT** |
+
+**Zero `ChronosList__c` + zero `ChronosTask__c` rows landed in SF** despite the POST returning an SF-shaped ID (`a22aZ000000UJMzQAO`) that the client then PATCHed. So the task is "created" from the user perspective (server response includes an ID) but nothing persists to SF ChronosTask__c.
+
+**Zero `chronos.*` / `task.*` / `list.*` LedgerEntry events** — GAP-64 pattern continues (chronos ops silent in metering plane).
+
+### GAP-94 (new, non-blocker per Steward pattern) — Omens Godot client doesn't attach JWT on `/v1/chronos/*` endpoints — GAP-69 pattern re-emerging on new client + new god
+
+- **Severity:** 🟡 non-blocker per Steward pattern; **but concerning security shape parallel to GAP-69 CRITICAL** (which was scoped to olympus-gpt) now on the omens client's chronos surface
+- **§9 letter:** S · A · R
+- **Detected:** 2026-07-02 15:18-15:20 UTC (guardians chronos list + task creation)
+- **Suggested owner:** omens agent (Godot HTTP-client JWT attachment) + chronos agent (server-side auth enforcement, defense-in-depth)
+- **Empirical evidence:** 5 chronos ares api.inbound rows all landed anonymous while same client's athena+apollo calls in the same session authenticated correctly. Inconsistent JWT attachment across route families within the same omens client. Mirrors the shape iris #118 fixed for the olympus-grid-ai React app (which covered `chronos/apollo/proteus/ChatTester`) — but omens is a separate codebase that didn't receive the same treatment.
+- **Consequence:** Anonymous chronos ops accepted (no 401/403 reject) → data-loss possibility (see GAP-95). Cannot attribute chronos consumption to user for §9.R metering or §9.T tithe attribution. Per GAP-71 default-deny stance chronos routes should require JWT.
+- **Fix pattern:**
+  1. **Omens agent** — attach JWT header on all `/v1/chronos/*` HTTP requests in the Godot client. Model on omens' existing pattern for `/v1/athena/chat` + `/v1/apollo/speak` which already attach correctly.
+  2. **Chronos agent** — server-side reject anonymous chronos requests with 401 (defense-in-depth; matches GAP-71 default-deny). Post-fix, if omens still calls anonymously, chronos ops break loudly instead of silently corrupting state.
+- **Acceptance criteria:**
+  1. Fresh guardians chronos list creation → ares api.inbound stamps `col_Tenant=cloudpremise-llc`, `user_identity=<sub>`
+  2. Any `/v1/chronos/*` anonymous request returns 401 (with omens client fixed, this becomes an alarm condition)
+  3. Chronos ops emit `list.created` / `task.created` LedgerEntry events with correct 5-tuple attribution (rolls into GAP-64 Sprint E follow-on)
+
+### GAP-95 (new, non-blocker; Steward design gate) — Chronos SF-persistence intent unclear
+
+- **Severity:** 🟠 must-close design gate (not §13 critical path but resolves 3 other gaps if answered)
+- **§9 letter:** V · V (visibility · design intent clarity)
+- **Detected:** 2026-07-02 15:20 UTC
+- **Empirical:** Steward's list + task creation from guardians returned an SF-shaped ID from POST but nothing persists to `ChronosList__c` or `ChronosTask__c` SObjects. SObjects exist in the schema (from full system audit) but zero-rows since org creation. Meanwhile `POST /v1/chronos/tasks` returned a persistable-looking ID that the client PATCHed. So SOMETHING accepted the create and returned an ID — but that state doesn't reach SF.
+- **Question for Steward:** Is chronos intended as:
+  - **(A) SF-backed persistence** — ChronosList__c / ChronosTask__c are the real substrate, current empirical is a broken sync; fix would land data in those SObjects
+  - **(B) Pantheon-side ephemeral storage** — chronos state lives in Plutus / cluster memory / god-local state; the SObjects were exploratory and should be deprecated
+  - **(C) Hybrid** — Pantheon-side runtime + SF sync-events for durable audit; requires bidirectional sync
+- **Related:** GAP-64 (chronos ops emit no LedgerEntry) has different fix shapes depending on which answer is chosen. If (A), Sprint-E-style emit on Apex trigger. If (B), Pantheon-side emit from chronos god. If (C), both.
+- **Acceptance criteria:** Steward locks the intent + updates `foundation/eos/` chronos §3 NFR contract; downstream implementation follows.
+
 **Document signed:**
-EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-33/44/45/63/49/55 empirically CLOSED across multiple surfaces (12-for-12 GAP-45 tally across 3 AppKeys) — comprehensive system audit performed — GAPs 77-93 surfaced + all explicitly non-blocker per Steward direction — none on §13 critical path — Sprint D athena code confirmed deployed and structurally correct (registry unavailability is upstream olympus-grid endpoint bug per GAP-93) — apollo speak + music work end-to-end with shell metering + provider chain
+EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-33/44/45/63/49/55 empirically CLOSED across multiple surfaces (12-for-12 GAP-45 tally across 3 AppKeys) — comprehensive system audit performed — GAPs 77-95 surfaced + all explicitly non-blocker per Steward direction — none on §13 critical path — Sprint D athena code confirmed deployed and structurally correct (registry unavailability is upstream olympus-grid endpoint bug per GAP-93) — apollo speak + music work end-to-end with shell metering + provider chain — hermes SF-native lane message.sent Sprint E emit CONFIRMED — chronos list/task from omens client is anonymous + doesn't persist to SF (GAP-94 client-side + GAP-95 design gate)
 Steward: G.W. Homer (CloudPremise LLC)
