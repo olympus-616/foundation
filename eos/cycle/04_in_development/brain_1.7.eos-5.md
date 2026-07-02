@@ -6,7 +6,7 @@
 |---|---|
 | **Branch family** | `brain/1.7.x.x` |
 | **Cycle ordinal** | `eos-5` (5th on this branch family) |
-| **Status** | `In Development` — Steward verbal direction 2026-06-15: *"i am starting"* + *"you can move the cycle to in progress and you can capture my asserts that we will be validating to ensure the system meets the financial and reporting and security requirements to go live."* EOS-4 precondition satisfied (in `06_shipped/` 2026-06-11). §5 ticked via verbal sign-off below. EOS-5 is **the first assertion cycle** — Steward verbal framing 2026-06-15: *"the assertions are what will hold the repos together as i pull it all apart to add in the necessary plumbing... i must expose each app back to its bones."* The §9 assert set is the contract that holds cross-repo coherence during the bones-surgery. Runner automation deferred (*"we can do the automation validation later... this is not critical path"* — Steward 2026-06-15); §9 is the spec, the Steward executes the plumbing manually with §9 as the bar. |
+| **Status** | `In Development — FROZEN 2026-07-02 for Steward return` — Steward verbal direction 2026-06-15: *"i am starting"* + *"you can move the cycle to in progress and you can capture my asserts that we will be validating to ensure the system meets the financial and reporting and security requirements to go live."* EOS-4 precondition satisfied (in `06_shipped/` 2026-06-11). §5 ticked via verbal sign-off below. EOS-5 is **the first assertion cycle** — Steward verbal framing 2026-06-15: *"the assertions are what will hold the repos together as i pull it all apart to add in the necessary plumbing... i must expose each app back to its bones."* The §9 assert set is the contract that holds cross-repo coherence during the bones-surgery. Runner automation deferred (*"we can do the automation validation later... this is not critical path"* — Steward 2026-06-15); §9 is the spec, the Steward executes the plumbing manually with §9 as the bar. **Frozen 2026-07-02 per Steward direction** — *"i want a pr created with all relevant work and documenation up until now. i plan to open eos-5 again for another cycle of testing after the final updates across the board, and after my client work is done."* Empirical evidence base + return-to-work checklist captured in [`../01_planning/eos-5b-triage.md`](../01_planning/eos-5b-triage.md) (frozen on brain per PR #63). §13 Closeout preamble below records the freeze state; cycle doc stays in `04_in_development/` because the cycle IS in flight (Sprint work partially executed, 3 of 6 revenue-accepting surfaces attested at READINESS bar) — it is paused, not aborted. |
 | **Opened** | 2026-06-10 |
 | **Closed** | — |
 | **Prior cycle** | `brain_1.7.eos-4` (the `brain/1.7.x.x` IS the stable production environment cycle) |
@@ -939,4 +939,59 @@ A future cycle will lift §9 into runner code (`foundation/eos/cli/eos-assert` o
 *PENDING. Revenue-path rollback is uniquely hairy because payments are real money — financial rollback ≠ technical revert. §12 needs explicit per-rail policy (Stripe refund automation, Apple refund-request flow) + customer-comms templates.*
 
 ## §13 Closeout
-*PENDING.*
+
+### §13.0 Frozen state — 2026-07-02
+
+**Cycle status:** in-flight, paused for Steward return.
+
+**Steward-locked close criterion (2026-07-02):**
+
+> *"eos-5 as its stands is the 'READINESS' to accept money"*
+
+EOS-5 does NOT close when money has flowed through the pipes — it closes when every surface that will accept money is *demonstrably* wired to accept it end-to-end (Stripe / Apple → Plutus `LedgerEntry__c` → 7% tithe attribution row against the payer's `Identity__c.PrimaryCause__c` → payout substrate). The final GREEN state is READINESS; actual first-dollar-through is post-close operational.
+
+### §13.1 Empirical evidence base
+
+The full 2026-06-27 → 2026-07-02 triage — including 96 gaps, the receiver-mode attestation runs across 6 surfaces × 3 use cases, the §9 letter-chain scorecard, and the Tier-1/Tier-2/Tier-3 return-to-work checklist — is captured in:
+
+**[`../01_planning/eos-5b-triage.md`](../01_planning/eos-5b-triage.md)** (frozen on brain via PR #63, commit `10cc07f`).
+
+The triage doc contains the exact SObject IDs, payload JSONs, and timestamps that surfaced each gap and is designed for future-agent replay. Any subsequent EOS-5 reopen inherits `eos-5b-triage.md` as its scope baseline.
+
+**Companion publication:** [`../../WHITE-PAPER.md`](../../WHITE-PAPER.md) — the consulting-productization framing of EOS methodology (published to Medium 2026-07-02 as *Multi-Agent Attestation and AI-Generated System Integrity*). Conceptual-level share compatible with `PATENT-DISCLOSURE-DRAFT.md` confidentiality.
+
+### §13.2 Six-surface READINESS matrix at freeze
+
+| Surface | Payment rail | READINESS state at freeze | Notes |
+|---|---|---|---|
+| turtleshell-web | Stripe | **Attested** — signup → Identity dedup → ApplicationProfile Active → cause chosen | Cross-platform Sub continuity verified with iOS via shared AppKey |
+| turtleshell-ios | Apple StoreKit (IAP) | **Attested** — SIWA + email-link parity → AP consolidation → no re-onboarding | Shares AppKey='turtleshell' with web; distinguishing surface still needs Steward lock |
+| guardians | Apple StoreKit (IAP) | **Attested** — 8 auth events → 538 heracles content fetches → AP-00093 Active | Compliance backstop tracked in `foundation/GUARDIANS-LAUNCH-COMPLIANCE.md` for App Store launch 2026-07-17 |
+| templeathena | Stripe | **Not yet attested** — live prod iris-portal-app at `app.olympus-grid.com/templeathena` (per EOS-5 §9.V2) | Payment path wired to §9.T but Steward re-attestation pending |
+| olympus-gpt | Stripe | **Not yet attested** — signup + cause selection verified; end-to-end payment→tithe unrun | Enterprise-shape surface; templeathena feeds into it |
+| turtleshell-iris | Stripe (via Salesforce native auth) | **Not yet attested — Steward-elevated as *maybe the most important*** | Enterprise commercial motion; auth path is SF-egress-routed (IP 52.205.46.67); LWC toolbar + iris-portal standalone endpoint distinct |
+
+**3 of 6 attested at READINESS bar** at freeze. Remaining 3 (templeathena, olympus-gpt, turtleshell-iris) block EOS-5 close but not first-dollar-through on the attested three.
+
+### §13.3 Return-to-work path
+
+When Steward returns to EOS-5:
+
+1. **Re-open the triage doc** (`../01_planning/eos-5b-triage.md`) and read the Tier-1 / Tier-2 / Tier-3 checklist at the frozen-state signature.
+2. **Verify no drift** on the 3 attested surfaces — signup + Identity dedup + AP transition still holds against current alpha-org state.
+3. **Run READINESS attestation on the remaining 3 surfaces** (templeathena, olympus-gpt, turtleshell-iris) using the same receiver-mode discipline captured in the triage doc.
+4. **Grade each §9 letter** (V / A / Q / F / T / R / S + D + B + M + P) against the six-surface matrix. §13 §9 close is when every letter is GREEN across all 6 surfaces.
+5. **Cross-repo assertion automation is out of scope** for EOS-5 close (Steward 2026-06-15: *"we can do the automation validation later... this is not critical path"*). Runner is a follow-on cycle.
+
+### §13.4 Non-blocker discipline
+
+Per Steward direction 2026-07-02 (*"no just log it non of these are blockers"*), the 96 gaps in the triage doc are prioritized by the spiral-reset priority hierarchy: money-from-guardians is the highest critical path; monitoring-attestation gaps (GAP-78, GAP-79 axiom) are deferred to a dedicated monitoring-attestation cycle (see `foundation/eos/cycle/README.md` future extension). §9 GREEN is not "zero open gaps" — it is "no gap that would prevent a first dollar from flowing through the pipes and correctly attributing its 7% tithe."
+
+### §13.5 Post-close forward pointer
+
+When §13 closes GREEN, the cycle doc moves via `git mv` from `04_in_development/` to `06_shipped/`. At that point:
+
+- `06_shipped/brain_1.7.eos-5.md` becomes canon — the answer to *"the platform can autonomously accept money, meter consumption, and attribute the 7% tithe on every surface listed in §13.2."*
+- `01_planning/` accepts the next cycle (single-open-cycle mutex re-engages). Candidate next cycles from the triage doc + memory: EOS-5.1 Guardians global-distribution compliance (currently scaffolded on brain), EOS-6 first monitoring-attestation cycle (GAP-78/79 scope seed), EOS-7 authority (least-privilege via Identity__c).
+
+**Cycle remains open. Freeze is a pause, not a close.**
