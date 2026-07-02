@@ -8,6 +8,8 @@
 **Status:** Working draft, 2026-07-02
 **Audience:** Chief Architects, CIOs, VP Engineering, Heads of Platform
 
+**Published:** Medium · 2026-07-02 · [Multi-Agent Attestation and AI-Generated System Integrity](https://medium.com/@odysseyofchrist/multi-agent-attestation-and-ai-generated-system-integrity-549d7eca2c2b) · author `odysseyofchrist`
+
 ---
 
 ## Executive Summary
