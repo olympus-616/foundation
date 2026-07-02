@@ -5246,6 +5246,56 @@ Attestation-agent is ready to run the re-attestation the moment:
 
 If Steward pastes a fresh JWT (Sprint D unblock), Denver-weather probe validates §9.R MCP telemetry in the same run.
 
+### Pre-re-attestation baseline established 2026-07-01
+
+Post-Sprint-A+B+C merges + deploys. og-agent + Steward established clean baseline in alpha-org:
+
+- **6 Application__c rows** all Active, all with `ClientId__c` populated:
+
+  | AppKey | ClientId | RequiresWaitlist |
+  |---|---|---|
+  | builtsy | builtsy | false |
+  | guardians | guardians-ios | true |
+  | iris | iris-portal | true |
+  | olympus-gpt | olympus-gpt | true |
+  | templeathena | templeathena | true |
+  | turtleshell | turtleshell-web | true |
+
+- **0 ApplicationProfile__c rows** (transactional data wiped)
+- **4 residual LedgerEntry__c rows** (noise-floor tail; grading windows filter to post-baseline)
+- **Preserved config**: 2 Identities (platform@olympus-grid.com + homer) · 2 Clusters (api-int + eos-5d) · 1 Tenant (`cloudpremise-llc`) · 6 Applications
+
+Fresh signup will produce a new AP row → grades GAP-44 empirically (Application FK backfill).
+
+### GAP-76 (new, non-blocking hygiene) — Seed script omits `ClientId__c` on builtsy + templeathena inserts
+
+- **Severity:** 🟡 defer — non-blocking hygiene
+- **§9 letter:** — (operational)
+- **Detected:** 2026-07-01 (og-agent post-Sprint-A wipe+reseed)
+- **Suggested owner:** olympus-grid (small PR to `scripts/alpha-org-data-seed.apex`)
+- **Empirical evidence:** Seed script on brain omits `og_node_beta_1__ClientId__c` on the builtsy + templeathena `Application__c` inserts. `ClientId__c` is required per post-PR#297 canonical convention. First-shot execution failed; og-agent filled `ClientId = AppKey` per convention via one-shot Apex to unblock this attestation cycle.
+- **Acceptance criteria:** Update `alpha-org-data-seed.apex` to include `og_node_beta_1__ClientId__c = og_node_beta_1__AppKey__c` on both new rows. Re-seed after future wipes works first-try.
+
+## Attestation-agent grading dimensions armed
+
+Baseline reconciled. I will grade the following empirically on fresh telemetry as Steward exercises flows:
+
+- **GAP-44** — fresh AP has `Application__c` FK populated at insert (was null pre-Sprint-A)
+- **GAP-45** — Pattern 1 rows (profile.created, notification.appowner.waitlist, profile.status_changed, profile.onboarding.completed) carry Sub/App/AppSource/Tenant stamped
+- **GAP-16** — Ares api.inbound rows have `Sub__c` populated on authenticated calls
+- **GAP-49/55** — athena rows continue clean; guardians chat now matches iris/turtleshell shape after athena #101 code-level fix
+- **GAP-57** — turtleshell-iris LWC toolbar Cause tile submits picklist API name (not short code)
+- **GAP-62/63/65** — hermes/messaging/feedback events emit with correct 5-tuple
+- **GAP-66** — turtleshell-web Stripe subscription-status auth'd
+- **GAP-69** — olympus-gpt chat + all Pantheon calls auth'd
+- **GAP-72** — templeathena signup fires notification.appowner.waitlist with resolved `target_app_id`
+- **GAP-73** — templeathena `/v1/apollo/speak` auth'd
+- **GAP-74** — orphan-notification event won't fire this run (all AppKeys resolve now); grading dimension: `SELECT COUNT() FROM LedgerEntry WHERE EventType='notification.appowner.waitlist.orphaned'` returns 0
+- **GAP-75** — builtsy sign-in returns 200 with code emitted (was NOT_FOUND)
+- **GAP-68** — turtleshell-iOS feedback `StructuredData.answers` is nested object
+
+Sprint D (MCP chain) grading if Steward pastes fresh JWT: `mcp.registry.loaded` + `mcp.tool.call` events land with matching `trace_id + parent_event_id`.
+
 **Document signed:**
-EOS agent · 2026-07-01 · EOS-5 empirical validation run — Sprint B fully delivered (iris #118 + og #305 + turtleshell-web #70 + turtleshell-ios #29) — 5 PRs across 3 repos queued for merge — re-attestation stands ready
+EOS agent · 2026-07-01 · EOS-5 empirical validation run — Sprint B fully delivered — baseline reconciled — GAP-76 logged non-blocking — grading dimensions armed — re-attestation stands ready
 Steward: G.W. Homer (CloudPremise LLC)
