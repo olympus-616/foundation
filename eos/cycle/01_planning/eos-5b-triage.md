@@ -5393,7 +5393,61 @@ GAP-77 is explicitly OUT OF §13 critical path per Steward:
 | GAP-65 | 🟠 must-close | (untested — no feedback submit yet) |
 | GAP-33 | ✅ closed | (untested — iris has no onboarding UI; awaits turtleshell/gpt/templeathena signin+onboard) |
 | **GAP-77 (new)** | — | 🟡 deferred to multi-tenant readiness cycle |
+| **GAP-78 (new)** | — | 🟡 deferred to non-happy-path monitoring-attestation cycle |
+
+### GAP-78 (new, deferred to future non-happy-path monitoring-attestation cycle) — Sign-in FAILURES leave no telemetry footprint
+
+- **Severity:** 🟡 defer — out of EOS-5 scope; belongs to a future EOS cycle dedicated to non-happy-path validation ("monitoring cycle of attestation" — see below)
+- **§9 letter:** V (visibility) · S (sovereignty — abuse detection)
+- **Detected:** 2026-07-02 (Steward-fired failed sign-in during re-attestation)
+- **Suggested owner:** to-be-determined future cycle; likely olympus-grid (Apex ApiRouteAuth emits `auth.*.verify_failed`) + ares (perimeter denials emit `api.blocked.auth_failed` per policy)
+- **Steward direction 2026-07-02 (verbatim):** *"log it as gap needed for an eos cycle dedicated to non-happy path validation which will be harder to qualify. perhaps a monitoring cycle of attestation"*
+- **Empirical evidence:** After a successful re-attestation sequence (turtleshell Waitlist→Approved at 13:42), Steward deliberately fired a FAILED sign-in attempt. Full ledger scan since 13:39 UTC returned:
+  - 1 total row (the earlier profile.status_changed) — no auth-fail event of any type
+  - Zero `auth.apple.verify_failed`, zero `auth.email.verify_failed`
+  - Zero `api.blocked.*` (SF-native path never touched Ares)
+  - Zero new IdentityToken__c (correct — failed mint leaves nothing)
+  - Zero state change on any AP row
+  - Zero Logger__c rows visible to the standard query
+- **Consequences:**
+  - No audit row for "someone attempted to sign in and failed" — completely invisible to §9.V
+  - Credential-stuffing / hammering attacks would produce no ledger signal until AP account lockout OR IdentityToken volume anomaly detection kicks in — neither currently wired
+  - Per-user auth failure rates are unmeasurable, blocking any policy like "flag Identity after N failed sign-ins in T minutes"
+  - Failed Apple SIWA (user cancellation, Apple service outage, SIWA credential mismatch) is indistinguishable from user simply not attempting — hides real UX + reliability signal
+- **Relationship to GAP-19 (Sprint G, deferred):** GAP-19 covers "email-link auth bypasses Ares" on the success path. GAP-78 is the *failure*-side analog. Both are the same architectural gap (SF-native auth doesn't emit `auth.*` events + Ares isn't on the wire) but the failure side has distinct security-observability consequences worth splitting for future prioritization.
+- **Acceptance criteria (for the future non-happy-path monitoring-attestation cycle):**
+  1. Every failed sign-in attempt produces a `LedgerEntry` with `EventType='auth.email.verify_failed'` or `'auth.apple.verify_failed'` and `{reason, attempt_count, sub_or_email_hash}` payload
+  2. Attempts hitting Ares perimeter (post-GAP-19 migration OR the future cycle's own perimeter work) also emit `api.blocked.auth_*` variants
+  3. SOQL `SELECT COUNT() FROM LedgerEntry WHERE EventType LIKE 'auth.%.verify_failed' AND CreatedDate=TODAY` returns non-zero after any Steward-fired fail
+  4. Alerting threshold configurable per-Identity (default: N=5 failures in T=15 minutes → escalation event)
+
+## Attestation cycle typology — new dimension recognized 2026-07-02
+
+Steward's framing of GAP-78's future home introduces a **new EOS attestation cycle typology**: the **"monitoring cycle of attestation"** — dedicated to non-happy-path validation.
+
+**Delta from feature-attestation cycles (like EOS-5 current):**
+
+| Dimension | Feature-attestation cycle (EOS-5-shape) | Monitoring cycle of attestation |
+|---|---|---|
+| Focus | Feature works end-to-end | System detects when things fail / are attacked / degrade |
+| Close criterion | Empirical evidence feature emits correct telemetry on happy path | Empirical evidence system emits telemetry on failure paths AND monitoring wires up to it |
+| Testability | Steward exercises the feature once, agent grades | Requires synthesized failure injection; longer observation windows; likely alerting-threshold tuning |
+| §9 letter emphasis | V/A/F/T primary | V/S primary; A/R secondary |
+| Difficulty | Discrete deliverable — did the row land? | Continuous — is monitoring adequate? What's the false-positive rate? What's covered? |
+| Cycle shape | Weeks | Likely months of observation + tuning |
+
+Steward-verbatim: *"which will be harder to qualify. perhaps a monitoring cycle of attestation"* — the qualifier "harder to qualify" is the load-bearing phrase. Non-happy-path attestation needs different close-criteria mechanics than happy-path.
+
+**Implication for the EOS methodology:** the current single-track feature-attestation model (author §1-§5 → agent authors §6-§12 → execute → close on empirical §9 assertions) works well for delivery cycles. Monitoring-attestation cycles will need a §9 shape that includes:
+- Coverage matrices (what failure modes are we claiming to detect?)
+- Alerting SLOs (mean-time-to-detection thresholds)
+- Simulation harness (repeatable failure-injection tests)
+- False-positive/negative rates
+
+This typology dimension should be documented in `foundation/eos/cycle/README.md` (canonical operating manual) as a future extension — not now, but noted here for the doc-driftting record. First real monitoring-attestation cycle likely inherits GAP-78 as its scope seed.
+
+**§13 close pathway (unchanged):** money-from-guardians critical path intact; GAP-78 explicitly deferred.
 
 **Document signed:**
-EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-44/45/63 empirically CLOSED — GAP-77 (cluster.* attribution) surfaced + deferred to multi-tenant readiness future cycle per Steward direction (out of §13 critical path)
+EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-44/45/63 empirically CLOSED — GAP-77 (cluster.* multi-tenant attribution) + GAP-78 (auth-fail observability) surfaced + deferred per Steward direction — new EOS cycle typology dimension recognized: monitoring cycle of attestation for non-happy-path validation
 Steward: G.W. Homer (CloudPremise LLC)
