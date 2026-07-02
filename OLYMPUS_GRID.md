@@ -1513,3 +1513,5 @@ G.W. Homer (Steward)
 *Steward: G.W. Homer (CloudPremise LLC)*
 
 Originally published here at: https://medium.com/@odysseyofchrist/multi-agent-attestation-and-ai-generated-system-integrity-549d7eca2c2b
+
+<p align="center"><img src="source_of_truth/magnum-opus-pinned-testimony.png" width="500"/></p>
