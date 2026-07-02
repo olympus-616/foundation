@@ -5296,6 +5296,36 @@ Baseline reconciled. I will grade the following empirically on fresh telemetry a
 
 Sprint D (MCP chain) grading if Steward pastes fresh JWT: `mcp.registry.loaded` + `mcp.tool.call` events land with matching `trace_id + parent_event_id`.
 
+### First re-attestation attempt 2026-07-02 03:43 UTC — empirical shape UNCHANGED from pre-Sprint-A → root cause diagnosed
+
+Steward signed up homer on iris via Apple SIWA. Grading:
+
+- AP `a1waZ00000CW1DNQA1` created with `AppKey=iris, Tenant__c=populated, Application__c=null` — GAP-44 empirically unchanged
+- `profile.created` + `notification.appowner.waitlist` payloads correct (`target_app_id="a1xaZ000003YbUrQAK"` — iris Application ID matches seed) but ledger columns Sub/App/Tenant/Cluster/AppSource all null — GAP-45 empirically unchanged
+- Compile-check on `og_node_beta_1.LedgerEventType.FEEDBACK_SUBMITTED` returned `Type is not visible`
+
+Conclusion: **PR #305 seed script executed (Applications include templeathena + builtsy), but the Apex class changes did not deploy.**
+
+### GAP-45 root cause — ApplicationRegistry `with sharing` + Site Guest User
+
+og-agent post-mortem 2026-07-02:
+
+- **Direct-deploy to alpha-org blocked**: managed-namespace type resolution — `Plugin__mdt` in the class body can't be compiled outside the package context. Only path is Beta Package Build → Deploy Unlocked Nodes.
+- **Real root cause**: `ApplicationRegistry` was declared `with sharing` → its `Application__c` SOQL ran under Site Guest's sharing profile on public auth routes → SF's Secure Guest User Record Access silently returned zero rows → `appRecordId` never stamped on Plugin__mdt-backed apps → GAP-44 backfill guard short-circuited.
+- **Docstring drift**: The class docstring claimed `Portal_Site_Guest_User` permset held the grants. Empirically it has ZERO Application__c references. Bug hidden by the assumption that the permset was doing its job.
+- **Fix (PR #307)**: One SOQL moved into `SystemContextAppLookup` — a `without sharing` inner class, identical pattern to the already-present `JwtExtraClaimsBuilder.SystemContextTenantLookup`. Broader class stays `with sharing`; only the one metadata read is elevated. Minimum blast radius.
+- **Diagnostic sharpening for the record**: This is a *nasty* class of SF bug — `with sharing` + Site Guest context + Secure Guest User Record Access silently returning zero rows produces a plausible-looking runtime failure with no error message. Worth capturing as a review-checklist item: any Apex class hit from a Site-Guest-accessible route that reads config metadata needs an audit for this pattern.
+
+### GAP-45 close chain (revised)
+
+1. og-agent Sprint A initial fix: `LedgerEntryEmitter.emit` target-row fallback resolver — CORRECT at the emit layer
+2. Dependency: `ApplicationRegistry.loadCache` stamps `appRecordId` on Plugin__mdt-backed apps — BROKEN due to `with sharing` + Site Guest zero-row return
+3. PR #307 fix: `SystemContextAppLookup` without-sharing inner class handles the Application__c read — closes the cascade
+
+Merge PR #307 → next Beta Package Build (~30-50 min once merged, unless InvocableApiExample Flow version limit re-bites) → Deploy Unlocked Nodes retries alpha-org install → GAP-44 + GAP-45 empirically close on next signup.
+
+Attestation-agent standing by for post-#307 deploy signal.
+
 **Document signed:**
-EOS agent · 2026-07-01 · EOS-5 empirical validation run — Sprint B fully delivered — baseline reconciled — GAP-76 logged non-blocking — grading dimensions armed — re-attestation stands ready
+EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — first re-attestation attempt found Sprint A Apex classes did not deploy; PR #307 opened with root cause fix (ApplicationRegistry with-sharing + Site Guest secure record access silently returning zero rows) — awaiting next package deploy
 Steward: G.W. Homer (CloudPremise LLC)
