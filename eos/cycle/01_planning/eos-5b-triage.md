@@ -6020,6 +6020,110 @@ Each surface = ~5 minutes of Steward testing. Total ~15 minutes to attest the re
 - Post-close cycles queued: EOS-6 (first money flowed), EOS-7 (first tithe processed) — separate attestation moments per Steward discipline
 - Minor-bug follow-ons on attested surfaces: GAP-58 / GAP-59 / GAP-81 / GAP-90 / GAP-92 / GAP-93 / GAP-94 / GAP-16 — all logged, none block EOS-5 READINESS but all become the working list for the next sprint cycle
 
-**Document signed:**
-EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run through the "READINESS" close-criterion lens — 3-of-6 surfaces attested (turtleshell-web + turtleshell-iOS + guardians) — 3 surfaces remaining for empirical re-verification (templeathena, olympus-gpt, turtleshell-iris) per iris #118 + og #305 fixes — attestation-agent push-back logged: fix-shipped ≠ fix-empirically-verified; the athena PR #101 audit lesson stands — GAPs 77-97 tracked as minor-bug follow-ons but none blocking READINESS — EOS-5 stays OPEN until the three remaining surfaces are exercised
-Steward: G.W. Homer (CloudPremise LLC)
+## EOS-5 STATE FROZEN 2026-07-02 — Steward moved to client work
+
+Per Steward direction 2026-07-02: *"just keep everything logged in our attestation documenation ... i need to move on to client work for now and we will need to come back to this."*
+
+### Frozen state — what is closed, what is pending
+
+**Empirically CLOSED (attestation-agent verified against live alpha-org):**
+- GAP-33 (`profile.onboarding.completed`) — 3 surfaces
+- GAP-44 (Application FK backfill at insert) — 3 AppKeys deterministic
+- GAP-45 (Pattern 1 4-tuple stamping) — **12-for-12 empirical tally** across 3 AppKeys × 4 transitions
+- GAP-49 (Athena chat-path tenant lift) — settled as guardians-only outlier (client x-application-id header)
+- GAP-53 (Tenant seed typo `cloudpremise-lls`→`cloudpremise-llc`) — Steward data fix
+- GAP-55 (Athena `agent_id` split from `ATHENA_NODE_ID`) — PR #100 across chat.turn + analyze
+- GAP-63 (MessageEvent three-touch chain firing) — SF-native lane confirmed
+- Sprint E `message.sent` emit — confirmed firing
+- Sprint E `feedback.submitted` emit — confirmed firing (attribution columns still gap-83)
+- Sprint D athena code deployed + structurally correct — `mcp.registry.loaded` sub-event fires
+
+**Locked as READINESS close criterion (Steward direction 2026-07-02):**
+- EOS-5 = **READINESS to accept money for sea shells** — used against cluster services, accounted for properly
+- NOT required: money has flowed, tithe processed
+- Money-flowed = future cycle (EOS-6 candidate)
+- Tithe-processed = further future cycle (EOS-7 candidate)
+
+**Attested-3-of-6 surfaces** (empirically verified this run):
+1. ✅ turtleshell-web — full lifecycle
+2. ✅ turtleshell-iOS — reduced surface (shared AP)
+3. ✅ guardians (omens Godot iOS) — full lifecycle with known follow-ons
+
+**3-of-6 surfaces REMAINING for EOS-5 close** (fixes shipped via iris #118 + og #305 but NOT re-verified empirically):
+4. ⏸ templeathena (voice-first; GAP-73 apollo/speak fix + GAP-72 Application row seed)
+5. ⏸ olympus-gpt (GAP-69 CRITICAL SECURITY fix + GAP-70 semver + GAP-25 templeathena strip)
+6. ⏸ **turtleshell-iris** (Steward-elevated as *"maybe the most important as it will allow salesforce users access to ai from a chat window in salesforce"* — commercial enterprise motion; GAP-57 LWC Cause picklist fix)
+
+### Non-blocker gaps logged during run (all deferred per Steward pattern; count for the record)
+
+- GAP-16 (Ares HTTP-ingest Sub__c lift) — receiver-side plumbing; Tier-1 for Stripe validation
+- GAP-56 (mnemosyne tenant lift)
+- GAP-57 (turtleshell-iris LWC picklist — fix shipped, not re-verified)
+- GAP-58 (Athena `llm.turn` wrapper leak on guardians) — REOPENED empirically
+- GAP-59 Path A (guardians onboarding-gate enforcement) — Steward-LOCKED design not-yet-implemented
+- GAP-67 (memory-reflect cross-surface parity) — resolved by Steward direction "it is athena"
+- GAP-71 default-deny auth — Steward-LOCKED, chronos empirical breach
+- GAPs 77-97 all logged as non-blocker per Steward pattern
+
+### Path forward when Steward resumes (resume checklist)
+
+**Tier 1 — Before Stripe validation (~1 day of coordinated work):**
+
+1. **GAP-81** — `Identity.PrimaryCause__c` dual-write on onboarding. 1-line fix in onboarding handler. og-agent. Without this, Stripe settlement lands and tithe attribution query returns no target.
+2. **GAP-16** — Ares HTTP-ingest `Sub__c` column lift. Same fix pattern as PR #307 `SystemContextAppLookup`. og-agent. Without this, Stripe webhook `sub` in payload doesn't join to Identity by column.
+3. **Empirical re-verification of 3 remaining EOS-5 surfaces** — templeathena + olympus-gpt + turtleshell-iris. ~15 min Steward testing. **turtleshell-iris is the most important** per Steward direction.
+
+**Tier 2 — Before public production for real revenue (2-3 weeks + vendor engagements):**
+
+Security enforcement (Steward-locked but not implemented):
+- GAP-59 Path A (guardians onboarding-gate)
+- GAP-71 default-deny auth (chronos anonymous is empirical breach)
+- GAP-78 auth-fail observability (basic)
+- GAP-79 axiom implementation (DLQ visibility)
+
+Data integrity:
+- GAP-84 DLQ triage (172+ failures at 3.2/min silently accumulating)
+- GAP-94 chronos anonymous + GAP-95 SF-vs-Pantheon persistence design gate
+- GAP-92 apollo emit attribution
+
+Attribution completeness for §9.R rollup:
+- GAP-90 analyze cost metering (vision-model cost currently unmetered)
+- GAP-83 feedback/message.* attribution (columns NULL despite payload complete)
+- GAP-58 athena guardians `llm.turn` leak (omens client x-application-id removal + athena grep)
+
+Compliance backstop (real deadline pressure):
+- Turtleshell-web equivalent of `foundation/GUARDIANS-LAUNCH-COMPLIANCE.md`
+- GUARDIANS-LAUNCH-COMPLIANCE §0 20-item checklist has T-14 = 2026-07-03 (T-15 = today) with several items already overdue against 2026-07-17 launch
+
+Product quality:
+- GAP-93 (MCP registry endpoint) — same PR #307 pattern on `ApiRouteMcpServersHandler`; without this all clients hallucinate on tool queries
+
+Sovereignty attestation preconditions:
+- Data export capability (GDPR right + sovereignty claim)
+- Persistence across Pantheon redeploys (untested)
+- Cluster locality (homer's data in eos-5e vs athena-717 default?)
+
+**Tier 3 — Post-launch / follow-on EOS cycles (already scoped as deferred):**
+- GAP-77 (cluster.* multi-tenant attribution) → multi-tenant readiness cycle
+- GAP-78/79 (advanced monitoring) → monitoring-attestation cycle
+- GAP-80 (Guide/Tithe schema) → cross-app identity/preference cycle
+- GAP-97 (JWT per-surface claim) → surface-discrimination cycle
+- GAP-19 (email-link auth via Ares) → Sprint G deferred
+
+### Return-to-work handoff
+
+When Steward returns:
+1. **Read this section** for the frozen state
+2. **Tier 1 first** — 3 items × ~1 day = Stripe validation unblocked
+3. **Tier 2 in parallel with Stripe validation** — the "before public production" checklist; ~2-3 weeks
+4. **Recommend: keep turtleshell-iris as the highest-priority remaining surface** — enterprise Salesforce commercial motion
+5. **Do NOT scope-creep** — anything not in Tier 1 or Tier 2 that's not user-blocking stays deferred per non-blocker discipline
+6. **Compliance backstop clock is ticking** — T-15 to 2026-07-17 launch; turtleshell-web equivalent of GUARDIANS-LAUNCH-COMPLIANCE needs to start now if public advertising is same-week as game launch
+
+### Related deliverable — 2026-07-02
+
+- **White paper** authored: `foundation/eos/WHITE-PAPER.md` — "EOS Attestation: The Theory, The Practice, and How It's Going So Far" — for Chief Architect / CIO audience; consulting-engagement productization. References this triage doc's empirical record as evidence.
+
+**Document signed and FROZEN:**
+EOS agent · 2026-07-02 · EOS-5 triage doc frozen at Steward direction; empirical record preserved; return-to-work checklist provided; Tier-1/Tier-2/Tier-3 path forward documented; white paper delivered as parallel deliverable
+Steward: G.W. Homer (CloudPremise LLC) — moving to client work; will return
