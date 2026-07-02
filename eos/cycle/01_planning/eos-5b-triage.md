@@ -5910,6 +5910,60 @@ In the 2-minute window around the feedback submit (15:20:24 - 15:22:39), 26 addi
 
 Cumulative heracles reads this run: 39 (prior signin) + 26 (this window) = 65+ unique story paths in ~30 minutes. Consistent with guardians game exploring content in depth. Per GAP-40 catalog reads are public by design; per GAP-79 they should classify as `Information Only` with volume-anomaly detection ready for the monitoring-attestation cycle.
 
+### Turtleshell-iOS signin — 2026-07-02 15:26 UTC
+
+Steward signed into turtleshell-iOS via Apple SIWA on iPhone. Empirical shape:
+
+- 2 IdentityTokens minted (access + refresh) at 15:26:32, `ClientId__c=turtleshell`, IP=71.237.2.131 (same as web signin IP)
+- Turtleshell AP `a1waZ00000CXcyrQAD` unchanged — **existing AP correctly reused via shared AppKey** ✅ (no re-onboarding, no new AP)
+- Zero non-polling ledger events (SF-native Apple SIWA)
+- Zero authenticated ares traffic yet (Steward hadn't exercised Pantheon calls)
+
+### Athena conversation history — cross-surface persistence works
+
+Steward observed on turtleshell-iOS: History with Athena shows unified conversations across surfaces (turtleshell-web chat + guardians poseidon MCP + chronos test all appear). Steward-verbatim: *"i see all conversations with athena in the conversation history, including what came from turtleshell, including with the other gods like poseidon and chronos. this is fine for now. we will filter them later. it is athena."*
+
+**Design intent locked (per this run):** conversation history is **agent-centric** (Athena is the persistent memory host across surfaces). Per-surface/per-god filtering is a UX layer on top of the unified store. Architecturally coherent for a sovereign-agent model.
+
+**Ties to GAP-85 empirical:** `Conversation__c` SObject in SF has 0 rows despite this history. Conversation state lives in Pantheon-side mnemosyne runtime, not SF. This is a design decision (SF for durable identity/tenant/config; runtime state stays Pantheon-side) — but see the three sovereignty questions logged below.
+
+### Sovereignty attestation preconditions surfaced (design context, not a new gap)
+
+If "sovereign AI" as a claim implies user controls their conversation state, three empirical tests become sovereignty prereqs:
+
+1. **Persistence across Pantheon redeploys** — when mnemosyne container restarts, do homer's conversations survive? Not tested this run.
+2. **Cluster locality** — does homer's history live in his cluster (`eos-5e`) or the default (`athena-717`)? If default, platform holds the state, not the user.
+3. **User export capability** — can homer download all his conversations in a standard format? Not tested.
+
+Context for future sovereignty attestation cycle; NOT a new gap logged. Ties into GAP-79 axiom (data has purpose + control) and the broader sovereign-AI attestation.
+
+### GAP-97 (new, non-blocker per Steward pattern — design gate for surface discrimination in JWT) — JWT should carry per-surface claim to distinguish clients within a shared AppKey
+
+- **Severity:** 🟡 non-blocker · design gate for future EOS cycle
+- **§9 letter:** V (visibility · per-surface analytics) · A (attribution refinement) · S (per-surface security policy)
+- **Detected:** 2026-07-02 15:30 UTC (post-turtleshell-iOS signin observation that ClientId=turtleshell for both web and iOS)
+- **Steward direction 2026-07-02 (verbatim):** *"the client id is fine at the app level. the jwt should maybe have that information in it somehhow, such as what is requested the token"*
+- **Design intent per this direction:**
+  - `Application.ClientId__c` stays as the app-namespace identifier (turtleshell, guardians, iris, etc.) ✅
+  - **JWT extends with a per-surface claim** identifying which specific client requested the token — currently absent
+  - Candidate claim names: `sfx` (surface), `surface`, `client_type`, or borrowing `azp` (RFC 7519 authorized party) — Steward decision on canonical
+  - Candidate values: `web`, `ios`, `android`, `offgrid`, `portal`, `lwc`, `cli`, `game` (for guardians omens Godot)
+  - Value comes from the client's context at token mint time (typically from `x-client-surface` header or User-Agent parsing at the auth handler)
+- **Empirical driver:** Same `ClientId=turtleshell` on IdentityToken for both turtleshell-web and turtleshell-iOS. Downstream services cannot distinguish surface from JWT alone. Distinguishing signal currently only exists on Feedback.ClientVersion__c (`turtleshell-web/1.7.4` vs `turtleshell-ios/1.7.4`) + DeviceModel__c — which requires the downstream to inspect Feedback rows, not the token.
+- **Complements GAP-39** — GAP-39 (LedgerEntry.ClientType__c stamping, deferred as doc-only) is the emit-layer artifact. GAP-97 is the auth-layer prerequisite. GAP-39 can't stamp ClientType__c cleanly without GAP-97 providing the JWT claim. **The two close together.**
+- **Fix pattern:**
+  1. Auth handler at token mint reads `x-client-surface` header (or fallback User-Agent parse) → stamps `surface` claim in JWT payload
+  2. Ares extracts the claim + stamps `ClientType__c` column on api.inbound (rolls into GAP-39 close)
+  3. All downstream emit paths (athena, apollo, mnemosyne, hermes, chronos) propagate the surface value into their own metering events (parallel to how tid/sub/cid propagate today)
+  4. Client contract: every non-SF-native surface sends `x-client-surface: <value>` at auth start; SF-native surfaces (iris portal, guardians via omens Swift bridge) send equivalent header on the SF-Apex auth call
+- **Acceptance criteria (for future EOS cycle):**
+  1. JWT payload includes surface claim on all client-issued tokens
+  2. Same AppKey different surfaces produce JWTs with distinguishable surface values
+  3. Ares perimeter policies can gate on surface (e.g., iOS-only routes; block anything if bot user-agent detected)
+  4. LedgerEntry.ClientType__c populates from JWT surface claim (GAP-39 close)
+  5. `SELECT AppSource__c, ClientType__c, COUNT(Id) FROM LedgerEntry GROUP BY AppSource__c, ClientType__c` returns per-app-per-surface consumption view
+- **Steward decision needed for future cycle:** claim name (`sfx` / `surface` / `client_type`) + canonical value list. Not needed now; can be locked when this gap moves to a cycle.
+
 **Document signed:**
-EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-33/44/45/63/49/55 empirically CLOSED across multiple surfaces (12-for-12 GAP-45 tally across 3 AppKeys) — comprehensive system audit performed — GAPs 77-96 surfaced + all explicitly non-blocker per Steward direction — none on §13 critical path — Sprint D athena code confirmed deployed and structurally correct (registry unavailability is upstream olympus-grid endpoint bug per GAP-93) — apollo speak + music work end-to-end with shell metering + provider chain — hermes SF-native lane message.sent Sprint E emit CONFIRMED — chronos list/task from omens client is anonymous + doesn't persist to SF (GAP-94 client-side + GAP-95 design gate) — guardians feedback loses in-app context (GAP-96)
+EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-33/44/45/63/49/55 empirically CLOSED across multiple surfaces (12-for-12 GAP-45 tally across 3 AppKeys) — comprehensive system audit performed — GAPs 77-97 surfaced + all explicitly non-blocker per Steward direction — none on §13 critical path — Sprint D athena code confirmed deployed and structurally correct — apollo speak + music work end-to-end with shell metering + provider chain — hermes SF-native lane message.sent Sprint E emit CONFIRMED — chronos list/task from omens client is anonymous + doesn't persist to SF (GAP-94/95) — guardians feedback loses in-app context (GAP-96) — turtleshell-iOS signin clean + Athena conversation history is cross-surface unified (agent-centric design locked) — JWT per-surface claim design gate opened (GAP-97, complements GAP-39)
 Steward: G.W. Homer (CloudPremise LLC)
