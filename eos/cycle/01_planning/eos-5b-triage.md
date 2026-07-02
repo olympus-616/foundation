@@ -5639,6 +5639,40 @@ Steward direction: **log-only, non-blocker.** Fix pattern likely mirrors PR #307
 
 **Still-empirically-open non-blockers logged this run:** GAP-16 (HTTP-ingest half only), GAP-56 (mnemosyne), GAP-81 (Identity.PrimaryCause dual-write), GAP-82 (LedgerEntry.Cause stamping on profile.*), GAP-83 (feedback.submitted attribution), GAP-84 (DLQ accumulation), GAP-85 (Memory/Conversation empty), GAP-86 (shells substrate), GAP-87 (session-log flag), GAP-88 (TurtleshellProfile orphan), GAP-89 (cluster naming drift + agent_env)
 
+### Two-image analyze correlation test — 2026-07-02 14:28 UTC
+
+Steward ran athena.analyze with 2 images ("Please review and discuss these attachments") on eos-5e cluster. Analysis produced correct vision-model output (IMG_4858 = torch+book+omega; IMG_4856 = Audubon Bird Call in Jeep). Correlation exercise revealed the client uploads each image via its own POST + follow-up chat references them.
+
+**Chain reconstruction:**
+
+| Event | trace_id | Size | Timing |
+|---|---|---|---|
+| Analyze #1 upload | `0be8de2c` | 35,356 bytes | 14:28:12 → athena.analyze 14:28:22 (10 sec) |
+| Analyze #2 upload | `1940e043` | 3,410,604 bytes | 14:28:17 → athena.analyze 14:28:18 (1 sec) |
+| Follow-up chat.turn | `be17b179` | 2,037 bytes | 14:28:27 (references both) |
+
+Same session_id `20c519ac-3750-40d5-800a-35ca31dd0d64` groups all events at conversation level.
+
+### GAP-90 (non-blocker, log-only) — `athena.analyze` emits no LLM cost/token metering — §9.R attribution black hole
+
+- **Severity:** 🟡 non-blocker per Steward pattern; **relevant for Stripe validation** because analyze burns real gpt-4o-vision cost with zero ledger attribution row
+- **§9 letter:** R (royalty/shell-consumption) · A · V
+- **Empirical (2026-07-02 14:28):** For each `/v1/athena/analyze` POST, the ledger emits ONLY `api.inbound` (ares perimeter) + `athena.analyze` (envelope-only). Compare to `athena.chat.turn` which emits 7 events including `llm.tokens.input`, `llm.tokens.output`, `llm.turn` with `model=gpt-4o` + `units=<token count>`. Analyze rows have no token counts, no model identifier, no shell attribution. Vision-model consumption is invisible to the metering plane.
+- **Consequence for §13:** When Stripe billing goes live, if an analyze-heavy user consumes $50 of gpt-4o-vision cost, the ledger shows one 1-unit api.inbound row per analyze POST — no cost basis for tithe attribution rollup. Same shape as poseidon's missing `mcp.tool.call` metering (GAP-50).
+- **Fix pattern:** athena.analyze emitter extended to publish `llm.tokens.input`, `llm.tokens.output`, `llm.turn` events after each vision-model call (mirrors the chat.turn pattern). Include token counts, model identifier, and shell_cost derived from prompt/completion token pricing table.
+
+### GAP-91 (non-blocker, log-only) — No `parent_event_id` linkage from follow-up chat.turn to preceding analyze events
+
+- **Severity:** 🟡 non-blocker per Steward pattern; observability-chain integrity for §9.V
+- **§9 letter:** V (visibility · causality)
+- **Empirical (2026-07-02 14:28):** All athena.analyze rows have `parent_event_id: null`. The follow-up `athena.chat.turn` at 14:28:32 that discusses IMG_4858 and IMG_4856 doesn't reference either analyze trace_id in its payload. Association can only be inferred by (a) same session_id (works — 20c519ac covers everything) and (b) time proximity. Per-analyze-call causal linkage is asserted nowhere.
+- **Fix pattern:** the follow-up chat's athena.chat.turn populates `parent_event_id` referencing the preceding analyze `event_id`s (list if multiple attachments). Placeholder already exists in the payload shape (`parent_event_id: null`).
+- **Why this matters:** for future audit / debugging / user-attributable content moderation review, "which analyze results fed which chat" is a common query. Currently answerable only heuristically.
+
+### Timing anomaly observed (informational, not a gap)
+
+The 3.4MB image (Analyze #2) completed in 1 second while the 35KB image (Analyze #1) took 10 seconds. Not a bug — vision-model queue behavior. Larger request hit a free processing slot; smaller request coincided with queue contention. Worth noting for future latency-monitoring cycle work.
+
 **Document signed:**
-EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-44/45/63/33 empirically CLOSED across multiple surfaces — comprehensive system audit performed — GAPs 77-89 surfaced + all explicitly non-blocker per Steward direction — none on §13 critical path
+EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-44/45/63/33 empirically CLOSED across multiple surfaces — comprehensive system audit performed — GAPs 77-91 surfaced + all explicitly non-blocker per Steward direction — none on §13 critical path — analyze correlation reveals §9.R metering black hole (GAP-90) + missing parent_event_id linkage (GAP-91)
 Steward: G.W. Homer (CloudPremise LLC)
