@@ -5964,6 +5964,62 @@ Context for future sovereignty attestation cycle; NOT a new gap logged. Ties int
   5. `SELECT AppSource__c, ClientType__c, COUNT(Id) FROM LedgerEntry GROUP BY AppSource__c, ClientType__c` returns per-app-per-surface consumption view
 - **Steward decision needed for future cycle:** claim name (`sfx` / `surface` / `client_type`) + canonical value list. Not needed now; can be locked when this gap moves to a cycle.
 
+## EOS-5 §13 CLOSE CRITERION — LOCKED 2026-07-02
+
+Steward-verbatim direction 2026-07-02 (final locking of the §13 close definition):
+> *"eos-5 as its stands is the 'READINESS' to accept money. that doesn't mean money has flowed or the tithe has been processed"*
+
+**Locked §13 close criterion:**
+- EOS-5 = **READINESS to accept money for sea shells that can then be used against cluster services and accounted for properly**
+- NOT required for EOS-5 close: money has flowed, tithe processed against real settlement
+- Money-flowed becomes a follow-on cycle (EOS-6 candidate)
+- Tithe-processed becomes a further follow-on cycle (EOS-7 candidate)
+- Each is a discrete attestation moment; Steward is being disciplined by not conflating them
+
+**Steward-verbatim scope refinement 2026-07-02:**
+> *"there are other surfaces that accept money namely templeathena and gpt, but there are also the turtleshell-iris compoentn which maybe the most important as it will allow salesforce users access to ai from a chat window in salesforce"*
+
+## EOS-5 attested-surface scope — SIX surfaces total
+
+**Attested this session (2026-07-01–07-02):**
+1. ✅ turtleshell-web — full lifecycle verified end-to-end
+2. ✅ turtleshell-iOS — reduced surface (existing AP reused via shared AppKey), Apple SIWA + chat + PDF analyze verified
+3. ✅ guardians (omens Godot iOS) — signup + Apple SIWA + chat + apollo TTS + music + hermes + chronos + poseidon MCP + feedback all empirically exercised (with known minor-bug follow-ons)
+
+**STILL REQUIRED for EOS-5 close (empirical re-verification):**
+4. ⏸ **templeathena** — voice-first (apollo-heavy) iris-portal-app. GAP-73 (apollo/speak anonymous) fixed in iris #118 + og #305 but **not empirically re-verified**. GAP-72 (Application row) closed in og #305 seed. Need fresh signup + apollo verification + shell metering attribution.
+5. ⏸ **olympus-gpt** — iris-portal-app with CRITICAL SECURITY BLOCKER GAP-69 (anonymous JWT-detachment on chat/chronos/apollo/proteus) fixed in iris #118 + og #305. **Not empirically re-verified.** Need fresh signup + chat + tool exercises with post-fix telemetry.
+6. ⏸ **turtleshell-iris** — Steward-elevated as *"maybe the most important as it will allow salesforce users access to ai from a chat window in salesforce"*. Commercial enterprise motion. GAP-57 (LWC Cause picklist mismatch) fixed in iris #118. **Not empirically re-verified.** Needs fresh SF-admin exercise: sign in inside SF Lightning as a real SF user; open the AI chat panel; verify Cause selection accepts full picklist API names; verify chat with athena works with proper attribution.
+
+## Attestation-agent honest push-back on scope
+
+Steward: *"you may disagree and then pushback"* — invoked. Here's the push-back:
+
+Three surfaces above have **CRITICAL SECURITY / BLOCKER-tier fixes that shipped via iris #118 + og #305 but were NEVER empirically re-verified against the alpha-org.** Fix confidence relies on:
+- Local Steward tests before merge
+- Iris agent's structural verification
+- og-agent's Sprint A+E code work
+
+But **empirical closure requires post-deploy live-alpha-org verification.** GAP-58 came back to bite on guardians even after PR #101 shipped because the audit was incomplete. GAP-16 stays open on HTTP-ingest even after PR #307 because the fix was scoped to the PE path. Iris #118 might have the same story — the fixes might close some sites but miss others. **We don't know until we test.**
+
+Under READINESS attestation, these three surfaces need fresh empirical runs before EOS-5 can defensibly close for the full 6-surface scope. Not full end-to-end game sessions like guardians — just the security-critical paths:
+- **olympus-gpt**: signed-in chat + one chronos call + one apollo call → verify all show `col_Tenant=cloudpremise-llc`, `user_identity=<sub>` in ares api.inbound
+- **templeathena**: signed-in athena chat + one apollo/speak → verify apollo emit rows stamp real tenant (not `default`) after client fix
+- **turtleshell-iris LWC**: SF-admin session opens the AI chat panel; signup gate works; onboarding tile picklist accepts full API names; chat with athena produces auth'd api.inbound
+
+Each surface = ~5 minutes of Steward testing. Total ~15 minutes to attest the remaining three.
+
+**Without this verification, EOS-5 READINESS attestation applies only to the three surfaces I actually saw fire empirically. Extending the attestation to templeathena / gpt / turtleshell-iris on the strength of "the fix shipped" alone is the same mistake I made with the athena PR #101 audit — trusting the fix without the row.**
+
+## Recording for the log
+
+- EOS-5 §13 close criterion: **LOCKED as READINESS** per this Steward direction
+- Attested surfaces this run: turtleshell-web, turtleshell-iOS, guardians
+- Remaining scope for EOS-5 close: templeathena, olympus-gpt, turtleshell-iris (empirical re-verification per iris #118 + og #305 fixes)
+- Steward-elevated: turtleshell-iris as commercial-enterprise motion — AI chat inside Salesforce workflow
+- Post-close cycles queued: EOS-6 (first money flowed), EOS-7 (first tithe processed) — separate attestation moments per Steward discipline
+- Minor-bug follow-ons on attested surfaces: GAP-58 / GAP-59 / GAP-81 / GAP-90 / GAP-92 / GAP-93 / GAP-94 / GAP-16 — all logged, none block EOS-5 READINESS but all become the working list for the next sprint cycle
+
 **Document signed:**
-EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-33/44/45/63/49/55 empirically CLOSED across multiple surfaces (12-for-12 GAP-45 tally across 3 AppKeys) — comprehensive system audit performed — GAPs 77-97 surfaced + all explicitly non-blocker per Steward direction — none on §13 critical path — Sprint D athena code confirmed deployed and structurally correct — apollo speak + music work end-to-end with shell metering + provider chain — hermes SF-native lane message.sent Sprint E emit CONFIRMED — chronos list/task from omens client is anonymous + doesn't persist to SF (GAP-94/95) — guardians feedback loses in-app context (GAP-96) — turtleshell-iOS signin clean + Athena conversation history is cross-surface unified (agent-centric design locked) — JWT per-surface claim design gate opened (GAP-97, complements GAP-39)
+EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run through the "READINESS" close-criterion lens — 3-of-6 surfaces attested (turtleshell-web + turtleshell-iOS + guardians) — 3 surfaces remaining for empirical re-verification (templeathena, olympus-gpt, turtleshell-iris) per iris #118 + og #305 fixes — attestation-agent push-back logged: fix-shipped ≠ fix-empirically-verified; the athena PR #101 audit lesson stands — GAPs 77-97 tracked as minor-bug follow-ons but none blocking READINESS — EOS-5 stays OPEN until the three remaining surfaces are exercised
 Steward: G.W. Homer (CloudPremise LLC)
