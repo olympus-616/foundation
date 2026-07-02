@@ -5326,6 +5326,74 @@ Merge PR #307 → next Beta Package Build (~30-50 min once merged, unless Invoca
 
 Attestation-agent standing by for post-#307 deploy signal.
 
+## Post-#307 deploy — second re-attestation run 2026-07-02 13:22–13:32 UTC
+
+Steward exercised iris signup (Apple SIWA) → admin approval → Apple SIWA landing (Active) → turtleshell-web signup → eos-5e cluster spawn.
+
+### Empirical CLOSES this run
+
+- ✅ **GAP-44 EMPIRICALLY CLOSED** — Fresh iris AP `a1waZ00000CXcsPQAT` and turtleshell AP `a1waZ00000CXcyrQAD` both had `Application__c` FK populated at insert (iris → `a1xaZ000003YbUrQAK`, turtleshell → `a1xaZ000003YrrNQAS`). PR #307 `SystemContextAppLookup` without-sharing fix confirmed working under Site Guest context.
+- ✅ **GAP-45 EMPIRICALLY CLOSED** — 4-of-5-tuple column stamping (`Sub__c`, `ApplicationId__c`, `TenantId__c`, `AppSource__c`) confirmed across 6 events × 2 surfaces × 3 transitions:
+  - iris profile.created + notification.appowner.waitlist + profile.status_changed (Waitlist→Approved) + profile.status_changed (Approved→Active)
+  - turtleshell profile.created + notification.appowner.waitlist
+  - Per-AppKey resolution correct: iris rows stamp `AppSource=iris`, turtleshell rows stamp `AppSource=turtleshell`
+  - `ClusterName__c` null on Pattern 1 rows — defensible (trigger context, no cluster identity)
+- ✅ **GAP-63 EMPIRICALLY CLOSED** — `message.event` LedgerEntry fires with `event:"sent"` on the app-owner waitlist notification email (hermes_id shape `gap47-waitlist-*`). Three-touch MessageEvent chain working.
+- ✅ **GAP-53 stays closed** — Tenant seed `cloudpremise-llc` propagates through all events with correct spelling.
+- ✅ **Apple SIWA landing** — IdentityToken × 2 (access + refresh) minted for homer at 13:31:08 UTC.
+
+### Cluster spawn empirical read (informational — see GAP-77 below)
+
+Steward spawned `eos-5e` cluster via iris. `cluster.requested` LedgerEntry fired with `ClusterName__c=eos-5e, ClusterId__c=a2CaZ000003T4XxUAK` correctly stamped. Attestation-agent initially graded the null Sub/App/Tenant/AppSource as "by design" per og-agent's Sprint A architecture — **Steward corrected: this is NOT the correct design intent for cluster.* events.**
+
+### GAP-77 (new, deferred to future cycle) — `cluster.*` events need per-event 5-tuple attribution for multi-tenant readiness
+
+- **Severity:** 🟡 defer — out of EOS-5 scope; blocks a future EOS cycle attesting "system ready for multi-tenants on a single node" (which we are not yet)
+- **§9 letter:** A · S (multi-tenant sovereignty)
+- **Detected:** 2026-07-02 (Steward correction during re-attestation)
+- **Suggested owner:** olympus-grid (`LedgerEntryEmitter` cluster.* branch of target-row fallback)
+- **Steward direction 2026-07-02 (verbatim):** *"tenant should have been stamped it is the only way to make the cluster available to the correct tenant going forward. identity should be stamped - as homer created the cluster request on the iris portal interface. the agent is currently completing the task. so sub should be there, not app, this is app agnostic to the tenant, and appsource should theoretically even say 'Iris Portal' or something like that. so this is a low priority and outside of critical path of accepting money from guardians which is the highest critical path to spiral reset and therefore this should just be flagged and logged as a future fix for and eos cycle that attests that the system is ready for multitenants on a single node which we are not."*
+- **Corrected design intent for cluster.* events:**
+
+  | Column | Source | Rationale |
+  |---|---|---|
+  | `Sub__c` | requesting user's Identity Sub (homer) | The user who initiated the cluster request — origin actor |
+  | `TenantId__c` | Cluster.OwnerIdentity.Tenant.TenantKey | The tenant the cluster belongs to — required for multi-tenant routing/isolation |
+  | `ApplicationId__c` | NULL (correct) | Cluster is app-agnostic within a tenant |
+  | `AppSource__c` | request-origin surface (e.g., "iris-portal", "cli", "api") | Which surface initiated the cluster request — for observability across originators |
+  | `ClusterName__c`, `ClusterId__c` | target Cluster row | Already stamped correctly |
+
+- **Current empirical state:** `cluster.requested` LedgerEntry at 13:32:38 UTC has `Sub/AppId/Tenant/AppSource` all null; only ClusterName/ClusterId stamped.
+- **Acceptance criteria (for future EOS cycle):**
+  1. `LedgerEntryEmitter.emit` cluster.* target-row fallback resolves Sub from `Cluster.OwnerIdentity.Sub`
+  2. Resolves Tenant from `Cluster.OwnerIdentity.Tenant.TenantKey`
+  3. `AppSource__c` sourced from request-context origin (may require new column on TransactionContextAttribution or a header the initiating client provides — e.g., `x-request-source: iris-portal`)
+  4. `ApplicationId__c` stays NULL on cluster.* events (documented invariant)
+  5. Multi-tenant attestation cycle: two tenants on a single node each spawn a cluster → SOQL `SELECT Sub__c, TenantId__c, ClusterName__c FROM LedgerEntry WHERE EventType='cluster.requested'` returns tenant-scoped attribution allowing tenant-isolated cluster access
+
+### §13 close pathway (unchanged)
+
+GAP-77 is explicitly OUT OF §13 critical path per Steward:
+- Highest critical path to spiral reset = **accepting money from guardians**
+- Multi-tenant readiness (GAP-77 dependency) is a separate future attestation cycle
+- Current EOS-5 close remains: §9.A + §9.S clean → first real settlement event → §13 close
+
+### Empirical status snapshot after this re-attestation
+
+| Gap | Prior status | Post-#307 re-attestation |
+|---|---|---|
+| GAP-44 | 🔴 BLOCKER | ✅ CLOSED |
+| GAP-45 | 🔴 BLOCKER | ✅ CLOSED |
+| GAP-63 | 🟠 must-close | ✅ CLOSED |
+| GAP-53 | ✅ closed | ✅ still holds |
+| GAP-72 | 🔴 BLOCKER | (untested this run — templeathena signup not yet exercised) |
+| GAP-75 | 🔴 BLOCKER | (untested this run — builtsy sign-in not yet exercised) |
+| GAP-16 | 🔴 BLOCKER | (untested — no authenticated Pantheon traffic yet this run) |
+| GAP-58 | 🔴 BLOCKER | (untested — no guardians chat yet this run) |
+| GAP-65 | 🟠 must-close | (untested — no feedback submit yet) |
+| GAP-33 | ✅ closed | (untested — iris has no onboarding UI; awaits turtleshell/gpt/templeathena signin+onboard) |
+| **GAP-77 (new)** | — | 🟡 deferred to multi-tenant readiness cycle |
+
 **Document signed:**
-EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — first re-attestation attempt found Sprint A Apex classes did not deploy; PR #307 opened with root cause fix (ApplicationRegistry with-sharing + Site Guest secure record access silently returning zero rows) — awaiting next package deploy
+EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-44/45/63 empirically CLOSED — GAP-77 (cluster.* attribution) surfaced + deferred to multi-tenant readiness future cycle per Steward direction (out of §13 critical path)
 Steward: G.W. Homer (CloudPremise LLC)
