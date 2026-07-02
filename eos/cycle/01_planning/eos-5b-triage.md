@@ -5853,6 +5853,63 @@ Steward created a list + task from guardians (omens Godot). Empirical:
 - **Related:** GAP-64 (chronos ops emit no LedgerEntry) has different fix shapes depending on which answer is chosen. If (A), Sprint-E-style emit on Apex trigger. If (B), Pantheon-side emit from chronos god. If (C), both.
 - **Acceptance criteria:** Steward locks the intent + updates `foundation/eos/` chronos §3 NFR contract; downstream implementation follows.
 
+### Guardians feedback with session log — 2026-07-02 15:22 UTC
+
+Steward left feedback "on delphi" from within guardians (omens Godot iOS).
+
+**Feedback__c `a2AaZ000004LyoTUAS`:**
+- AppKey=guardians ✅ · AP FK ✅ · IdentitySub__c=homer's sub ✅ (domain-object receiver lift works)
+- Body=`"Full cycle eos5 testing"`
+- ClientVersion=`omens/4.6.2-stable (official)` · DeviceModel=`iPhone16,2`
+- Source=`Feedback` (free-form)
+- IncludesSessionLog=`true` + ContentDocument attached (77,041 bytes JSONL session log)
+
+**`feedback.submitted` LedgerEntry fires** at 15:22:21 with Sub/AppId/Tenant/AppSource NULL (continues GAP-83 pattern — domain-object attribution works, ledger-event column attribution broken).
+
+**"Delphi" mentioned by Steward as the in-game context of the feedback — this word appears NOWHERE in the Feedback__c row.** No column captures WHERE in the game the feedback was submitted from. Only Body__c free-form text.
+
+### GAP-96 (new, non-blocker per Steward pattern) — Guardians feedback captures no in-app context (screen / scene / character at submit time)
+
+- **Severity:** 🟡 non-blocker per Steward pattern; §9.F feedback-loop fidelity gap
+- **§9 letter:** F (feedback · signal fidelity) · V (visibility · reconstruction of user state)
+- **Detected:** 2026-07-02 15:22 UTC (Steward described feedback as "on delphi" but that context absent from row)
+- **Suggested owner:** omens agent (Godot client-side, stamps context at submit) + iris agent (mirror the pattern on iris-portal-app clients for parity)
+- **Empirical:** Steward's action was "added feedback on delphi from within guardians" — implying an in-game oracle/character/feature/scene named delphi was the subject or origin of the feedback. Feedback__c row has:
+  - `Body__c` = "Full cycle eos5 testing" (Steward's testing note, not delphi-specific)
+  - `Source__c` = "Feedback" (free-form category)
+  - `StructuredData__c` = NULL (unused on this submit)
+  - No column for `screen`, `scene`, `character`, `feature`, or `context_at_submit`
+- **Consequence:**
+  - Triage / QA agent reviewing feedback loses the "what were they looking at" signal
+  - Downstream feedback clustering by in-app location impossible
+  - Product-analytics per-feature feedback rate impossible without natural-language extraction from Body__c
+  - Loss compounds at scale — every user's feedback becomes a search-through-Body__c problem
+- **Fix pattern (leverages existing schema):**
+  - Guardians client stamps in-app context in `StructuredData__c` JSON blob at submit:
+    ```json
+    {
+      "screen": "delphi",
+      "scene_id": "iliad-ch07-s01-arrival",
+      "chapter_id": "iliad-ch07",
+      "character_at_focus": "athena",
+      "game_time_ms": 1234567,
+      "action_context": "reading" | "chatting" | "voice_playback" | "onboarding"
+    }
+    ```
+  - iris-portal-app clients (olympus-gpt, turtleshell-iris, templeathena) apply parity: stamp `route`, `active_agent`, `active_tool`, etc. as StructuredData at submit
+  - Optional: promote `screen` / `feature` to first-class columns on Feedback__c once semantics stabilize
+- **Acceptance criteria:**
+  1. Fresh guardians feedback submit → `Feedback.StructuredData__c` non-null and contains guardians-specific context keys (at least `screen`)
+  2. Fresh feedback from any iris-portal-app client → same shape with client-specific context
+  3. Feedback triage query: `SELECT StructuredData__c FROM Feedback__c WHERE AppKey__c='guardians'` returns rows with parseable JSON containing meaningful context
+  4. Reconciliation: for any single feedback row, triage agent can answer "what was the user doing / looking at" without reading Body__c natural language
+
+### Heracles content pre-loading observation (non-gap; informational)
+
+In the 2-minute window around the feedback submit (15:20:24 - 15:22:39), 26 additional `/v1/heracles/omens/books/{mythology}/scenes/{scene-id}` and `/chapters/{n}` paths were fetched. All anonymous. Chapter 7 across all 15 mythologies (Arthurian, Shahnameh, Iliad, Heroic Age, Crucible, Paradise Lost, Mahabharata, Gilgamesh, Journey to the West, Argonautica, Ramayana, Kalevala, Nibelungenlied, Poetic Edda, Divine Comedy) + one chapter-08 crossing into Crucible Season One.
+
+Cumulative heracles reads this run: 39 (prior signin) + 26 (this window) = 65+ unique story paths in ~30 minutes. Consistent with guardians game exploring content in depth. Per GAP-40 catalog reads are public by design; per GAP-79 they should classify as `Information Only` with volume-anomaly detection ready for the monitoring-attestation cycle.
+
 **Document signed:**
-EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-33/44/45/63/49/55 empirically CLOSED across multiple surfaces (12-for-12 GAP-45 tally across 3 AppKeys) — comprehensive system audit performed — GAPs 77-95 surfaced + all explicitly non-blocker per Steward direction — none on §13 critical path — Sprint D athena code confirmed deployed and structurally correct (registry unavailability is upstream olympus-grid endpoint bug per GAP-93) — apollo speak + music work end-to-end with shell metering + provider chain — hermes SF-native lane message.sent Sprint E emit CONFIRMED — chronos list/task from omens client is anonymous + doesn't persist to SF (GAP-94 client-side + GAP-95 design gate)
+EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-33/44/45/63/49/55 empirically CLOSED across multiple surfaces (12-for-12 GAP-45 tally across 3 AppKeys) — comprehensive system audit performed — GAPs 77-96 surfaced + all explicitly non-blocker per Steward direction — none on §13 critical path — Sprint D athena code confirmed deployed and structurally correct (registry unavailability is upstream olympus-grid endpoint bug per GAP-93) — apollo speak + music work end-to-end with shell metering + provider chain — hermes SF-native lane message.sent Sprint E emit CONFIRMED — chronos list/task from omens client is anonymous + doesn't persist to SF (GAP-94 client-side + GAP-95 design gate) — guardians feedback loses in-app context (GAP-96)
 Steward: G.W. Homer (CloudPremise LLC)
