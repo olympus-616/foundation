@@ -5673,6 +5673,109 @@ Same session_id `20c519ac-3750-40d5-800a-35ca31dd0d64` groups all events at conv
 
 The 3.4MB image (Analyze #2) completed in 1 second while the 35KB image (Analyze #1) took 10 seconds. Not a bug — vision-model queue behavior. Larger request hit a free processing slot; smaller request coincided with queue contention. Worth noting for future latency-monitoring cycle work.
 
+### Guardians surface — signup + Apple SIWA + chat + poseidon MCP + apollo TTS + music (2026-07-02 14:47–15:11 UTC)
+
+Steward exercised guardians end-to-end from omens Godot iOS: signup → admin approval → Apple SIWA landing → chat with athena → poseidon MCP weather test → apollo TTS "hello" → apollo music generation. Massive empirical evidence surface.
+
+### Empirical CLOSES / confirmations this run
+
+- ✅ **GAP-44/45** — 12-for-12 tally now across 3 AppKeys (iris + turtleshell + guardians) × 4 transitions each. Sprint A + PR #307 attribution close is deeply structural. Cross-AppKey resolution correct on every event.
+- ✅ **GAP-63** — MessageEvent three-touch chain fired for guardians waitlist notification (`hermes_id=gap47-waitlist-7d19a275-...`)
+- ✅ Apple SIWA landing on iOS via omens Swift native-bridge — 2 IdentityTokens minted with `ClientId=guardians`
+- ✅ **Sprint D athena code IS deployed to eos-5e** — `mcp.registry.loaded` sub-event fires with `subtype: mcp.registry.loaded`, `load_ms: 32` — athena structurally works
+- ✅ Multi-provider apollo chain: OpenAI (gpt-4o-mini-tts, voice=nova) for TTS + ElevenLabs (music_v1) for music generation
+- ✅ Character-count metering precision: `voice.characters.input.units=5` matches "hello" exactly
+- ✅ Shell cost differentiation: `voice.turn.shell_cost=1` per speak turn; `music.generate.shell_cost=5` per composition
+- ✅ Real audio bytes returned: TTS=13,056 bytes mp3; music=960,515 bytes mp3
+
+### Cross-app persistence gaps confirmed empirically (as expected per prior direction)
+
+- 🔴 `guardians AP.Cause=NULL` post-signup — turtleshell onboarding's "Education & Literacy" did NOT propagate. GAP-81 impact visible.
+- 🔴 No Guide field to check for cross-app propagation. GAP-80 impact.
+
+### GAP-58 EMPIRICALLY REOPENED — athena PR #101 fix did NOT catch all leak sites
+
+Guardians chat at 14:56:02 UTC on eos-5e produces `agent=athena, event_type=llm.turn` with:
+- `col_TenantId__c=499633cc-f6e8-44c7-b193-d48f12ea09e1` (homer's sub UUID, wrong)
+- `payload.tenant_id="499633cc-..."` (leak is at emit, not just column-lift)
+
+Other rows in same chain stamp `tenant_id=cloudpremise-llc` correctly:
+- `athena.chat.turn` (both instances) ✅
+- `thoth llm.turn / tokens.input / tokens.output` ✅
+
+**Leak is specific to `agent=athena × event_type=llm.turn` on guardians surface only.** iris + turtleshell surfaces don't produce this leak. Athena PR #101 audit concluded *"only `athena.tool_call` has the leak; `llm.turn` reads reqCtx.tenantId cleanly"* — empirical says otherwise. There is a second leak site in athena that fires for guardians-specific requests.
+
+**Owner: omens repo (client-side) primarily, athena repo (server-side defense-in-depth) secondarily.**
+
+Attribution: same athena instance serves iris/turtleshell/guardians. Same JWT chain. Same Ares perimeter. The differentiating variable is the client. Most likely: omens Godot client sends `x-application-id: <sub>` header that triggers athena's legacy fallback code path. **Primary fix: omens client stops sending the header (trust JWT `tid` claim as canonical tenant source, matching iris + turtleshell).** Secondary fix: athena grep for `... ?? applicationId ?? 'default'` pattern outside `utils/index.ts:321` — the same shape may exist in another emit path.
+
+### GAP-92 (new, non-blocker per Steward pattern) — Apollo downstream emits don't propagate request context; stamp `tenant_id=default` despite authenticated ingress
+
+- **Severity:** 🟡 non-blocker per Steward pattern; §9.R attribution gap on apollo consumption path
+- **§9 letter:** A · R (royalty · shell-consumption attribution)
+- **Detected:** 2026-07-02 15:10-15:11 (guardians apollo TTS + music generation)
+- **Suggested owner:** apollo agent (emit-path fix to read request context)
+- **Empirical:** For each apollo request:
+
+  ```
+  Ares api.inbound row (perimeter):
+     Path: /v1/apollo/speak (or /v1/apollo/music/generate)
+     Payload: user_identity="499633cc-..." (homer's sub)
+     Payload: tenant_id="cloudpremise-llc" ✅
+     Column: TenantId__c="cloudpremise-llc" ✅ (partial — Sub__c still null per GAP-16)
+
+  Apollo downstream emits (voice.turn, voice.audio.output, voice.characters.input,
+                            music.generate, music.duration.seconds, music.audio.bytes):
+     Payload: tenant_id="default" ❌
+     Column: TenantId__c="default" ❌
+     Column: Sub__c=NULL ❌
+     Column: ApplicationId__c=NULL ❌
+     Column: AppSource__c=NULL ❌
+  ```
+
+- **Consequence:** Voice + music consumption emits real shell costs (voice=1, music=5) but the rows are attributed to `tenant=default` — not homer's actual tenant. §9.R shell-cost rollups by tenant/identity/application will miss these events.
+- **Same class as GAP-56 (mnemosyne tenant lift) but on apollo.** Same fix pattern: apollo emitter reads incoming request context (JWT tid claim + sub claim + cid claim) and propagates to every downstream metering event.
+- **Acceptance criteria:** Fresh apollo speak or music call → `voice.turn` / `music.generate` row stamps `TenantId__c=<real tenant>`, `Sub__c=<real sub>`, `AppSource__c=<real cid>`. Reconciliation: `SELECT COUNT() FROM LedgerEntry WHERE AgentId__c='apollo' AND TenantId__c='default' AND CreatedDate=TODAY` returns 0 for authenticated requests.
+
+### GAP-93 (new, non-blocker per Steward pattern) — `/v1/mcp/servers` endpoint returns `source=unavailable, row_count=0` despite `Plugin.mcp_weather` existing in SF metadata
+
+- **Severity:** 🟡 non-blocker per Steward pattern; **but this is what makes poseidon MCP hallucinate on all clients today**
+- **§9 letter:** V · R
+- **Detected:** 2026-07-02 15:09 (guardians poseidon weather test)
+- **Suggested owner:** olympus-grid (`ApiRouteMcpServersHandler` route handler)
+- **Empirical:** Athena Sprint D correctly wired end-to-end. `athena.chat.turn.subtype: mcp.registry.loaded` event fires with:
+
+  ```json
+  {
+    "source": "unavailable",
+    "row_count": 0,
+    "fetched_at": "2026-07-02T15:09:06.961Z",
+    "tools": []
+  }
+  ```
+
+  Athena falls through gracefully — populates `athena.chat.turn.tools: []` (empty array), tells the LLM no tools available. LLM answers Denver weather from training corpus (hallucination). This is architecturally correct athena behavior in the absence of tools.
+
+  **The bug is upstream**: `/v1/mcp/servers` returns unavailable/empty even though `Plugin.mcp_weather` (PluginType='MCP Server') exists in SF with correct `handler:{type:PoseidonRelay,ref:weather}` config.
+
+- **Root cause hypothesis:** Same class as GAP-44 pre-PR#307 root cause — `ApiRouteMcpServersHandler` route runs under Site Guest sharing profile on the public discover endpoint → SF's Secure Guest User Record Access silently returns zero Plugin__mdt rows → athena's response is empty → tools[] stays empty.
+
+- **Fix pattern:** Extract the `Plugin__mdt WHERE PluginType__c='MCP Server'` SOQL into a `SystemContextMcpServersLookup` without-sharing inner class, identical pattern to `SystemContextAppLookup` from PR #307. One SOQL elevation, minimum blast radius.
+
+- **Acceptance criteria (Denver-weather test):**
+  1. `athena.chat.turn.mcp_registry.source: 'sf'` (not `'unavailable'`)
+  2. `athena.chat.turn.mcp_registry.row_count >= 1` (weather at minimum)
+  3. `athena.chat.turn.tools[]` includes weather tools (`get_alerts`, `get_forecast`)
+  4. LLM invokes tool for "Denver severe weather alerts today" query
+  5. `poseidon mcp.tool.call` LedgerEntry fires with correct 5-tuple attribution
+  6. Response contains actual current data, not fabricated training-corpus content
+
+### Massive Heracles catalog fetch pattern (informational, non-gap)
+
+Guardians (omens Godot) client fetched 39 unique `/v1/heracles/omens/books/{mythology}/...` paths at chat time — Nibelungenlied, Arthurian, Divine Comedy, Gilgamesh, Mahabharata, Ramayana, Argonautica, Journey to the West, Iliad, Kalevala, Poetic Edda, Shahnameh, Paradise Lost, Heroic Age, The Crucible. Aggressive narrative content pre-loading. All anonymous requests (heracles narrative content is public by design per GAP-40 — content read is public catalog access).
+
+Per GAP-79 discipline: these rows would classify as **Information Only** with volume alerting on burst rate. Per GAP-71 default-deny audit: heracles read paths need explicit `public` marking in §3 NFR contract so future audits don't flag them.
+
 **Document signed:**
-EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-44/45/63/33 empirically CLOSED across multiple surfaces — comprehensive system audit performed — GAPs 77-91 surfaced + all explicitly non-blocker per Steward direction — none on §13 critical path — analyze correlation reveals §9.R metering black hole (GAP-90) + missing parent_event_id linkage (GAP-91)
+EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-33/44/45/63/49/55 empirically CLOSED across multiple surfaces (12-for-12 GAP-45 tally across 3 AppKeys) — comprehensive system audit performed — GAPs 77-93 surfaced + all explicitly non-blocker per Steward direction — none on §13 critical path — Sprint D athena code confirmed deployed and structurally correct (registry unavailability is upstream olympus-grid endpoint bug per GAP-93) — apollo speak + music work end-to-end with shell metering + provider chain
 Steward: G.W. Homer (CloudPremise LLC)
