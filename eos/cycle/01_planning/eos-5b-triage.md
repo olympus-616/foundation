@@ -5488,6 +5488,157 @@ This typology dimension should be documented in `foundation/eos/cycle/README.md`
 
 - **First real monitoring-attestation cycle likely inherits BOTH GAP-78 + GAP-79** as scope seeds. GAP-79 is the broader architectural umbrella; GAP-78 is one specific instance under it.
 
+### GAP-80 (new, deferred to future cross-app identity/preference-model cycle) — Guide + Tier onboarding attributes have no schema representation; only Cause is properly modeled with dual placement
+
+- **Severity:** 🟡 defer — future cycle. Not §13-blocking (interim: dump into `AP.ProfileData__c` JSON) but breaks cross-app persistence when guardians needs to read turtleshell's Guide selection.
+- **§9 letter:** V (visibility) · A (attribution — for future preference-based routing)
+- **Detected:** 2026-07-02 (Steward asking where Guide is stored + directing cross-app persistence intent)
+- **Suggested owner:** olympus-grid (schema additions + trigger updates for dual-placement write pattern)
+- **Steward direction 2026-07-02 (verbatim):** *"i would also like to know where the chosen guide is stored. this must persiste across all turtleshell sessions, and potentially cross into the guardians game."*
+- **Empirical schema state (2026-07-02 alpha-org):**
+
+  | Field | Currently modeled? | Cross-app? |
+  |---|---|---|
+  | Cause | ✅ `Identity.PrimaryCause__c` (canonical) + `AP.Cause__c` (per-app) — dual placement | ✅ yes (design intent) |
+  | Guide | ❌ NO SCHEMA — only `AP.ProfileData__c` JSON blob | ❌ no |
+  | Tier | ❌ NO SCHEMA — only `AP.ProfileData__c` JSON blob | ❌ no |
+
+- **Impact:** Turtleshell onboarding UI asks for cause + guide + tier per the recovery-screen empirical (2026-07-02 turtleshell-web `/app/chat` finish-onboarding view). Cause writes to structured column with Identity-level canonical source. Guide + Tier can only land in `AP.ProfileData__c` free-form textarea. When guardians tries to read the user's Guide selection, guardians would need to (a) know which AP row belongs to homer (fine — Identity FK), (b) parse arbitrary JSON from turtleshell's AP.ProfileData, (c) trust the shape hasn't drifted between clients. Fragile.
+
+- **Recommended shape (mirrors Cause dual-placement pattern):**
+
+  | New field | SObject | Purpose |
+  |---|---|---|
+  | `PrimaryGuide__c` | `Identity__c` | Canonical cross-application source of truth |
+  | `Guide__c` | `ApplicationProfile__c` | Per-app snapshot (allows customization if a user wants different guide per app; defaults from Identity on new-app sign-in) |
+  | `PrimaryTier__c` | `Identity__c` | Same if tier is cross-app; skip if turtleshell-specific |
+  | `Tier__c` | `ApplicationProfile__c` | Per-app snapshot |
+
+- **Onboarding write pattern (matches Cause):**
+  1. User picks Guide on turtleshell-web onboarding
+  2. Handler writes `Identity.PrimaryGuide__c = <selection>` (canonical) + `AP.Guide__c = <selection>` (turtleshell AP snapshot)
+  3. When homer signs into guardians for the first time, guardians AP-insert reads `Identity.PrimaryGuide__c` → seeds `guardians AP.Guide__c` with the same value
+  4. Guardians can now render homer's Guide selection without cross-AP lookup
+
+- **Acceptance criteria (for future cycle):**
+  1. Schema additions per table above with FLS on `Olympus_Grid_Admin` permset (mandatory per prior Steward correction pattern)
+  2. `ApplicationProfileTrgHnd.onBeforeInsert` seeds new AP's `Guide__c` (and Tier__c if applicable) from `Identity.PrimaryGuide__c` when Identity has one set — mirrors existing Tenant__c/Application__c backfill pattern from GAP-44 close
+  3. Onboarding-handler writes BOTH Identity and AP fields per Cause precedent
+  4. `identity.guide.changed` LedgerEntry event on `Identity.PrimaryGuide__c` transitions (per §9.A discipline)
+  5. `profile.onboarding.completed` payload includes Guide + Tier in structured shape (not just Cause)
+  6. Downstream test: guardians AP-insert on a homer-who-onboarded-on-turtleshell → guardians AP has Guide__c populated from Identity, no ProfileData JSON parse required
+
+- **Relationship to other gaps:**
+  - Same architectural shape as Cause (already partially modeled)
+  - GAP-33 (`profile.onboarding.completed` fires) is orthogonal — GAP-80 is about WHAT fields are written, not whether the event fires
+  - **Not on §13 critical path** — Cause is what §9.T needs; Guide/Tier are UX + cross-app features Cause has already established the pattern for
+
+- **Interim workaround for immediate turtleshell demand:** if Guide + Tier need to work TODAY on turtleshell-web before this cycle lands, dump them into `AP.ProfileData__c` as `{"guide": "...", "tier": "..."}` JSON. Structured columns are the future-proof answer.
+
+### Full system audit + two-turn chat consistency test — 2026-07-02 14:07–14:24 UTC
+
+Steward completed turtleshell onboarding, submitted feedback with session log, ran two athena chat turns (first on "default cluster", second on eos-5e), and directed a full system audit ("probe the entire system. make sure you understand each record in the system"). Multiple gap candidates surfaced — Steward direction: log as non-blockers, none on §13 critical path.
+
+### Onboarding submit empirical grade
+
+- ✅ `profile.onboarding.completed` fired at 14:07:05 with 4-tuple stamped (`Sub/AppId/Tenant/AppSource` all populated) — **GAP-33 CLOSED empirically on turtleshell-web (2nd surface confirmation after prior olympus-gpt)**
+- ✅ `AP.OnboardingComplete=true` + `AP.Cause__c="Education & Literacy"` (full picklist API name — turtleshell-web reference-implementation holds)
+- ✅ `AP.ProfileData__c` populated with `{"configuredGuides":["athena"],"username":"homer","displayName":"homer","cause":"Education & Literacy","guideAgent":"athena","profilePublic":false,"onboardingComplete":true}` — GAP-80 interim workaround (Guide + Tithe in JSON blob)
+- ✅ `feedback.submitted` ledger event fires at 14:07:36 with payload including `feedback_id, app_key, body_length, device_model_hash`
+- ✅ Feedback `Session log ContentDocument uploaded (session_20260702_140133.jsonl, 4775 bytes)
+
+### GAP-81 (non-blocker, log-only) — Identity.PrimaryCause__c not written during onboarding
+
+- **Severity:** 🟡 non-blocker per Steward direction
+- **§9 letter:** A · cross-app persistence
+- **Empirical:** After completing turtleshell onboarding with `Education & Literacy`, `AP.Cause__c` populates correctly but `Identity.PrimaryCause__c` stays NULL. Cause is schema-modeled with dual placement (Identity canonical + AP snapshot) but the onboarding handler only writes the AP field, not the Identity canonical field. Consequence: cross-app persistence design intent doesn't work TODAY even for the field where the schema is properly modeled.
+- **Fix pattern:** onboarding handler writes BOTH `Identity.PrimaryCause__c = <selection>` AND `AP.Cause__c = <selection>`. Also emit `identity.cause.changed` LedgerEntry per §9.A discipline.
+
+### GAP-82 (non-blocker, log-only) — `profile.onboarding.completed` doesn't stamp `LedgerEntry.Cause__c` column
+
+- **Severity:** 🟡 non-blocker per Steward direction
+- **Empirical:** AP has `Cause="Education & Literacy"` at emit time; `LedgerEntry.Cause__c` column on the `profile.onboarding.completed` row stays NULL. og-agent's Sprint A fallback resolver for `profile.*` events reads Identity.Sub, Tenant.TenantKey, and AppKey but doesn't lift AP.Cause__c to LedgerEntry.Cause__c. Small extension in LedgerEntryEmitter.
+
+### GAP-83 (non-blocker, log-only) — `feedback.submitted` doesn't stamp 5-tuple attribution
+
+- **Severity:** 🟡 non-blocker per Steward direction
+- **Empirical:** `feedback.submitted` ledger row has `Sub/AppId/Tenant/AppSource` all NULL despite payload having `app_key="turtleshell"` and the Feedback__c row having full attribution (IdentitySub__c populated). FeedbackTrgHnd emits the event but doesn't call the same attribution-resolver fallback that `LedgerEntryEmitter` uses for profile.* events. Small fix.
+
+### GAP-84 (non-blocker, log-only) — `PlatformEventDLQ__c` accumulating 172+ failed platform events at ~3.2/min with zero visibility
+
+- **Severity:** 🟡 non-blocker per Steward direction (but critical GAP-79 evidence for future monitoring-attestation cycle)
+- **§9 letter:** V · quintessential GAP-79 instance
+- **Empirical (2026-07-02):**
+  - 172 rows in DLQ, ALL Status=`Fail`
+  - 170× `og_node_beta_1__PE_INSERT_SOBJECT_LIST` with `EventData=[]` (empty array!) + error `"List index out of bounds: 0 at PlatformEventHandlers.InsertSObjects.handle line 38"`
+  - 2× `PE_AUTH_SIGNED_IN` also failed
+  - Cadence: 172 rows over 53 minutes = ~3.2 failures/min since 13:21:58 UTC
+  - Zero alerting; discovered only via manual system audit
+- **Steward correction absorbed:** initially I suggested DLQ might hold "processed events in completed state or persistent queue for scheduled events." Empirical scan proved ALL 172 rows are Fail. So the current DLQ population IS all failures, not a mixed queue. The DLQ object may still be designed to hold multiple states — but current usage is failure-only.
+- **This is exactly the GAP-79 threat model in production**: silent infrastructure failure with no telemetry surfacing the problem. Belongs in the future monitoring-attestation cycle scope alongside GAP-78/79/85.
+
+### GAP-85 (non-blocker, log-only) — `Memory__c` + `Conversation__c` SObjects designed for persistence but ZERO rows despite Pantheon-side memory/chat activity
+
+- **Severity:** 🟡 non-blocker per Steward direction
+- **§9 letter:** V · design-intent-vs-empirical drift
+- **Empirical:** `Memory__c` (Identity FK, Content, Key, Tenant FK) and `Conversation__c` (Identity FK, ConversationId, Turns text, MessageCount) both properly modeled for cross-app persistence. Zero rows in both despite mnemosyne firing `memory.search`/`memory.read` events + athena carrying `session_id` across chat turns. Either Pantheon-side memory/conversation persistence isn't wired to SF (design gap) or the persistence path is broken (execution gap). Belongs in future audit cycle.
+
+### GAP-86 (non-blocker, log-only) — Sea Shells / Wallet / Balance / Tithe substrate does not exist as an SObject
+
+- **Severity:** 🟡 non-blocker per Steward direction (but §9.T tithe attribution eventually needs this)
+- **§9 letter:** T · R
+- **Empirical:** Full schema search for `Wallet__c`, `Shell__c`, `Balance__c`, `Currency__c`, `Tithe__c` returned zero matches (only false-positive matches on TurtleshellProfile pattern). The "1,000 sea shells starting balance" + "0 shells given to Education & Literacy so far" real-time counter shown in the onboarding UI has NO SF-side substrate. Either persisted in Pantheon (Plutus most likely) or client-side-only. When §9.T tithe attribution needs per-user shell balances for rollup calculations, this substrate needs to land — either Plutus-side with SF-side sync events, or new SF SObject family.
+- Left nav on turtleshell-web shows a "Sea Shells" section — the UI exists, backend substrate needs confirmation of where it actually lives.
+
+### GAP-87 (non-blocker, log-only) — `Feedback.includes_session_log` payload flag reports `false` while ContentDocument attachment actually landed at same-second timestamp
+
+- **Severity:** 🟡 non-blocker per Steward direction
+- **Empirical:** `feedback.submitted` ledger row at 14:07:36 has `payload.includes_session_log: false`. ContentDocument `069aZ00000opl9lQAA` titled `session_20260702_140133.jsonl` (4775 bytes) created at 14:07:36 same second. Either the flag is computed before attachment upload commits, OR the flag measures something else (a client-side toggle that Steward didn't tick?). Data-integrity misalignment.
+
+### GAP-88 (non-blocker, log-only) — 1 orphan `TurtleshellProfile__c` row survived wipe despite table being deprecated
+
+- **Severity:** 🟡 non-blocker per Steward direction
+- **Empirical:** All other deprecated tables (TSFeedback, PortalUser*, PortalGroup*, BusinessProcess, ProcessInstructions, ProcessQueue, ProcessTask*) are empty (0 rows). TurtleshellProfile__c has 1 row. Either the wipe script should purge deprecated tables (fix), OR the row is legitimately preserved (need Steward confirmation on intent).
+
+### GAP-89 (non-blocker, log-only) — Two-turn chat consistency test surfaces `int` vs `api-int` naming + `agent_env=unknown-env` on user-spawned clusters
+
+- **Severity:** 🟡 non-blocker per Steward direction
+- **Empirical (2026-07-02 14:23-14:24 UTC — two athena chat turns from turtleshell-web):**
+
+  Turn 1 ("testing on default cluster", trace_id=`593e8f6c`):
+  - Ares `api.inbound` column `ClusterName__c="int"`; payload `cluster_name="api-int"` — same event, two names
+  - Athena `agent_node_id="athena-717"`, `agent_env="production (AWS Fargate)"` ✅
+
+  Turn 2 ("testing on eos-5e cluster", trace_id=`a583a7af`):
+  - Column and payload both stamp `eos-5e` — consistent ✅
+  - Athena `agent_node_id="eos-5e"`, `agent_env="unknown-env"` — user-spawned cluster missing env identifier
+
+- **Two observations:**
+  1. `int` vs `api-int` column-vs-payload naming drift (rolls into GAP-07 cluster name normalization scope)
+  2. User-spawned cluster (eos-5e) reports `agent_env="unknown-env"` — provisioner should stamp this at spawn time
+- **Positive confirmations from same run:**
+  - Session continuity: mnemosyne preserved `session_id=20c519ac-3750-40d5-800a-35ca31dd0d64` across the cluster switch (multi-cluster conversation persistence works)
+  - GAP-49/58 stays closed — both turns' athena `llm.turn` rows stamp `tenant_id=cloudpremise-llc` correctly (not the sub — guardians-scope diagnosis holds)
+  - GAP-55 stays closed — `athena.chat.turn` has proper `agent_id="athena"` + `agent_node_id` split
+
+### GAP-16 empirically STILL open on Ares HTTP-ingest path (log-only, non-blocker per Steward direction)
+
+Empirical from the same 14:23-14:24 chat run: BOTH turns' Ares `api.inbound` rows have `user_identity` in payload (homer's sub) with `Sub__c/ApplicationId__c/AppSource__c` all NULL in the columns. `TenantId__c` correctly populates as `cloudpremise-llc`. So the receiver clearly can lift `tenant_id`, but doesn't lift `user_identity` or the `cid` claim.
+
+og-agent's Sprint A + PR #307 closed the Platform Event path (Pattern 1 events like profile.created now stamp Sub__c/AppId/AppSource correctly). But the HTTP-ingest path (Ares POST → `/v1/plutus/api/ingest` → Apex handler → LedgerEntry) is a separate code path with the same missing lift.
+
+Steward direction: **log-only, non-blocker.** Fix pattern likely mirrors PR #307's `SystemContextAppLookup` — the HTTP-ingest Apex handler probably has same `with sharing` + Site Guest zero-row issue OR just needs the env-key allowlist widening.
+
+## GAP status snapshot 2026-07-02 14:30 UTC
+
+**§13 critical path (unchanged):** money from guardians → spiral reset. All GAPs 77-89 explicitly non-blocker per Steward direction.
+
+**Closed empirically this session:**
+- GAP-33 (profile.onboarding.completed) — turtleshell-web (2nd surface)
+- GAP-44, GAP-45, GAP-63 (from earlier in this session)
+
+**Still-empirically-open non-blockers logged this run:** GAP-16 (HTTP-ingest half only), GAP-56 (mnemosyne), GAP-81 (Identity.PrimaryCause dual-write), GAP-82 (LedgerEntry.Cause stamping on profile.*), GAP-83 (feedback.submitted attribution), GAP-84 (DLQ accumulation), GAP-85 (Memory/Conversation empty), GAP-86 (shells substrate), GAP-87 (session-log flag), GAP-88 (TurtleshellProfile orphan), GAP-89 (cluster naming drift + agent_env)
+
 **Document signed:**
-EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-44/45/63 empirically CLOSED — GAP-77 (cluster.* multi-tenant attribution) + GAP-78 (auth-fail observability) + GAP-79 (every ledger row must have declared purpose; unclassified traffic triggers adaptive response) surfaced + deferred per Steward direction — new EOS cycle typology dimension recognized: monitoring cycle of attestation for non-happy-path validation
+EOS agent · 2026-07-01–07-02 · EOS-5 empirical validation run — Sprint A + PR #307 deploy confirmed working — GAP-44/45/63/33 empirically CLOSED across multiple surfaces — comprehensive system audit performed — GAPs 77-89 surfaced + all explicitly non-blocker per Steward direction — none on §13 critical path
 Steward: G.W. Homer (CloudPremise LLC)
