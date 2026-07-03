@@ -6287,9 +6287,10 @@ Per §13.0 Steward-locked close criterion: *"eos-5 as its stands is the 'READINE
 
 **6 of 6 surfaces meet the criterion at 04:05:09 UTC 2026-07-03.**
 
-EOS-5 is CLOSE-ELIGIBLE. §13 closeout awaits Steward direction. Immediate follow-on cycles queued:
-- **EOS-5.2** (guest-access lockdown reconciliation — see §5.10) — prevents money from flowing through un-attributable guest paths
-- **EOS-5.1** (Guardians global-distribution compliance — already in `04_in_development/`)
+EOS-5 is CLOSE-ELIGIBLE. §13 closeout awaits Steward direction. **Three follow-on cycles scaffolded in `01_planning/` 2026-07-03** per Steward direction *"anything you want before i accept money needs to be listed in 5.1, 5.2, or 5.3":*
+- **`brain_1.7.eos-5.1.md`** (currently in `04_in_development/`) — Guardians global-launch compliance chain; regulatory + legal architecture; money-transmitter analysis; DAF vs. direct-grant decision. Source: `foundation/GUARDIANS-LAUNCH-COMPLIANCE.md`.
+- **`brain_1.7.eos-5.2.md`** — Guest-access lockdown; GAP-51 reconciliation + GAP-A/B/C/D/E from backend-agent audit; prove no anonymous fall-through on any revenue-attributing endpoint; auth-matrix suite across every Ares-fronted route.
+- **`brain_1.7.eos-5.3.md`** — Tithe integrity + first-dollar-through preconditions; Identity.PrimaryCause__c (GAP-28); tithe trigger; Stripe/Apple webhook handlers; idempotency; reconciliation; refund/chargeback reversal; DAF payout (dep on 5.1); public `/tithe` ledger; GAP-16/GAP-01/GAP-02 propagation on the tithe-critical path.
 
 ### §5.5 New event_types observed since freeze
 
