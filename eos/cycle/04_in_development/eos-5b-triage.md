@@ -6175,7 +6175,7 @@ Steward returned same-day (2026-07-02 evening) and drove a fresh receiver-mode r
 | **GAP-47 (App-owner notification)** | 🔴 BLOCKER · Tier 1 | ✅ **CLOSED (receiver-mode + ledger)** | Both iris + turtleshell waitlist emails hit `platform@olympus-grid.com` inbox; `notification.appowner.waitlist` LedgerEntry with full attribution |
 | **GAP-01 (Tenant primitive)** | 🟠 must-close | ⚠ **PARTIAL CLOSE** | `TenantId__c` field on LedgerEntry + `Tenant__c` FK on ApplicationProfile deployed; most rows stamp `cloudpremise-llc`; residual `default` on some early Ares `api.inbound` rows and mnemosyne `memory.search` |
 | **GAP-08 (AP junction + composite external ID)** | 🔴 BLOCKER | ✅ **SCHEMA CLOSED** | `IdentityApplicationKey__c` composite external ID pattern `{IdentityId}_{AppKey}` works — homer has exactly one AP per app across iris + turtleshell |
-| **GAP-16 (Sub null on gateway/god emits)** | 🔴 BLOCKER | 🔴 **UNCHANGED** | Every Ares `api.inbound` + every Athena/Mnemosyne emit has `Sub__c=null` even for authenticated traffic; JWT verification works (routing succeeds) but Sub not propagated to LedgerEntry |
+| **GAP-16 (Sub null on gateway/god emits)** | 🔴 BLOCKER | ⚠ **REFINED — FIELD-HOIST BUG, NOT ATTRIBUTION VOID** | 2026-07-03 payload-level audit proved JWT-auth'd requests DO carry `shell_id={homer sub}` + `tenant_id=cloudpremise-llc` in `LedgerEntry.Payload__c` JSON on ALL 92 rows of Steward's browser session; the top-level `Sub__c` first-class column is not populated because the emitter doesn't hoist `payload.shell_id → Sub__c`. Fix scope is narrower than originally framed — attribution IS in the row, just not on the queryable column. Owner: whoever emits LedgerEntry rows (per-god emitters) — add hoist step. |
 | **GAP-19 (Email-link Ares bypass)** | 🔴 BLOCKER | ⚠ **LIKELY CLOSED — needs payload confirm** | 6× `api.inbound` rows on Ares during turtleshell email-link auth window (02:49–02:56); pre-freeze this was 0 rows. Payload path confirmation deferred. |
 | **GAP-39 (Surface discriminator)** | 🟡 defer · shape locked | 🔴 **RE-SCOPE** | `ClientType__c` picklist not deployed; observation shows runtime god emits (athena.chat.turn, athena.analyze, llm.*) carry `AppSource__c=null` — cannot distinguish turtleshell-iris from turtleshell-web from turtleshell-ios from iris admin on the ledger. Broader than the original picklist-vs-string framing. |
 | **GAP-48 (SF Trusted URLs)** | — | 🟠 **NEW · must-close** | Steward manually added cluster URL to Session Settings → Trusted URLs to unblock iris-embedded chat/PDF; browser CSP blocked pre-whitelist. Future-autonomy blocker; not first-dollar-through blocker per §13.4. |
@@ -6237,6 +6237,34 @@ Post-attestation depth run — 63 LedgerEntry rows over ~16 min wall-clock. **14
 - **Tenant propagation degrades on Apollo/Athena post-authenticated paths** — all voice + music rows stamp `default` even though the actor is authenticated. Pattern is: Ares api.inbound sometimes has tenant, but the downstream Apollo/Athena emit chain drops it.
 - **GAP-50 (no Application creation UI) surfaced** — Steward-flagged during operator exploration; logged defer-tier for future cycle.
 
+### §5.9 Steward-directed 2026-07-03 auth-matrix test — GAP-51 root cause + full session attribution
+
+Steward issued dev key `og_live_...` and asked *"i want to see if you are able to test the appliation yourself"* + *"use the wrong api key and no api key and validate the responses"*. EOS agent ran a 5-cell matrix + a full session-attribution audit.
+
+**Cell matrix results — `POST /v1/athena/chat` on `https://api-eos-5e.turtleshell.ai`:**
+
+| Auth mode | HTTP | LLM response | payload.shell_id | payload.tenant_id | Ares block? |
+|---|---|---|---|---|---|
+| No `Authorization` header | 200 | streamed GPT-4o | shell-default | default | no |
+| `Bearer og_live_INVALID_...` | 200 | streamed GPT-4o | shell-default | default | no |
+| `Bearer totally_not_a_key` | 200 | streamed GPT-4o | shell-default | default | no |
+| Valid `Bearer og_live_...` (Steward key) | 200 | streamed GPT-4o | shell-default | default | no |
+| Steward's iris session JWT (via UI) | 200 | streamed GPT-4o | ✅ homer's sub | ✅ cloudpremise-llc | no |
+
+**Zero `api.blocked.*` events fired for any of the four api-key cases.** Contrast: EOS agent's earlier `GET /.well-known/cosmos-logos.json` at root path fired `api.blocked.path_not_allowed` — proving Ares path-allowlist enforcement machinery is operational. **The chat route is admitted without auth enforcement.**
+
+**Full-session attribution audit** — 135 LedgerEntry rows since 03:11:00Z bucketed by `payload.shell_id`:
+
+| shell_id | Rows | Interpretation |
+|---|---|---|
+| homer sub `499633cc-...` | 92 | Steward's iris/olympus-gpt browser session — 12 event types across 4 gods; FULLY attributed at payload level |
+| `shell-default` | 36 | EOS agent's 5 curl attempts (chat + variants) + collateral system probes |
+| (no payload) | 7 | Apex Pattern 1 events (profile.created, profile.status_changed, notification.appowner.waitlist, message.event, feedback.submitted) — distinct emit shape |
+
+**The 92-row Steward session proves § 9.V + § 9.A payload-level PASS for JWT path on olympus-gpt end-to-end** — every chat, PDF analyze, memory search, voice synthesis, music generation, and Feedback__c write is correctly stamped with homer's sub + cloudpremise-llc tenant in the payload JSON. The first-class column hoist bug (GAP-16 refined) is the only remaining §9.A gap for JWT — narrower than originally scoped.
+
+**GAP-51 root-cause narrowed 2026-07-03:** the chat route needs (a) an `auth_required=true` flag on the `/v1/athena/chat` policy-overlay entry (per §3.AR 5-layer overlay — memory `project_ares_ingress_hardening_policy_overlay.md`) AND (b) an api-key registry lookup so that when a valid `og_live_...` arrives, Ares resolves it to Identity/Application/Tenant and stamps `payload.shell_id / tenant_id / application_id` from the resolution result. Both halves must land — enforcement alone leaves valid keys anonymous; attribution alone leaves the endpoint DoS-able. Both together restore §9.T tithe integrity on API-key revenue.
+
 ### §5.5 New event_types observed since freeze
 
 - `athena.chat.turn` — LLM chat turn (per user message)
@@ -6250,20 +6278,31 @@ Post-attestation depth run — 63 LedgerEntry rows over ~16 min wall-clock. **14
 - `profile.onboarding.completed` — Pattern 1 AP onboarding-complete transition (GAP-33 lift-out)
 - `message.event` — SendGrid webhook delivery event
 
-### §5.6 Attribution scorecard — the §9.A drilling target
+### §5.6 Attribution scorecard — the §9.A drilling target (REFINED 2026-07-03 post-audit)
 
-| Field | Apex Pattern 1 | Ares | Athena | Mnemosyne |
+**Payload-level attribution (inside `LedgerEntry.Payload__c` JSON):**
+
+| Field | Apex Pattern 1 | Ares (JWT path) | Ares (api-key path) | Athena/Mnemosyne/Apollo (JWT chain) |
 |---|---|---|---|---|
-| Sub__c | ✅ full | ❌ null | ❌ null | ❌ null |
-| ApplicationId__c | ✅ (iris / turtleshell) | ❌ null | ❌ null | ❌ null |
-| AppSource__c | ✅ (iris / turtleshell) | ❌ null | ❌ null | ❌ null |
-| ClusterName__c | ❌ null (Apex has no cluster context) | ✅ (int / eos-5e) | ✅ eos-5e | ✅ eos-5e |
-| TenantId__c | ✅ cloudpremise-llc | ⚠ mostly cloudpremise-llc; residual `default` | ✅ cloudpremise-llc | ⚠ `default` |
+| shell_id | (Apex uses top-level Sub__c) | ✅ homer's sub | ❌ `shell-default` | ✅ homer's sub |
+| tenant_id | (top-level) | ✅ cloudpremise-llc | ❌ `default` | ✅ cloudpremise-llc |
 
-**Root-cause hypothesis for GAP-16:** JWT arrives at Ares → Ares routes based on JWT → downstream services get JWT-derived headers → **but the LedgerEntry emitter is not reading those headers when stamping Sub__c on the row**. Fix is a stamp-on-emit chain, not an auth chain. Owner: Ares agent (Bug A pattern from memory `project_pattern_1_platform_events_architecture.md` — emitter puts `sub`/`identity_id` in payload but receiver reads `user_identity`; likely same shape here).
+**First-class column attribution (queryable SOQL fields):**
+
+| Field | Apex Pattern 1 | Ares | Athena | Mnemosyne | Apollo |
+|---|---|---|---|---|---|
+| Sub__c | ✅ full | ❌ null | ❌ null | ❌ null | ❌ null |
+| ApplicationId__c | ✅ (iris / turtleshell) | ❌ null | ❌ null | ❌ null | ❌ null |
+| AppSource__c | ✅ (iris / turtleshell) | ❌ null | ❌ null | ❌ null | ❌ null |
+| ClusterName__c | ❌ null (Apex has no cluster context) | ✅ (int / eos-5e) | ✅ eos-5e | ✅ eos-5e | ✅ eos-5e |
+| TenantId__c | ✅ cloudpremise-llc | ⚠ mixed | ✅ cloudpremise-llc | ⚠ mixed | ⚠ mixed |
+
+**Root-cause hypothesis for GAP-16 REFINED:** Ares emitter correctly puts `shell_id` + `tenant_id` + `user_identity` inside the `Payload__c` JSON blob when the JWT resolves. The gap is a **field-hoist bug at the LedgerEntry writer** — whoever converts the payload JSON into a `LedgerEntry__c` insert is not lifting `payload.shell_id → Sub__c`, `payload.tenant_id → TenantId__c`, `payload.application_id → ApplicationId__c`. Fix is per-emitter (Ares, Athena, Mnemosyne, Apollo each emit their own rows). This is Bug A pattern from memory `project_pattern_1_platform_events_architecture.md` — emitter writes one envelope key, receiver reads a different one. **Once the hoist lands, §9.A JWT path goes from ⚠ to ✅ with no additional auth-chain work.**
+
+**Note on Ares path allowlist enforcement:** Steward-directed 2026-07-03 auth-matrix test surfaced `api.blocked.path_not_allowed` on EOS agent's `GET /.well-known/cosmos-logos.json` (root path, no god scope) — proves the §3.AR policy overlay path-allowlist IS enforcing. The specific issue is that `/v1/athena/chat` is on the allowlist (correctly) but has no auth-required flag (GAP-51 root-cause narrowed).
 
 ---
 
 **Reopen entry signed:**
-EOS agent · 2026-07-03 · turtleshell-iris + olympus-gpt READINESS attested in one session; iris admin baseline captured; 5 of 6 surfaces at READINESS bar; templeathena is the last remaining surface; 6 gaps advanced (5 closed / progressed, 1 unchanged, 1 re-scoped, 1 net-new)
-Steward: G.W. Homer (CloudPremise LLC) — three attestations captured in ~40 minutes wall-clock (02:35 iris signup → 03:12:51 gpt onboarding complete)
+EOS agent · 2026-07-03 · turtleshell-iris + olympus-gpt READINESS attested; iris admin baseline captured; olympus-gpt full-ops depth run (14 event types × 4 gods) + Steward-directed auth-matrix test; 5 of 6 surfaces at READINESS; templeathena remaining; **9 gaps advanced**: GAP-12/13/33/47 CLOSED, GAP-01/08 partial→schema-close, GAP-16 REFINED to field-hoist bug (JWT path works at payload level), GAP-19 likely closed pending payload confirm, GAP-39 re-scoped, GAP-48/49/50/51 net-new
+Steward: G.W. Homer (CloudPremise LLC) — three attestations captured in ~40 minutes wall-clock (02:35 iris signup → 03:12:51 gpt onboarding complete); auth-matrix test added ~30 minutes proving GAP-51 root cause + full session attribution
