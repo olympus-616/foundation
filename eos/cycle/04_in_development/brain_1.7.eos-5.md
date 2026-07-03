@@ -967,11 +967,11 @@ The triage doc contains the exact SObject IDs, payload JSONs, and timestamps tha
 | turtleshell-web | Stripe | **Attested** — signup → Identity dedup → ApplicationProfile Active → cause chosen | Cross-platform Sub continuity verified with iOS via shared AppKey |
 | turtleshell-ios | Apple StoreKit (IAP) | **Attested** — SIWA + email-link parity → AP consolidation → no re-onboarding | Shares AppKey='turtleshell' with web; distinguishing surface still needs Steward lock |
 | guardians | Apple StoreKit (IAP) | **Attested** — 8 auth events → 538 heracles content fetches → AP-00093 Active | Compliance backstop tracked in `foundation/GUARDIANS-LAUNCH-COMPLIANCE.md` for App Store launch 2026-07-17 |
-| templeathena | Stripe | **Not yet attested** — live prod iris-portal-app at `app.olympus-grid.com/templeathena` (per EOS-5 §9.V2) | Payment path wired to §9.T but Steward re-attestation pending |
+| templeathena | Stripe | **Attested 2026-07-02** — signup → dedup → AP Active → cause chosen (Food & Nutrition) → live chat + voice conversation with Athena + Thoth on eos-5e cluster | AP dedup pattern continues (4 APs, 4 composite external IDs). Voice-chain (`voice.turn` / `voice.characters.input` / `voice.audio.output`) exercised heavily; NEW god observed on ledger: `agent_id=thoth` emitting `llm.turn` + tokens |
 | olympus-gpt | Stripe | **Attested 2026-07-02** — signup → dedup → AP Active → cause chosen (Education & Literacy) | Third distinct cause across homer's APs (iris None / turtleshell Food & Nutrition / gpt Education & Literacy) proves composite external-ID dedup + per-AP cause differentiation; end-to-end payment→tithe still needs a real Stripe payment |
 | turtleshell-iris | Stripe (via Salesforce native auth) | **Attested 2026-07-02** — signup → dedup → AP Active → cause chosen (Food & Nutrition) → chat + PDF review on eos-5e cluster | AP dedup across iris+turtleshell via `IdentityApplicationKey__c` composite external ID; §9.A partial (Apex ✅ full / gateway ❌ Sub-null per GAP-16); trusted-URL manual whitelist step surfaced GAP-48. Full evidence in [`./eos-5b-triage.md`](./eos-5b-triage.md) §5. Steward verbatim 2026-07-03: *"iris-turtleshell is operational."* |
 
-**5 of 6 attested at READINESS bar** as of 2026-07-02 reopen. Remaining 1 (templeathena) blocks EOS-5 close but not first-dollar-through on the attested five.
+**6 of 6 attested at READINESS bar** as of 2026-07-02 reopen — **EOS-5 §13 CLOSE-ELIGIBLE per Steward-locked close criterion.** Every revenue-accepting surface is demonstrably wired signup → dedup → AP Active → cause chosen. Actual first-dollar-through is post-close operational per §13.0.
 
 ### §13.3 Return-to-work path
 

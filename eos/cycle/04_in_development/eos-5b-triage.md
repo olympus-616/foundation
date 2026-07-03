@@ -6180,7 +6180,7 @@ Steward returned same-day (2026-07-02 evening) and drove a fresh receiver-mode r
 | **GAP-39 (Surface discriminator)** | 🟡 defer · shape locked | 🔴 **RE-SCOPE** | `ClientType__c` picklist not deployed; observation shows runtime god emits (athena.chat.turn, athena.analyze, llm.*) carry `AppSource__c=null` — cannot distinguish turtleshell-iris from turtleshell-web from turtleshell-ios from iris admin on the ledger. Broader than the original picklist-vs-string framing. |
 | **GAP-48 (SF Trusted URLs)** | — | 🟠 **NEW · must-close** | Steward manually added cluster URL to Session Settings → Trusted URLs to unblock iris-embedded chat/PDF; browser CSP blocked pre-whitelist. Future-autonomy blocker; not first-dollar-through blocker per §13.4. |
 
-### §5.4 Six-surface READINESS matrix — 5 of 6 attested
+### §5.4 Six-surface READINESS matrix — **6 of 6 attested · EOS-5 §13 CLOSE-ELIGIBLE**
 
 | Surface | Payment rail | State | Attestation evidence |
 |---|---|---|---|
@@ -6189,9 +6189,11 @@ Steward returned same-day (2026-07-02 evening) and drove a fresh receiver-mode r
 | guardians | Apple StoreKit | ✅ Attested | Pre-freeze |
 | **turtleshell-iris** | **Stripe (SF-native)** | ✅ **Attested 2026-07-02** | signup + waitlist + approve + email-verify + onboarding-complete + chat + PDF review; Cause=Food & Nutrition |
 | **olympus-gpt** | **Stripe** | ✅ **Attested 2026-07-02** | signup + waitlist + approve + onboarding-complete via iris admin; Cause=Education & Literacy — third distinct cause across homer's APs proves composite external-ID dedup + per-AP cause differentiation |
-| templeathena | Stripe | ⚠ Not yet attested | Only surface remaining; Steward-flagged re-attestation |
+| **templeathena** | **Stripe** | ✅ **Attested 2026-07-02** | signup + waitlist (GAP-47 fires 4th time) + approve + onboarding-complete + live voice conversation with Athena + Thoth chain; Cause=Food & Nutrition (reused from turtleshell) |
 
-**Steward verbatim declaration 2026-07-03:** *"iris-turtleshell is operational."*
+**Steward verbatim declarations:**
+- 2026-07-03: *"iris-turtleshell is operational."*
+- 2026-07-03: *"i logged in and spoke with athena"* (templeathena)
 
 ### §5.7 olympus-gpt attestation — 2026-07-02 21:11 local / 2026-07-03 03:11 UTC
 
@@ -6269,6 +6271,26 @@ Steward issued dev key `og_live_...` and asked *"i want to see if you are able t
 
 Post-test 2026-07-03 the Steward directed a parallel investigation with the olympus-grid backend agent, which traced the actual code pipeline and found: **(1)** the correct API-key header is `x-og-key`, NOT `Authorization: Bearer og_live_...` — EOS agent's cell matrix used the wrong header format, so all four api-key cells effectively equal the "no key" case. **(2)** The pipeline that DOES respond to `x-og-key` is fully wired: `ares/api/src/middleware/apiKeyMiddleware.ts:115-155` → SHA-256 hash → 5-min LRU cache → SF resolver at `ApiRouteIdentityKeyResolver.cls:38-132` → mints 10-min JWT signed with `OG_Signing_Key` → strips `x-og-key`, injects `x-user-identity` + `x-og-key-id` + `x-og-key-derived: 1` → 3-axis rate limiter (per_ip / per_key / per_sub) + kill-switch on `x-og-key-id`. **(3)** Backend agent's audit ranks the REAL gaps as: GAP-A (`IdentityKey__c.RateLimit__c` is display theater — resolver returns it, Ares discards it, all keys throttled at policy-floor 300 rpm), GAP-B (`policy.kill.revoked_keys` not auto-synced from `Active__c=false`; fast-kill path is manual), GAP-C (CloudFront WAF has no `x-og-key` ByteMatch → attacker sending random `og_live_xxxxx…` amplifies to Salesforce resolver on every request until Ares per-IP limiter catches up), GAP-D (resolver auth is header-only — `x-service-name: ares` with no shared secret), GAP-E (no Ares vitest coverage on middleware stack). **(4)** However — the EOS agent's empirical finding *"no `Authorization` at all → 200 streamed GPT-4o"* is not dismissed: it means either `/v1/athena/chat` has an unauthenticated carve-out, OR the middleware skips resolution when no key header is present and falls through to a `shell-default` bypass. That fall-through IS a §3.AR breach even if the api-key-provided path is enforced. **Steward direction 2026-07-03:** *"we cannot accept money until we have proven that the platform is properly locked down from guest access. this would be eos-5.2 ... we will need a definitive answer to triage against on eos-5.2 but we can do that after eos-5 is complete because we are almost done."* **Reconciliation deferred to `brain_1.7.eos-5.2.md` (sub-attestation cycle to be opened after EOS-5 §13 closes)** — scope: prove the platform's guest-access surface is fully locked down before first dollar; reconcile EOS agent's empirical finding (no auth → 200) with backend agent's pipeline audit (x-og-key path is enforced); resolve GAP-A through GAP-E as gaps in-scope. Both findings remain in this triage as data points; the definitive answer comes from EOS-5.2's own attestation run.
 
+### §5.11 templeathena attestation — 2026-07-02 22:56 local / 2026-07-03 03:56 UTC — **6th and final surface**
+
+Steward verbatim 2026-07-03: *"i logged in and spoke with athena."*
+
+- **AP templeathena:** `a1waZ00000CYMjxQAH` · IdentityApplicationKey=`a1OaZ000006RliX_templeathena` · Cause=`Food & Nutrition` · OnboardingComplete=true · Active
+- **Timeline (UTC):** 03:56:50 profile.created + notification.appowner.waitlist (GAP-47 fires **fourth time** in one session — email hit `platform@`) + message.event → 03:56:58 Waitlist→Approved → 04:04:52 Approved→Active (7-minute delay; Steward review/browse) → 04:05:09 profile.onboarding.completed → 04:05:10+ heavy voice conversation with Athena + Thoth
+- **158 payload-attributed rows** during the templeathena session — dominated by Apollo voice chain (`voice.turn`, `voice.characters.input`, `voice.audio.output`) plus multiple `athena.chat.turn` + `memory.search`
+- **NEW god observed on ledger:** `agent_id=thoth` emitting `llm.turn` + `llm.tokens.input` + `llm.tokens.output` at 04:06:44-47 — templeathena's chat routed to Thoth (cosmos-logos agent) alongside Athena; ledger attributes correctly to homer via payload.shell_id
+- **Four APs, four causes attribution ready:** iris (None) · turtleshell (Food & Nutrition) · olympus-gpt (Education & Literacy) · templeathena (Food & Nutrition) — the composite external ID + Cause__c per-AP pattern holds across four apps × three causes (two apps share Food & Nutrition)
+
+### §5.12 EOS-5 close-eligibility declaration
+
+Per §13.0 Steward-locked close criterion: *"eos-5 as its stands is the 'READINESS' to accept money"* — READINESS = every revenue-accepting surface demonstrably wired signup → dedup → AP Active → cause chosen.
+
+**6 of 6 surfaces meet the criterion at 04:05:09 UTC 2026-07-03.**
+
+EOS-5 is CLOSE-ELIGIBLE. §13 closeout awaits Steward direction. Immediate follow-on cycles queued:
+- **EOS-5.2** (guest-access lockdown reconciliation — see §5.10) — prevents money from flowing through un-attributable guest paths
+- **EOS-5.1** (Guardians global-distribution compliance — already in `04_in_development/`)
+
 ### §5.5 New event_types observed since freeze
 
 - `athena.chat.turn` — LLM chat turn (per user message)
@@ -6308,5 +6330,5 @@ Post-test 2026-07-03 the Steward directed a parallel investigation with the olym
 ---
 
 **Reopen entry signed:**
-EOS agent · 2026-07-03 · turtleshell-iris + olympus-gpt READINESS attested; iris admin baseline captured; olympus-gpt full-ops depth run (14 event types × 4 gods) + Steward-directed auth-matrix test; 5 of 6 surfaces at READINESS; templeathena remaining; **9 gaps advanced**: GAP-12/13/33/47 CLOSED, GAP-01/08 partial→schema-close, GAP-16 REFINED to field-hoist bug (JWT path works at payload level), GAP-19 likely closed pending payload confirm, GAP-39 re-scoped, GAP-48/49/50/51 net-new
-Steward: G.W. Homer (CloudPremise LLC) — three attestations captured in ~40 minutes wall-clock (02:35 iris signup → 03:12:51 gpt onboarding complete); auth-matrix test added ~30 minutes proving GAP-51 root cause + full session attribution
+EOS agent · 2026-07-03 · **ALL 6 SURFACES ATTESTED — EOS-5 CLOSE-ELIGIBLE**. turtleshell-iris + olympus-gpt + templeathena READINESS attested in one reopen session; iris admin baseline captured; olympus-gpt full-ops depth run (14 event types × 4 gods) + Steward-directed auth-matrix test + templeathena voice+chat run (Thoth god observed on ledger for the first time); **9 gaps advanced**: GAP-12/13/33/47 CLOSED, GAP-01/08 partial→schema-close, GAP-16 REFINED to field-hoist bug (JWT path works at payload level), GAP-19 likely closed pending payload confirm, GAP-39 re-scoped, GAP-48/49/50/51 net-new; GAP-51 reconciliation deferred to `brain_1.7.eos-5.2.md` (guest-access lockdown sub-attestation cycle)
+Steward: G.W. Homer (CloudPremise LLC) — six-surface READINESS in one ~90-minute session (02:35 iris signup → 04:05:09 templeathena onboarding complete)
