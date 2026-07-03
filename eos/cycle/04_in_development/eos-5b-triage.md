@@ -170,9 +170,10 @@ EmailMessage          +9   per-app branded waitlist/approved/magic-link
 | 47 | **No Application Owner notification trail on user signup/waitlist** — every signup is invisible to the platform operator; chain `App.OwnerIdentity → Identity.Email` (canonical, deployment-layer forwards `platform@olympus-grid.com` to a live inbox per Steward 2026-06-30); rides Hermes/SendGrid `Messages__c` rail + `notification.appowner.waitlist` LedgerEntry; depends on GAP-09 + GAP-44 + GAP-04 + GAP-12 + GAP-45 | 🔴 BLOCKER · Tier 1 operability → **CLOSED 2026-07-03** (waitlist email hit `platform@` for both iris + turtleshell; `notification.appowner.waitlist` ledger row emitted with full sub/app/tenant attribution — see §5) | A · HM | 2026-06-30 |
 | 48 | **SF Trusted URLs not auto-registered on cluster provision** — iris-embedded surfaces (turtleshell-iris, olympus-gpt, templeathena) can't reach a newly-provisioned cluster until a human whitelists via Setup → Session Settings → Trusted URLs; browser CSP blocks the callout before Ares sees it (no `api.blocked` event because no request egresses); zeus cluster-provisioner (SF Metadata API from AWS on `cluster.requested`) OR olympus-grid `Cluster__c` after-insert trigger (in-org Metadata deploy) should auto-register the cluster URL; anti-rec: NO wildcard whitelist — per-cluster only, because cluster subdomains are per-Steward/per-app | 🟠 must-close · §9.V | V | 2026-07-03 |
 | 49 | **gpt whitepaper PDF 404** — `https://app.olympus-grid.com/whitepaper-agent-iaas.pdf` returns 404; PDF never generated/hosted; linked 6× from iris gpt workspace (`reactforce/olympus-grid-ai/src/{Agent,Faq,Landing}.tsx`); md source at `olympus-616/docs/whitepaper-agent-iaas.md`; three hosting options triaged (A: olympus-grid `docs` static resource + `docsUrl()` helper — MVP; B: A + Apex `PortalSiteUrlRewriter` for clean URL; C: CloudFront behavior + S3 origin). Steward anti-rec: NOT in the iris static resource bundle — needs its own general resource. Steward direction 2026-07-03: *"low priority - will be fixed later"* | 🟡 defer · §9.V cosmetic | V | 2026-07-03 |
+| 50 | **No UI to create new Application__c records** — `Application__c` is the central runtime authority (per GAP-08 architecture reversal) but there is no operator-facing UI to commission new applications; new AppKeys are seed-script or hand-created via SF UI/CLI only; blocks the AIAAS self-serve onboarding pattern (per memory `project_builtsy_canonical_reference_application.md` — the shape that lets a third-party author commission a new iris-portal-app inheriting the agent stack); Steward observation 2026-07-03: *"there is no where to add applications yet otherwise everything is working very well"* — first surfaced during olympus-gpt full-operations attestation; owner: iris agent (Application admin LWC + reactforce panel) + olympus-grid agent (Apex `ApiRouteApplication` create/update endpoints with AppKey-uniqueness + OwnerIdentity assignment + cosmos-logos manifest URL validation); anti-rec: don't create Applications without validating flow | 🟡 defer · §9.V operator UX | V + §7 | 2026-07-03 |
 
-**Bucket counts:** 🔴 BLOCKER = 10 · 🟠 must-close = 11 · 🟡 defer = 21 · 🟢 retired = 3 → **42 active tracked in table + GAP-48 + GAP-49**
-*(GAP-01 promoted defer → must-close 2026-06-27. GAP-08 un-retired + promoted retired → BLOCKER 2026-06-27 after Steward architecture reversal: Application__c is the central runtime authority, ApplicationProfile is a junction, JWT is Application-scoped via `cid` claim. GAP-47 added 2026-06-30 after Steward observation that homer's guardians signup generated zero owner-notification — "the noise from the void must be treated with respect and anchor." **GAP-47 CLOSED 2026-07-03** during turtleshell-iris READINESS attestation — waitlist email hit `platform@olympus-grid.com` inbox for both iris + turtleshell apps + `notification.appowner.waitlist` ledger row emitted with full attribution. **GAP-48 added 2026-07-03** — Steward had to manually whitelist cluster URL in SF Trusted URLs before iris-embedded chat/PDF calls could reach eos-5e cluster; must-close for future autonomy, not a first-dollar-through blocker. **GAP-49 added 2026-07-03** — gpt whitepaper PDF at `app.olympus-grid.com/whitepaper-agent-iaas.pdf` 404s; Steward-classified "low priority, fixed later"; deferred with hosting-pattern triage captured for future implementer.)*
+**Bucket counts:** 🔴 BLOCKER = 10 · 🟠 must-close = 11 · 🟡 defer = 22 · 🟢 retired = 3 → **43 active tracked in table + GAP-48 + GAP-49 + GAP-50**
+*(GAP-01 promoted defer → must-close 2026-06-27. GAP-08 un-retired + promoted retired → BLOCKER 2026-06-27 after Steward architecture reversal: Application__c is the central runtime authority, ApplicationProfile is a junction, JWT is Application-scoped via `cid` claim. GAP-47 added 2026-06-30 after Steward observation that homer's guardians signup generated zero owner-notification — "the noise from the void must be treated with respect and anchor." **GAP-47 CLOSED 2026-07-03** during turtleshell-iris READINESS attestation — waitlist email hit `platform@olympus-grid.com` inbox for both iris + turtleshell apps + `notification.appowner.waitlist` ledger row emitted with full attribution. **GAP-48 added 2026-07-03** — Steward had to manually whitelist cluster URL in SF Trusted URLs before iris-embedded chat/PDF calls could reach eos-5e cluster; must-close for future autonomy, not a first-dollar-through blocker. **GAP-49 added 2026-07-03** — gpt whitepaper PDF at `app.olympus-grid.com/whitepaper-agent-iaas.pdf` 404s; Steward-classified "low priority, fixed later"; deferred with hosting-pattern triage captured for future implementer. **GAP-50 added 2026-07-03** — no operator UI to create new `Application__c` records; Steward observation during olympus-gpt full-operations test; blocks AIAAS self-serve onboarding pattern (builtsy-shape commissioning); deferred pending revenue-path close.)*
 
 ---
 
@@ -6199,7 +6200,41 @@ Third AP for homer created + approved + activated + onboarded. Full evidence:
 - **Timeline (UTC):** 03:11:24 `profile.created` → 03:11:25 `notification.appowner.waitlist` (GAP-47 fires third time — email hit `platform@`) → 03:11:26 `message.event` → 03:11:33 `profile.status_changed` Waitlist→Approved → 03:12:31 `profile.status_changed` Approved→Active → 03:12:51 `profile.onboarding.completed` → 03:13:11+ 10× `api.inbound` on Ares (int + eos-5e clusters)
 - **Cross-app dedup**: Same Sub `499633cc-...`, three APs, three composite external IDs, three distinct causes.
 - **⚠ Tenant regression on olympus-gpt Ares path:** Post-onboarding `api.inbound` rows show `TenantId__c=default` on 9 of 10 rows (only one row `cloudpremise-llc`), on both `int` and `eos-5e` clusters. Turtleshell-iris chat rows at 03:05 consistently showed `cloudpremise-llc`. Delta suggests the olympus-gpt UI hits an Ares path that doesn't yet consume the tenant header (residual GAP-01 propagation gap; iris-embedded olympus-gpt path specifically).
-- Chat/analyze not exercised in this attestation window; READINESS-bar criteria met without chat drive.
+- Chat/analyze not exercised in initial attestation window; READINESS-bar criteria met without chat drive.
+
+### §5.8 olympus-gpt full-operations depth test — 2026-07-03 03:13–03:29 UTC
+
+Steward verbatim 2026-07-03: *"i tested gpt. i fully tested all of the operations. there is no where to add applications yet otherwise everything is working very well."*
+
+Post-attestation depth run — 63 LedgerEntry rows over ~16 min wall-clock. **14 distinct event types exercised** across four gods (Ares · Athena · Mnemosyne · Apollo):
+
+| Chain | Event types | God |
+|---|---|---|
+| Perimeter | `api.inbound` (49×) | Ares |
+| Chat | `athena.chat.turn` (2×), `llm.turn`, `llm.tokens.input`, `llm.tokens.output` | Athena |
+| Memory | `memory.search` | Mnemosyne |
+| Analyze | `athena.analyze` | Athena |
+| **Voice (TTS)** — NEW | `voice.characters.input`, `voice.turn`, `voice.audio.output` | Apollo |
+| **Music generation** — NEW | `music.generate`, `music.audio.bytes`, `music.duration.seconds` | Apollo |
+| **Feedback loop** — NEW | `feedback.submitted` | (Apex — Feedback__c write) |
+
+**§9 letter grades for olympus-gpt after depth run:**
+
+| Letter | Grade | Note |
+|---|---|---|
+| §9.V (visibility) | ✅ **STRONG PASS** | 14 event types, four god chains, all reached eos-5e cluster |
+| §9.A (attribution) | ⚠ partial | Every runtime row still Sub-null (GAP-16 unchanged); AppSource null (GAP-39 re-scope) |
+| §9.F (feedback loop) | ✅ **NEW PASS** | `feedback.submitted` event fired — closes §9.F chain for olympus-gpt |
+| §9.T (tithe readiness) | ✅ armed | AP.Cause=Education & Literacy; payment→tithe still needs a real Stripe payment |
+| §9.HM (messaging) | ✅ | Waitlist notification landed at platform@ |
+| §9.Q (data integrity) | ✅ | AP dedup + composite external ID + Tenant FK |
+| §9.S (multi-tenancy) | ⚠ partial | Tenant propagation ~50% on Ares api.inbound (mixed `cloudpremise-llc` / `default`); all Apollo/Athena post-chat rows stamp `default` |
+
+**Notable observations from depth run:**
+- **Apollo TTS + music chain LIVE with full token/byte accounting** — three-event pattern per synthesis (input characters → turn → output audio bytes/duration). Substrate for §9.T tithe-on-consumption.
+- **Feedback loop reached prod** — Feedback__c row landed via API; `feedback.submitted` ledger event fired.
+- **Tenant propagation degrades on Apollo/Athena post-authenticated paths** — all voice + music rows stamp `default` even though the actor is authenticated. Pattern is: Ares api.inbound sometimes has tenant, but the downstream Apollo/Athena emit chain drops it.
+- **GAP-50 (no Application creation UI) surfaced** — Steward-flagged during operator exploration; logged defer-tier for future cycle.
 
 ### §5.5 New event_types observed since freeze
 
