@@ -954,7 +954,7 @@ EOS-5 does NOT close when money has flowed through the pipes — it closes when 
 
 The full 2026-06-27 → 2026-07-02 triage — including 96 gaps, the receiver-mode attestation runs across 6 surfaces × 3 use cases, the §9 letter-chain scorecard, and the Tier-1/Tier-2/Tier-3 return-to-work checklist — is captured in:
 
-**[`../01_planning/eos-5b-triage.md`](../01_planning/eos-5b-triage.md)** (frozen on brain via PR #63, commit `10cc07f`).
+**[`./eos-5b-triage.md`](./eos-5b-triage.md)** (frozen on brain via PR #63, commit `10cc07f`; both docs moved from `01_planning/` → `04_in_development/` at 2026-07-02 reopen; empirical additions from the reopen session are in triage §5).
 
 The triage doc contains the exact SObject IDs, payload JSONs, and timestamps that surfaced each gap and is designed for future-agent replay. Any subsequent EOS-5 reopen inherits `eos-5b-triage.md` as its scope baseline.
 
@@ -968,10 +968,10 @@ The triage doc contains the exact SObject IDs, payload JSONs, and timestamps tha
 | turtleshell-ios | Apple StoreKit (IAP) | **Attested** — SIWA + email-link parity → AP consolidation → no re-onboarding | Shares AppKey='turtleshell' with web; distinguishing surface still needs Steward lock |
 | guardians | Apple StoreKit (IAP) | **Attested** — 8 auth events → 538 heracles content fetches → AP-00093 Active | Compliance backstop tracked in `foundation/GUARDIANS-LAUNCH-COMPLIANCE.md` for App Store launch 2026-07-17 |
 | templeathena | Stripe | **Not yet attested** — live prod iris-portal-app at `app.olympus-grid.com/templeathena` (per EOS-5 §9.V2) | Payment path wired to §9.T but Steward re-attestation pending |
-| olympus-gpt | Stripe | **Not yet attested** — signup + cause selection verified; end-to-end payment→tithe unrun | Enterprise-shape surface; templeathena feeds into it |
-| turtleshell-iris | Stripe (via Salesforce native auth) | **Not yet attested — Steward-elevated as *maybe the most important*** | Enterprise commercial motion; auth path is SF-egress-routed (IP 52.205.46.67); LWC toolbar + iris-portal standalone endpoint distinct |
+| olympus-gpt | Stripe | **Attested 2026-07-02** — signup → dedup → AP Active → cause chosen (Education & Literacy) | Third distinct cause across homer's APs (iris None / turtleshell Food & Nutrition / gpt Education & Literacy) proves composite external-ID dedup + per-AP cause differentiation; end-to-end payment→tithe still needs a real Stripe payment |
+| turtleshell-iris | Stripe (via Salesforce native auth) | **Attested 2026-07-02** — signup → dedup → AP Active → cause chosen (Food & Nutrition) → chat + PDF review on eos-5e cluster | AP dedup across iris+turtleshell via `IdentityApplicationKey__c` composite external ID; §9.A partial (Apex ✅ full / gateway ❌ Sub-null per GAP-16); trusted-URL manual whitelist step surfaced GAP-48. Full evidence in [`./eos-5b-triage.md`](./eos-5b-triage.md) §5. Steward verbatim 2026-07-03: *"iris-turtleshell is operational."* |
 
-**3 of 6 attested at READINESS bar** at freeze. Remaining 3 (templeathena, olympus-gpt, turtleshell-iris) block EOS-5 close but not first-dollar-through on the attested three.
+**5 of 6 attested at READINESS bar** as of 2026-07-02 reopen. Remaining 1 (templeathena) blocks EOS-5 close but not first-dollar-through on the attested five.
 
 ### §13.3 Return-to-work path
 

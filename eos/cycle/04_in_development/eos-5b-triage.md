@@ -167,10 +167,11 @@ EmailMessage          +9   per-app branded waitlist/approved/magic-link
 | 40 | heracles content — 3-scenario intent map (A public / B analytics-only / C royalty); mixed catalog expected; Scenario B closes through GAP-16; Scenario C deferred to §9.R; perimeter access via §3.AR | 🟡 defer · intent commit needed | A · T · R | 2026-06-27 |
 | 41 | **guardians-iOS auth invisible to Ares (BOTH Apple SIWA + email)** — strictly worse than turtleshell-ios; 7/17 launch spine; closes through GAP-19 (omens Swift native-bridge refactor; olympus-grid contribution = none) | 🔴 BLOCKER · 7/17 spine | A | 2026-06-27 |
 | 42 | Cluster Status divorced from reachability — add `Degraded` to picklist + zeus health-check loop + iris badge; audit covered by GAP-23 (`cluster.status.changed`); anti-rec on new event types | 🔴 BLOCKER · multi-repo | A · UX truth | 2026-06-27 |
-| 47 | **No Application Owner notification trail on user signup/waitlist** — every signup is invisible to the platform operator; chain `App.OwnerIdentity → Identity.Email` (canonical, deployment-layer forwards `platform@olympus-grid.com` to a live inbox per Steward 2026-06-30); rides Hermes/SendGrid `Messages__c` rail + `notification.appowner.waitlist` LedgerEntry; depends on GAP-09 + GAP-44 + GAP-04 + GAP-12 + GAP-45 | 🔴 BLOCKER · Tier 1 operability | A · HM | 2026-06-30 |
+| 47 | **No Application Owner notification trail on user signup/waitlist** — every signup is invisible to the platform operator; chain `App.OwnerIdentity → Identity.Email` (canonical, deployment-layer forwards `platform@olympus-grid.com` to a live inbox per Steward 2026-06-30); rides Hermes/SendGrid `Messages__c` rail + `notification.appowner.waitlist` LedgerEntry; depends on GAP-09 + GAP-44 + GAP-04 + GAP-12 + GAP-45 | 🔴 BLOCKER · Tier 1 operability → **CLOSED 2026-07-03** (waitlist email hit `platform@` for both iris + turtleshell; `notification.appowner.waitlist` ledger row emitted with full sub/app/tenant attribution — see §5) | A · HM | 2026-06-30 |
+| 48 | **SF Trusted URLs not auto-registered on cluster provision** — iris-embedded surfaces (turtleshell-iris, olympus-gpt, templeathena) can't reach a newly-provisioned cluster until a human whitelists via Setup → Session Settings → Trusted URLs; browser CSP blocks the callout before Ares sees it (no `api.blocked` event because no request egresses); zeus cluster-provisioner (SF Metadata API from AWS on `cluster.requested`) OR olympus-grid `Cluster__c` after-insert trigger (in-org Metadata deploy) should auto-register the cluster URL; anti-rec: NO wildcard whitelist — per-cluster only, because cluster subdomains are per-Steward/per-app | 🟠 must-close · §9.V | V | 2026-07-03 |
 
-**Bucket counts:** 🔴 BLOCKER = 11 · 🟠 must-close = 10 · 🟡 defer = 20 · 🟢 retired = 2 → **41 active**
-*(GAP-01 promoted defer → must-close 2026-06-27. GAP-08 un-retired + promoted retired → BLOCKER 2026-06-27 after Steward architecture reversal: Application__c is the central runtime authority, ApplicationProfile is a junction, JWT is Application-scoped via `cid` claim. GAP-47 added 2026-06-30 after Steward observation that homer's guardians signup generated zero owner-notification — "the noise from the void must be treated with respect and anchor.")*
+**Bucket counts:** 🔴 BLOCKER = 10 · 🟠 must-close = 11 · 🟡 defer = 20 · 🟢 retired = 3 → **41 active tracked in table + new GAP-48**
+*(GAP-01 promoted defer → must-close 2026-06-27. GAP-08 un-retired + promoted retired → BLOCKER 2026-06-27 after Steward architecture reversal: Application__c is the central runtime authority, ApplicationProfile is a junction, JWT is Application-scoped via `cid` claim. GAP-47 added 2026-06-30 after Steward observation that homer's guardians signup generated zero owner-notification — "the noise from the void must be treated with respect and anchor." **GAP-47 CLOSED 2026-07-03** during turtleshell-iris READINESS attestation — waitlist email hit `platform@olympus-grid.com` inbox for both iris + turtleshell apps + `notification.appowner.waitlist` ledger row emitted with full attribution. **GAP-48 added 2026-07-03** — Steward had to manually whitelist cluster URL in SF Trusted URLs before iris-embedded chat/PDF calls could reach eos-5e cluster; must-close for future autonomy, not a first-dollar-through blocker.)*
 
 ---
 
@@ -6127,3 +6128,105 @@ When Steward returns:
 **Document signed and FROZEN:**
 EOS agent · 2026-07-02 · EOS-5 triage doc frozen at Steward direction; empirical record preserved; return-to-work checklist provided; Tier-1/Tier-2/Tier-3 path forward documented; white paper delivered as parallel deliverable
 Steward: G.W. Homer (CloudPremise LLC) — moving to client work; will return
+
+---
+
+## §5 — 2026-07-02/03 receiver-mode REOPEN — turtleshell-iris attested + iris admin baseline
+
+Steward returned same-day (2026-07-02 evening) and drove a fresh receiver-mode run against alpha-org (`olympus-grid-alpha-1.my.salesforce.com`, ns `og_node_beta_1`) covering two surfaces: `iris` (Olympus-Grid Admin portal) as attribution baseline, and `turtleshell-iris` (Stripe rail via SF-native auth) as the READINESS target.
+
+### §5.1 Empirical anchors — record IDs for future replay
+
+| Anchor | Value |
+|---|---|
+| Identity (homer) | `a1OaZ000006RliXUAS` · Sub `499633cc-f6e8-44c7-b193-d48f12ea09e1` · AppleUserId `000732.58f4f1222d104be8b9b68cb21e1d4154.0417` · SuperAdmin=true · Created 2026-06-30T21:32:06Z |
+| Tenant (CloudPremise LLC) | `a2FaZ000000UzsTUAS` · label `cloudpremise-llc` |
+| AP homer × iris | `a1waZ00000CYIZtQAP` · `AccountStatus=Active` · `OnboardingComplete=false` · `Cause=None` · `IdentityApplicationKey=a1OaZ000006RliX_iris` · Created 2026-07-03T02:35:59Z |
+| AP homer × turtleshell | `a1waZ00000CYJCbQAP` · `AccountStatus=Active` · `OnboardingComplete=true` · `Cause=Food & Nutrition` · `IdentityApplicationKey=a1OaZ000006RliX_turtleshell` · Created 2026-07-03T02:58:41Z |
+| Clusters observed | `int` (api-int, auth-flow rail) · `eos-5e` (LLM/chat/analyze rail; also serves iris admin) |
+
+### §5.2 Timeline
+
+| Time (UTC) | Event | Surface |
+|---|---|---|
+| 02:35:59 | `profile.created` (Apex Pattern 1) — iris AP | iris |
+| 02:36:00 | Ares `api.inbound` (cluster `int`, tenant `default`) + `notification.appowner.waitlist` (Pattern 1) + `message.event` (SendGrid webhook) | iris |
+| 02:40:46 | `profile.status_changed` Waitlist → Approved | iris |
+| 02:41:25 | `profile.status_changed` Approved → Active | iris |
+| 02:42:23…03:00 | Chat + PowerPoint paste chain on eos-5e — `athena.chat.turn`/`athena.analyze`/`llm.turn`/`llm.tokens.input`/`llm.tokens.output`/`memory.search` | iris admin |
+| 02:49–02:56 | 6× Ares `api.inbound` on `int` cluster (email-link auth flow — likely GAP-19 close; needs payload confirm) | turtleshell-iris |
+| 02:58:41 | `profile.created` — turtleshell AP | turtleshell-iris |
+| 02:58:42 | `notification.appowner.waitlist` + SendGrid `message.event` — GAP-47 fires per-app | turtleshell-iris |
+| 02:59:30 | `profile.status_changed` Waitlist → Approved (Steward approved via iris admin) | turtleshell-iris |
+| 03:00:18 | `profile.status_changed` Approved → Active | turtleshell-iris |
+| 03:00:29 | `profile.onboarding.completed` (NEW event_type — GAP-33 lift-out) — Cause=Food & Nutrition captured | turtleshell-iris |
+| 03:05–03:06 | Chat + PDF review on eos-5e — same god-emit chain as iris admin | turtleshell-iris |
+
+### §5.3 Gap status delta from freeze
+
+| GAP | Status at freeze | Status at reopen | Evidence |
+|---|---|---|---|
+| **GAP-12 Pattern 1** | 🔴 BLOCKER · spine | ✅ **LIVE** | 5+ `profile.*` events with full sub/app/tenant attribution across both surfaces |
+| **GAP-13 (AP status_changed)** | 🔴 BLOCKER | ✅ **CLOSED via Pattern 1** | `profile.status_changed` fired on all four state transitions |
+| **GAP-33 (OnboardingComplete lift-out)** | 🟠 must-close | ✅ **CLOSED** | `ApplicationProfile__c.OnboardingComplete__c` first-class Boolean + `profile.onboarding.completed` ledger event |
+| **GAP-47 (App-owner notification)** | 🔴 BLOCKER · Tier 1 | ✅ **CLOSED (receiver-mode + ledger)** | Both iris + turtleshell waitlist emails hit `platform@olympus-grid.com` inbox; `notification.appowner.waitlist` LedgerEntry with full attribution |
+| **GAP-01 (Tenant primitive)** | 🟠 must-close | ⚠ **PARTIAL CLOSE** | `TenantId__c` field on LedgerEntry + `Tenant__c` FK on ApplicationProfile deployed; most rows stamp `cloudpremise-llc`; residual `default` on some early Ares `api.inbound` rows and mnemosyne `memory.search` |
+| **GAP-08 (AP junction + composite external ID)** | 🔴 BLOCKER | ✅ **SCHEMA CLOSED** | `IdentityApplicationKey__c` composite external ID pattern `{IdentityId}_{AppKey}` works — homer has exactly one AP per app across iris + turtleshell |
+| **GAP-16 (Sub null on gateway/god emits)** | 🔴 BLOCKER | 🔴 **UNCHANGED** | Every Ares `api.inbound` + every Athena/Mnemosyne emit has `Sub__c=null` even for authenticated traffic; JWT verification works (routing succeeds) but Sub not propagated to LedgerEntry |
+| **GAP-19 (Email-link Ares bypass)** | 🔴 BLOCKER | ⚠ **LIKELY CLOSED — needs payload confirm** | 6× `api.inbound` rows on Ares during turtleshell email-link auth window (02:49–02:56); pre-freeze this was 0 rows. Payload path confirmation deferred. |
+| **GAP-39 (Surface discriminator)** | 🟡 defer · shape locked | 🔴 **RE-SCOPE** | `ClientType__c` picklist not deployed; observation shows runtime god emits (athena.chat.turn, athena.analyze, llm.*) carry `AppSource__c=null` — cannot distinguish turtleshell-iris from turtleshell-web from turtleshell-ios from iris admin on the ledger. Broader than the original picklist-vs-string framing. |
+| **GAP-48 (SF Trusted URLs)** | — | 🟠 **NEW · must-close** | Steward manually added cluster URL to Session Settings → Trusted URLs to unblock iris-embedded chat/PDF; browser CSP blocked pre-whitelist. Future-autonomy blocker; not first-dollar-through blocker per §13.4. |
+
+### §5.4 Six-surface READINESS matrix — 5 of 6 attested
+
+| Surface | Payment rail | State | Attestation evidence |
+|---|---|---|---|
+| turtleshell-web | Stripe | ✅ Attested | Pre-freeze (see prior §1-4) |
+| turtleshell-ios | Apple StoreKit | ✅ Attested | Pre-freeze |
+| guardians | Apple StoreKit | ✅ Attested | Pre-freeze |
+| **turtleshell-iris** | **Stripe (SF-native)** | ✅ **Attested 2026-07-02** | signup + waitlist + approve + email-verify + onboarding-complete + chat + PDF review; Cause=Food & Nutrition |
+| **olympus-gpt** | **Stripe** | ✅ **Attested 2026-07-02** | signup + waitlist + approve + onboarding-complete via iris admin; Cause=Education & Literacy — third distinct cause across homer's APs proves composite external-ID dedup + per-AP cause differentiation |
+| templeathena | Stripe | ⚠ Not yet attested | Only surface remaining; Steward-flagged re-attestation |
+
+**Steward verbatim declaration 2026-07-03:** *"iris-turtleshell is operational."*
+
+### §5.7 olympus-gpt attestation — 2026-07-02 21:11 local / 2026-07-03 03:11 UTC
+
+Third AP for homer created + approved + activated + onboarded. Full evidence:
+
+- **AP olympus-gpt**: `a1waZ00000CYJNtQAP` · IdentityApplicationKey=`a1OaZ000006RliX_olympus-gpt` · Cause=`Education & Literacy` · OnboardingComplete=true · Active
+- **Timeline (UTC):** 03:11:24 `profile.created` → 03:11:25 `notification.appowner.waitlist` (GAP-47 fires third time — email hit `platform@`) → 03:11:26 `message.event` → 03:11:33 `profile.status_changed` Waitlist→Approved → 03:12:31 `profile.status_changed` Approved→Active → 03:12:51 `profile.onboarding.completed` → 03:13:11+ 10× `api.inbound` on Ares (int + eos-5e clusters)
+- **Cross-app dedup**: Same Sub `499633cc-...`, three APs, three composite external IDs, three distinct causes.
+- **⚠ Tenant regression on olympus-gpt Ares path:** Post-onboarding `api.inbound` rows show `TenantId__c=default` on 9 of 10 rows (only one row `cloudpremise-llc`), on both `int` and `eos-5e` clusters. Turtleshell-iris chat rows at 03:05 consistently showed `cloudpremise-llc`. Delta suggests the olympus-gpt UI hits an Ares path that doesn't yet consume the tenant header (residual GAP-01 propagation gap; iris-embedded olympus-gpt path specifically).
+- Chat/analyze not exercised in this attestation window; READINESS-bar criteria met without chat drive.
+
+### §5.5 New event_types observed since freeze
+
+- `athena.chat.turn` — LLM chat turn (per user message)
+- `athena.analyze` — content-analysis event (PowerPoint + PDF review)
+- `llm.turn` — LLM invocation
+- `llm.tokens.input` / `llm.tokens.output` — token accounting
+- `memory.search` — Mnemosyne memory search
+- `notification.appowner.waitlist` — Pattern 1 App-owner notification (GAP-47 close)
+- `profile.created` — Pattern 1 AP creation
+- `profile.status_changed` — Pattern 1 AP status transition
+- `profile.onboarding.completed` — Pattern 1 AP onboarding-complete transition (GAP-33 lift-out)
+- `message.event` — SendGrid webhook delivery event
+
+### §5.6 Attribution scorecard — the §9.A drilling target
+
+| Field | Apex Pattern 1 | Ares | Athena | Mnemosyne |
+|---|---|---|---|---|
+| Sub__c | ✅ full | ❌ null | ❌ null | ❌ null |
+| ApplicationId__c | ✅ (iris / turtleshell) | ❌ null | ❌ null | ❌ null |
+| AppSource__c | ✅ (iris / turtleshell) | ❌ null | ❌ null | ❌ null |
+| ClusterName__c | ❌ null (Apex has no cluster context) | ✅ (int / eos-5e) | ✅ eos-5e | ✅ eos-5e |
+| TenantId__c | ✅ cloudpremise-llc | ⚠ mostly cloudpremise-llc; residual `default` | ✅ cloudpremise-llc | ⚠ `default` |
+
+**Root-cause hypothesis for GAP-16:** JWT arrives at Ares → Ares routes based on JWT → downstream services get JWT-derived headers → **but the LedgerEntry emitter is not reading those headers when stamping Sub__c on the row**. Fix is a stamp-on-emit chain, not an auth chain. Owner: Ares agent (Bug A pattern from memory `project_pattern_1_platform_events_architecture.md` — emitter puts `sub`/`identity_id` in payload but receiver reads `user_identity`; likely same shape here).
+
+---
+
+**Reopen entry signed:**
+EOS agent · 2026-07-03 · turtleshell-iris + olympus-gpt READINESS attested in one session; iris admin baseline captured; 5 of 6 surfaces at READINESS bar; templeathena is the last remaining surface; 6 gaps advanced (5 closed / progressed, 1 unchanged, 1 re-scoped, 1 net-new)
+Steward: G.W. Homer (CloudPremise LLC) — three attestations captured in ~40 minutes wall-clock (02:35 iris signup → 03:12:51 gpt onboarding complete)
