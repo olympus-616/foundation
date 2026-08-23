@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>First things first — CI/CD</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">First things first — CI/CD</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+I am not a devops expert. I am however a self proclaimed expert in building serverless systems (Salesforce, AWS, React, Netlify, etc) and…
+</section>
+<section data-field="body" class="e-content">
+<section name="5770" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="9bb6" id="9bb6" class="graf graf--h3 graf--leading graf--title">First things first — CI/CD</h3><figure name="fc83" id="fc83" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="0*h8D-eyzTUttnsaCD" data-width="2831" data-height="4025" data-unsplash-photo-id="04asBB737-k" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/0*h8D-eyzTUttnsaCD"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/@sigmund?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com/@sigmund?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-creator noopener" target="_blank">Sigmund</a> on <a href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-source noopener" target="_blank">Unsplash</a></figcaption></figure><p name="c8f5" id="c8f5" class="graf graf--p graf-after--figure">As part of my “<a href="https://medium.com/@gregheartcloud/lets-build-a-salesforce-app-together-be473e041aa6" data-href="https://medium.com/@gregheartcloud/lets-build-a-salesforce-app-together-be473e041aa6" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Let’s Build a Salesforce App Together</a>” series…</p><p name="ad54" id="ad54" class="graf graf--p graf-after--p">I am not a devops expert. I am however a self proclaimed expert in building serverless systems (Salesforce, AWS, React, Netlify, etc) and my latest passion is end to end CI/CD.</p><p name="b267" id="b267" class="graf graf--p graf-after--p">This is not easy to get going, and usually is an after thought for most teams I have ever worked with. But for me, in my navy seal approach to system building, it is one of the MOST important pieces of the system.</p><p name="5edf" id="5edf" class="graf graf--p graf-after--p">For every app I build, the very FIRST thing I work on is the CI/CD process. Functional development does not even begin until there is a deployment pipeline and process for EVERY component of the system.</p><p name="888e" id="888e" class="graf graf--p graf-after--p">In order to build systems fast and build cheap, building automated depoyment pipelines must be done. Otherwise each migration of the system from environment to environment will be error prone or unpredictable. Without an automation pipeline more time will be spent on migration and environment management than actual functional development. This is one of my main pieces of advice for anyone wanting to build an app or a startup company.</p><p name="581c" id="581c" class="graf graf--p graf-after--p graf--trailing">For those of you in a corporate environment, do whatever you can to bring in the right tools and processes for automated deployment processes as early in the project as possible. This is a key differentiator for my career in building zero error deployments and delivering new systems to market in record time.</p></div></div></section><section name="067b" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="495f" id="495f" class="graf graf--p graf--leading">So what makes a good deployment pipeline? Each project is so different… different components, platforms, programming languages, team sizes, deployment dependecies… the list goes on and on. Software is hard. But for every successful project that I have delivered there have been similar architectural principles. Here is a list of what I think are the MOST important.</p><ol class="postList"><li name="9803" id="9803" class="graf graf--li graf-after--p">Source control management — meaning each component of the system is tracked through source control (Github is my personal favorite) and each environment should have a representation in the source control system. I use branches such as “uat” or “staging” and “prod” to keep each environment in alignment with its respective branch.</li><li name="c261" id="c261" class="graf graf--li graf-after--li">Multiple Environments fit for purpose — meaning have enough environments that you need, and no more than you need. On a simple component, this maybe as low as 2 different environments. On a complex component, there maybe dozens if not hundreds of environments (and automating dozens or hundreds of environments is critical).</li><li name="718b" id="718b" class="graf graf--li graf-after--li">Ability to easily and consistently build a developer environment — this means workstation setup instructions, tools, procedures, and instructions to get up and running fast. This is critical I promise. I use my own instructions for myself over time as I bounce from one area of the system to another.</li><li name="bd90" id="bd90" class="graf graf--li graf-after--li">Developer environment isolation — this means each developer has their own environment and each change is isolated to a developer environment and source code feature branch.</li><li name="f5c3" id="f5c3" class="graf graf--li graf-after--li">Developer environment integration — this means each development environment is fully functional in capability. I can’t stress this one enough. There must be enough data and real or mock endpoints to ensure the development environment is representative of production and NOT a sub-set of functionality.</li><li name="6d84" id="6d84" class="graf graf--li graf-after--li">Ability to easily and consistently migrate a feature into a new environment — each developer added to the project adds in increasing complexity in the deployments. While migration for a single feature of a single component to the UAT environment maybe easy… tracking each developers change throughout each environment quickly becomes unwieldy and will require LOTS of meetings or LOTS of resources spent on deployments as opposed to building cool new features.</li><li name="4f36" id="4f36" class="graf graf--li graf-after--li">Ability to easily identify what features exist in which environment — this means either maintaining a very strict source control flow and/or a ticketing system that is kept to date with the feature branches. The faster you build, the more difficult this becomes unless there is a robust process backing it up.</li><li name="7eec" id="7eec" class="graf graf--li graf-after--li">Ability to “hold” or “gate” features in a development environment until the right time — Each development environment MUST be kept in sync with the appropriate upstream environment or you risk overwriting work as you migrate features into the next environment. If a feature is NOT ready for deployment, it should be able to be easily mothballed into a feature branch indefinitely. The feature branches should be kept in sync with the main branch (manually or automatically if possible).</li><li name="97aa" id="97aa" class="graf graf--li graf-after--li">A release train — there should be a gate between development and acceptance and deployment. Once a feature is accepted, the feature is migrated onto the release train which means that it is headed to production in the next production release. If a feature is accepted but NOT ready for deployment, it cannot and should not be added to the release train environment.</li><li name="ac9f" id="ac9f" class="graf graf--li graf-after--li">Ability to “roll back” the code and configuration to an earlier state — this is easier said than done and depending on the platform type there maybe a number of manual configuration steps that are introduced during deployment windows. For me this is more of an art than a science and my priority is to ensure that each stable release is tagged in the source control system which could then be “easily” re-deployed if necessary.</li><li name="aafb" id="aafb" class="graf graf--li graf-after--li">Tools, processes, and documentation that support the process from beginning to end — maybe I’m just getting old but I find myself reading my own documentation more and more. Trust me… your future self will REALLY appreciate your effort to document your development and deployment processes.</li></ol><p name="27d9" id="27d9" class="graf graf--p graf-after--li">Mind you this list can be significantly more complicated, but the above list should be considered minimum requirements for a deployment pipeline. I’m sure you may have more… leave a comment and I will update the list (if I agree of course!)</p><p name="1957" id="1957" class="graf graf--p graf-after--p">Over the life of this blog I will dig into these subjects… but for now I want to get into the actual apps that I’m building. This explains why the first requirements for the new system are building the entire system ci/cd pipeline (for which I will need at least 3 separately operating pipelines).</p><p name="b999" id="b999" class="graf graf--p graf-after--p">So first up… <a href="https://gregheartcloud.medium.com/sfdx-plugin-pipeline-9159cfe0fa79" data-href="https://gregheartcloud.medium.com/sfdx-plugin-pipeline-9159cfe0fa79" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">CI/CD of my SFDX plugin delivered through NPM</a>.</p><p name="0c93" id="0c93" class="graf graf--p graf-after--p">Next up… CI/CD of my Salesforce reusable utility library delivered through the AppExchange and through GitHub using CumulusCI.</p><p name="f6b3" id="f6b3" class="graf graf--p graf-after--p">After that… CI/CD of my Salesforce app that will use BOTH the plugin and the reusable library as dependencies.</p><p name="0cf2" id="0cf2" class="graf graf--p graf-after--p graf--trailing">See you soon!</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@gregheartcloud" class="p-author h-card">gregheartcloud</a> on <a href="https://medium.com/p/6c86b101f99e"><time class="dt-published" datetime="2023-03-01T23:25:14.583Z">March 1, 2023</time></a>.</p><p><a href="https://medium.com/@gregheartcloud/first-things-first-ci-cd-6c86b101f99e" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on July 16, 2026.</p></footer></article></body></html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Introducing Enterprise Utilities for Salesforce.com (lets build it)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Introducing Enterprise Utilities for Salesforce.com (lets build it)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+As part of my series… let’s build a salesforce app, I’m building a utility application for all of my future apps as well as anyone else…
+</section>
+<section data-field="body" class="e-content">
+<section name="35b1" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="e2fc" id="e2fc" class="graf graf--h3 graf--leading graf--title">Introducing Enterprise Utilities for Salesforce.com (lets build it)</h3><figure name="fddf" id="fddf" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*yfLxin20a_ZpV054WHNSMA.png" data-width="3000" data-height="1796" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*yfLxin20a_ZpV054WHNSMA.png"></figure><p name="ec03" id="ec03" class="graf graf--p graf-after--figure">As part of my series… let’s build a salesforce app, I’m building a utility application for all of my future apps as well as anyone else that ever wants to try the framework. I will eventually open source the code if appropriate.</p><p name="4115" id="4115" class="graf graf--p graf-after--p">The unique thing that I am doing is I am making THIS application the dependency for my actual Salesforce appexchange apps. The utilities will be free — but the apps that use them will require its use as a package dependency. So in other words… I’m building a low level library for the rest of my higher level functionality.</p><p name="68b9" id="68b9" class="graf graf--p graf-after--p">Here are my plans on the architecture:</p><p name="a977" id="a977" class="graf graf--p graf-after--p">— I will use CumulusCI and Github Actions as the CI/CD solution</p><p name="10be" id="10be" class="graf graf--p graf-after--p">— I will use 2nd generation packaging</p><p name="d9a3" id="d9a3" class="graf graf--p graf-after--p">— The library will be supported by myself (for now until i can afford a better programmer!)</p><p name="caa0" id="caa0" class="graf graf--p graf-after--p">— The libraries will implement my patterns that I have used over the past 20 years of consulting and the last 10 specifically focused on advanced Salesforce.com projects</p><p name="35f6" id="35f6" class="graf graf--p graf-after--p">— My main goal is to create a very simple library that allows my functional applications to focus primarily on functional requirements as opposed to cross-cutting concerns.</p><p name="81e0" id="81e0" class="graf graf--p graf-after--p">— I will also be using CumulusCI on my ISV functional apps that use my utilities as a dependency. I will have to figure out how to manage those configurations individually but also working together</p><p name="1cb0" id="1cb0" class="graf graf--p graf-after--p">— I have one utility inside of the library for the scheduling and execution of my apex worker framework. This is pretty cool as it allows me very easy development of new workers and all workers benefit from the framework features</p><p name="47a6" id="47a6" class="graf graf--p graf-after--p">— I also implement a DML and querying abstraction layer as a utility. This allows my function apps to make easy database queries that enjoy all of the difficult privileges&#39; that is salesforce security review.</p><p name="6b66" id="6b66" class="graf graf--p graf-after--p">— These functions (and many more) will be available via my Salesforce API framework. Possibly overengineered but possibly one of the coolest things I’ve ever written.</p><p name="60ea" id="60ea" class="graf graf--p graf-after--p">— I need to explore the architecture of different packages with the same namespace. I have not explored that architecture before. Otherwise each app will have its own namespace. (hopefully not i have a sweet one)</p><p name="7c8c" id="7c8c" class="graf graf--p graf-after--p">So I get that writing apex classes is like so 10 years ago. But if you work on the kind of projects I work on as an independent Certified Technical Architect and serial entrepreneur the frameworks I use and the tools I will build upon them have an incredible amount of reusability on every project I work on. In other words… it makes Salesforce (which is awesome) even more awesome. And that is awesome.</p><p name="80bd" id="80bd" class="graf graf--p graf-after--p graf--trailing">Let’s build the CI/CD for the Utilities library</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@gregheartcloud" class="p-author h-card">gregheartcloud</a> on <a href="https://medium.com/p/39f2a2af1a18"><time class="dt-published" datetime="2023-03-27T02:05:46.912Z">March 27, 2023</time></a>.</p><p><a href="https://medium.com/@gregheartcloud/introducing-enterprise-utilities-for-salesforce-com-lets-build-it-39f2a2af1a18" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on July 16, 2026.</p></footer></article></body></html>

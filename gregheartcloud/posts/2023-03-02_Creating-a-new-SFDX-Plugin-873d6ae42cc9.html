@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Creating a new SFDX Plugin</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Creating a new SFDX Plugin</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+As part of my “Let’s Build a Salesforce App Together” series…
+</section>
+<section data-field="body" class="e-content">
+<section name="1b43" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="228b" id="228b" class="graf graf--h3 graf--leading graf--title">Creating a new SFDX Plugin</h3><p name="242c" id="242c" class="graf graf--p graf-after--h3">As part of my “<a href="https://medium.com/@gregheartcloud/lets-build-a-salesforce-app-together-be473e041aa6" data-href="https://medium.com/@gregheartcloud/lets-build-a-salesforce-app-together-be473e041aa6" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Let’s Build a Salesforce App Together</a>” series…</p><p name="ae30" id="ae30" class="graf graf--p graf-after--p">Official <a href="https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_plugins.meta/sfdx_cli_plugins/cli_plugins_generate_prepare.htm" data-href="https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_plugins.meta/sfdx_cli_plugins/cli_plugins_generate_prepare.htm" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">documentation for setup</a>. Note my instructions are very similar but include source code repository setup.</p><p name="4e71" id="4e71" class="graf graf--p graf-after--p">Install the latest node.js (19 at the time of this writing). I highly recommend setting up NVM on your <a href="https://github.com/coreybutler/nvm-windows" data-href="https://github.com/coreybutler/nvm-windows" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">windows </a>or <a href="https://github.com/nvm-sh/nvm" data-href="https://github.com/nvm-sh/nvm" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">mac</a> workstation. It has been a life-saver on multiple occasions on my node.js journey. This is not really an optional step IMHO.</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="bash" name="b707" id="b707" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">&gt;nvm install 19</span></pre><p name="9be4" id="9be4" class="graf graf--p graf-after--pre">Use the latest version.</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="bash" name="927d" id="927d" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">&gt;nvm use 19</span></pre><p name="cc97" id="cc97" class="graf graf--p graf-after--pre">Check to make sure node is working</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="bash" name="c1be" id="c1be" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">&gt;node --version</span></pre><p name="4e36" id="4e36" class="graf graf--p graf-after--pre">Update npm.</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="bash" name="8aed" id="8aed" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">&gt;npm update -g npm</span></pre><p name="46d1" id="46d1" class="graf graf--p graf-after--pre">Install yarn.</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="bash" name="a17b" id="a17b" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">&gt;npm install -g yarn</span></pre><p name="f482" id="f482" class="graf graf--p graf-after--pre">Install TypeScript</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="bash" name="0b13" id="0b13" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">&gt;npm install -g typescript</span></pre><p name="aacd" id="aacd" class="graf graf--p graf-after--pre"><a href="https://developer.salesforce.com/docs/atlas.en-us.242.0.sfdx_setup.meta/sfdx_setup/sfdx_setup_install_cli.htm#sfdx_setup_install_cli" data-href="https://developer.salesforce.com/docs/atlas.en-us.242.0.sfdx_setup.meta/sfdx_setup/sfdx_setup_install_cli.htm#sfdx_setup_install_cli" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Install</a> or update Salesforce CLI</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="bash" name="02d7" id="02d7" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">&gt;sfdx update</span></pre><p name="d84c" id="d84c" class="graf graf--p graf-after--pre">Create a new github repository to host the plugin. Clone the repo locally and navigate into the subdirectory.</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="bash" name="ba66" id="ba66" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">&gt;git <span class="hljs-built_in">clone</span> git@github.com:cloudpremise/reactforce.git<br />&gt;<span class="hljs-built_in">cd</span> reactforce</span></pre><p name="532e" id="532e" class="graf graf--p graf-after--pre">Always make changes within a feature branch.</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="bash" name="02c1" id="02c1" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">&gt;git branch feature/scaffolding<br />&gt;git checkout feature/scaffolding</span></pre><p name="a9be" id="a9be" class="graf graf--p graf-after--pre"><a href="https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_plugins.meta/sfdx_cli_plugins/cli_plugins_generate_scaffold.htm" data-href="https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_plugins.meta/sfdx_cli_plugins/cli_plugins_generate_scaffold.htm" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Scaffold</a> a new plugin (if brand new… if the plugin is already scaffolded skip this step)</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="bash" name="570a" id="570a" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">&gt;sfdx plugins:generate reactforce</span></pre><p name="1e24" id="1e24" class="graf graf--p graf-after--pre">Test the plugin manually</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="bash" name="887d" id="887d" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-comment">#Windows</span><br />&gt;<span class="hljs-built_in">cd</span> bin<br />&gt;dev hello:org -h<br /><br /><span class="hljs-comment">#MacOS</span><br />&gt;<span class="hljs-built_in">chmod</span> 777 ./bin/dev<br />&gt;./bin/dev hello:org -h</span></pre><p name="4047" id="4047" class="graf graf--p graf-after--pre">Link and test the plugin via the sfdx cli</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="bash" name="6cf7" id="6cf7" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">&gt;<span class="hljs-built_in">cd</span> .. <span class="hljs-comment">#should be back in the reactforce base directory now</span><br />&gt;sfdx plugins:<span class="hljs-built_in">link</span><br />&gt;sfdx hello:org -h</span></pre><p name="f304" id="f304" class="graf graf--p graf-after--pre">Commit the code</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="bash" name="c463" id="c463" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">&gt;git add .<br />&gt;git commit -m <span class="hljs-string">&quot;SFDX Plugin Scaffolding&quot;</span><br />&gt;git push</span></pre><p name="8d70" id="8d70" class="graf graf--p graf-after--pre">See the code is now pushed to the feature branch in github.</p><figure name="f95b" id="f95b" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*OEskooy4PuXPdZ4hQsm2WQ.png" data-width="1401" data-height="1105" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*OEskooy4PuXPdZ4hQsm2WQ.png"></figure><p name="4c0b" id="4c0b" class="graf graf--p graf-after--figure">Note… it maybe helpful to tag the scaffolded code so you can easily see the original state of the code.</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="bash" name="568d" id="568d" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">&gt;git tag -a v0.0.1 -m <span class="hljs-string">&quot;SFDX Plugin Scaffolding&quot;</span><br />&gt;git push origin tags</span></pre><p name="7e7d" id="7e7d" class="graf graf--p graf-after--pre graf--trailing">You are ready to move to the next step. <a href="https://gregheartcloud.medium.com/publishing-a-sfdx-plugin-to-npm-116820d66ed1" data-href="https://gregheartcloud.medium.com/publishing-a-sfdx-plugin-to-npm-116820d66ed1" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Publishing via NPM</a>.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@gregheartcloud" class="p-author h-card">gregheartcloud</a> on <a href="https://medium.com/p/873d6ae42cc9"><time class="dt-published" datetime="2023-03-02T04:19:20.003Z">March 2, 2023</time></a>.</p><p><a href="https://medium.com/@gregheartcloud/creating-a-new-sfdx-plugin-873d6ae42cc9" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on July 16, 2026.</p></footer></article></body></html>
