@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Building CI/CD process for my new Salesforce AppExchange utility package (2GP) using CumulusCI and…</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Building CI/CD process for my new Salesforce AppExchange utility package (2GP) using CumulusCI and…</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Here are my requirements for the CI/CD process:
+</section>
+<section data-field="body" class="e-content">
+<section name="9d38" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="105c" id="105c" class="graf graf--h3 graf--leading graf--title">Building CI/CD process for my new Salesforce AppExchange utility package (2GP) using CumulusCI and GithubActions</h3><p name="5c2c" id="5c2c" class="graf graf--p graf-after--h3">Here are my requirements for the CI/CD process:</p><ul class="postList"><li name="069b" id="069b" class="graf graf--li graf-after--p">Work will be done in VS Code in feature branches based off of main branch</li><li name="40e4" id="40e4" class="graf graf--li graf-after--li">Approved pull requests or merges to main will trigger the deployment of a new beta package after the namespace is injected.</li></ul><p name="bd86" id="bd86" class="graf graf--p graf-after--li">Ok to be honest… I already have this one working. It is a thing of beauty. I’ll actually build the boiler plate for my next app (sentfolder) from the ground up… I promise.</p><p name="51b8" id="51b8" class="graf graf--p graf-after--p">Lets take a look at the folder structure and files inside the utility app to see what makes it work.</p><figure name="9842" id="9842" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*T-2lqGFjK45xAhuCfDdZZA.png" data-width="1392" data-height="1190" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*T-2lqGFjK45xAhuCfDdZZA.png"></figure><ul class="postList"><li name="6a11" id="6a11" class="graf graf--li graf-after--figure">The first step was to setup my boiler plate code space for CCI and SFDX, and push that into my github repo.</li><li name="b3db" id="b3db" class="graf graf--li graf-after--li">Next, I followed these instructions: <a href="https://cumulusci.readthedocs.io/en/latest/github-actions.html" data-href="https://cumulusci.readthedocs.io/en/latest/github-actions.html" class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">https://cumulusci.readthedocs.io/en/latest/github-actions.html</a> and then specifically cloning the reusable workflows at <a href="https://github.com/cumulus-actions/standard-workflows" data-href="https://github.com/cumulus-actions/standard-workflows" class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">https://github.com/cumulus-actions/standard-workflows</a> and moving them into my .github/workflow file.</li><li name="96d9" id="96d9" class="graf graf--li graf-after--li">Then I created my own build file based upon their examples but I replaced their repo with my own copy of the reusable workflows. I will have to keep an eye on these for the future in case of upgraded functionality.</li></ul><figure name="ef3d" id="ef3d" class="graf graf--figure graf-after--li"><img class="graf-image" data-image-id="1*PNr0CEDTaD7ddkxCo5VYuw.png" data-width="1209" data-height="528" src="https://cdn-images-1.medium.com/max/800/1*PNr0CEDTaD7ddkxCo5VYuw.png"><figcaption class="imageCaption">main_upload_beta.yml</figcaption></figure><ul class="postList"><li name="d851" id="d851" class="graf graf--li graf-after--figure">This build file will trigger a github action for every commit to main. This is the same for me as my local CCI process of:</li></ul><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="css" name="d2fd" id="d2fd" class="graf graf--pre graf-after--li graf--preV2"><span class="pre--content">cci <span class="hljs-attribute">flow</span> run release_2gp_beta <span class="hljs-attr">--org</span> dev</span></pre><ul class="postList"><li name="70af" id="70af" class="graf graf--li graf-after--pre">Next I created a repository secret for my dev hub auth url. This is found from the cli by running:</li></ul><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="bash" name="25fb" id="25fb" class="graf graf--pre graf-after--li graf--preV2"><span class="pre--content">sfdx force:org:display --json --verbose -o cp-biz <span class="hljs-comment"># where cp-biz is my devhub</span></span></pre><p name="caef" id="caef" class="graf graf--p graf-after--pre">And pasting the resulting value from the sfdxAuthUrl into the Github repo secret DEV_HUB_AUTH_URL</p><figure name="8624" id="8624" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Zz-UgMKInxq5V6bmd4BieQ.png" data-width="1582" data-height="871" src="https://cdn-images-1.medium.com/max/800/1*Zz-UgMKInxq5V6bmd4BieQ.png"></figure><p name="ca21" id="ca21" class="graf graf--p graf-after--figure">Note… I tested repository secrets AND environment secrets and at the present time it appears as though reusable github action workflows do not support environment variables beyond the calling script (meaning I will have to pass the secret through all of the scripts manually as a parameter… I have entered a backlog item)</p><p name="33df" id="33df" class="graf graf--p graf-after--p">— The first time the job runs, it will actually create you a package version so be careful running this command against your namespace.</p><p name="747a" id="747a" class="graf graf--p graf-after--p">— All subsequent pushes to main trigger a new beta package release. Amazing! I just fired a release engineer who was no longer necessary. Whoops.</p><p name="af27" id="af27" class="graf graf--p graf-after--p graf--trailing">So much more to see here… as we build out the app I will be adding the support for environment provisioning, namespace management, automated testing, and all sorts of cool stuff.</p></div></div></section><section name="968a" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="28df" id="28df" class="graf graf--p graf--leading graf--trailing">Stay tuned! I will update this guide when i build out more!</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@gregheartcloud" class="p-author h-card">gregheartcloud</a> on <a href="https://medium.com/p/14712c379cf2"><time class="dt-published" datetime="2023-03-27T03:52:49.895Z">March 27, 2023</time></a>.</p><p><a href="https://medium.com/@gregheartcloud/building-ci-cd-process-for-my-new-salesforce-appexchange-utility-package-2gp-using-cumulusci-and-14712c379cf2" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on July 16, 2026.</p></footer></article></body></html>

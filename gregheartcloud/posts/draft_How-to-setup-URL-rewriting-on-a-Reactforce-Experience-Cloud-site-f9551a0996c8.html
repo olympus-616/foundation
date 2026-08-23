@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>How to setup URL rewriting on a Reactforce Experience Cloud site</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">How to setup URL rewriting on a Reactforce Experience Cloud site</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+React is a Single Page Application (SPA) which means that after the initial page load, the entire react application lives locally in your…
+</section>
+<section data-field="body" class="e-content">
+<section name="89ac" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="0271" id="0271" class="graf graf--h3 graf--leading graf--title">How to setup URL rewriting on a Reactforce Experience Cloud site</h3><p name="2edd" id="2edd" class="graf graf--p graf--empty graf-after--h3"><br></p><p name="a26a" id="a26a" class="graf graf--p graf-after--p">React is a Single Page Application (SPA) which means that after the initial page load, the entire react application lives locally in your browser’s memory. </p><p name="1b69" id="1b69" class="graf graf--p graf-after--p">A modern site should have a good URL structure within the SPA, and React has the React Routing library to support this type of functionality.</p><p name="ce49" id="ce49" class="graf graf--p graf-after--p">One issue that I’ve had to continually overcome when building serverless applications is how to properly manage the url slugs and the query string parameters.</p><p name="31dc" id="31dc" class="graf graf--p graf-after--p">Because the react application sits at the <a href="https://%7B%7Bsalesforce" data-href="https://{{salesforce" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">https://{{salesforce</a>_site_domain}}/{{reactforce_url}}, typically all other slugs within the react application would not be found by the Salesforce platform and end up with a 404 and nasty salesforce screens.</p><h4 name="4595" id="4595" class="graf graf--h4 graf-after--p">The Problem</h4><p name="1c41" id="1c41" class="graf graf--p graf-after--h4">How do we get deep linking to work with a reactforce Experience Cloud application?</p><p name="9029" id="9029" class="graf graf--p graf-after--p">We also need to be able to preserve any query string paramaters that are passed into the application. This is critical for any kind of marketing attribution associated with traffic to your Experience Cloud site.</p><p name="8e2d" id="8e2d" class="graf graf--p graf--empty graf-after--p graf--trailing"><br></p></div></div></section><section name="1e16" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h4 name="ef93" id="ef93" class="graf graf--h4 graf--leading">The Solution</h4><p name="b421" id="b421" class="graf graf--p graf-after--h4">I’m giving away all the secret sauce on this one. If only those who read this blog could understand the magic of the next few minutes of reading.</p><figure name="b218" id="b218" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="0*Sr0LkUS6xuNGAVBw" data-width="1980" data-height="770" src="https://cdn-images-1.medium.com/max/800/0*Sr0LkUS6xuNGAVBw"><figcaption class="imageCaption">Reactforce Solution for Experience Cloud url redirection</figcaption></figure><ol class="postList"><li name="9c71" id="9c71" class="graf graf--li graf-after--figure">Add React Routing /contact /users etc notice that the site blows up when you hit the route</li><li name="0202" id="0202" class="graf graf--li graf-after--li">Add the url rewriter class (which is under the site settings which are hard to find)</li><li name="1b39" id="1b39" class="graf graf--li graf-after--li">Add rte and site url to the visualforce page that hosts the react force application.</li><li name="c3af" id="c3af" class="graf graf--li graf-after--li">Allow React to Redirect to the route based upon what is passed into the rte div on the page</li><li name="6e40" id="6e40" class="graf graf--li graf-after--li">Debugging — In order to debug the UrlRewriter Class, set up debugging on the Site’s Guest User from the Setup → Debug Logs.</li></ol><p name="5f3d" id="5f3d" class="graf graf--p graf-after--li">Lastly, I like to use the default rewriter to keep the Landing page from getting in the way</p><figure name="f65a" id="f65a" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*x3SUyt7LLnMjtCREaoA2zQ.png" data-width="1435" data-height="635" src="https://cdn-images-1.medium.com/max/800/1*x3SUyt7LLnMjtCREaoA2zQ.png"></figure><p name="65d5" id="65d5" class="graf graf--p graf--empty graf-after--figure"><br></p><p name="b5ff" id="b5ff" class="graf graf--p graf-after--p">This solution effectively always redirects anything other than the specific routes identified in the urlwriter back to the react app, but it puts all of the rest of the route including query string params into the visualforce page inside of a div that should be able to be read from react.</p><p name="bb7e" id="bb7e" class="graf graf--p graf-after--p">React then inspects the rte and can rerender to the “correct” url. Net effect is deep linking now works on your Reactforce Experience Cloud! OMG I just gave away the golden goose. Well… not all of it.</p><p name="7075" id="7075" class="graf graf--p graf-after--p">Lets look at the reactforce templates and see how they work:</p><p name="bea3" id="bea3" class="graf graf--p graf--empty graf-after--p"><br></p><p name="5adb" id="5adb" class="graf graf--p graf--empty graf-after--p graf--trailing"><br></p></div></div></section>
+</section>
+<footer><p><a href="https://medium.com/p/f9551a0996c8">View original.</a></p><p>Exported from <a href="https://medium.com">Medium</a> on July 16, 2026.</p></footer></article></body></html>

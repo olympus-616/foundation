@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>The Apex Async Worker Pattern to rule them all</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">The Apex Async Worker Pattern to rule them all</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+As part of my series… lets build a salesforce app… I have another utility to add to the Enterprise Utilities library. This thing is…
+</section>
+<section data-field="body" class="e-content">
+<section name="fc20" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h2 name="af02" id="af02" class="graf graf--h2 graf--leading graf--title">The Apex Async Worker Pattern to rule them all (a/k/a Threads)</h2><figure name="1753" id="1753" class="graf graf--figure graf-after--h2"><img class="graf-image" data-image-id="1*0tAk1SYN017991PA_PIBYQ.png" data-width="3168" data-height="3346" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*0tAk1SYN017991PA_PIBYQ.png"><figcaption class="imageCaption">Someday I will be recognized for genius or locked up for insanity</figcaption></figure><p name="faf9" id="faf9" class="graf graf--p graf-after--figure">As part of my series… lets build a salesforce app… I have another utility to add to the Enterprise Utilities library. This thing is awesome. I call it a “worker framework” to attempt to bring some organization and control what is otherwise a chaotic unorganized universe of async processing in Salesforce.</p><p name="42b3" id="42b3" class="graf graf--p graf-after--p">Here is what I don’t like about my experience on salesforce with async processing:</p><ol class="postList"><li name="285c" id="285c" class="graf graf--li graf-after--p">Scheduled job in general. I find the solution extremely lacking from other CRON based tools and especially I don’t like the fact that the schedules are not able to be paused or easily created in refreshed sandboxes or scratch orgs</li><li name="7cc5" id="7cc5" class="graf graf--li graf-after--li">Too much boiler plate. Each batch job I end up putting in the exact same boiler plate code, especially in relation to cross cutting concerns (sensing a pattern in my blog?)</li><li name="b9e2" id="b9e2" class="graf graf--li graf-after--li">The user interface could use a major upgrade (Reactforce to the rescue!)</li><li name="f16c" id="f16c" class="graf graf--li graf-after--li">My obsession with api driven development requires me to attach every feature of the system to an api… including all operations related to managing async jobs</li><li name="eff6" id="eff6" class="graf graf--li graf-after--li">Common exception handling, logging, and monitoring are just the right things to do</li></ol><p name="edcb" id="edcb" class="graf graf--p graf-after--li">Here are the requirements for the framework:</p><ol class="postList"><li name="2d00" id="2d00" class="graf graf--li graf-after--p">A new worker implementation can be added by creating a record in the ImplementationHandler custom metadata and implementing the enterprise.IWorker interface. Creating scalable, robust, and powerful async jobs becomes extremely easy once all of the non-functional features have been managed by the framework.</li><li name="a683" id="a683" class="graf graf--li graf-after--li">The implemented interface can be scheduled, unscheduled(paused), paused, and executed immediately.</li><li name="fa27" id="fa27" class="graf graf--li graf-after--li">The workers can be scheduled with CRON schedules but also the CRON schedule can be created with human readable and manageable concepts like repeat jobs per month, per day, per hour, every x number of minutes, etc. Trust me. Its awesome.</li><li name="f8fd" id="f8fd" class="graf graf--li graf-after--li">The api framework can be used to manage all features of the worker framework. This makes building tooling easy to build and it opens the door to front end developers (Reactforce anyone?) to manage async tasks easily from the front end.</li></ol><p name="4863" id="4863" class="graf graf--p graf-after--li">This feature shall ever be known as feature/ENT-18__WorkerFramework</p><p name="4a8b" id="4a8b" class="graf graf--p graf-after--p graf--trailing">I’ll update this blog post when its done. Happy coding!</p></div></div></section><section name="6202" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="2ede" id="2ede" class="graf graf--p graf--leading graf--trailing">Time passes….</p></div></div></section><section name="317f" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="2e0c" id="2e0c" class="graf graf--p graf--leading graf--trailing">More time passes…</p></div></div></section><section name="28b4" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="fa43" id="fa43" class="graf graf--p graf--leading">A few more reactforce based hospital portals, a complete backend library rewrite, and new clients on the reactforce bandwagon caused this feature to push pretty far out on the roadmap. But I just got my hands on the latest version of the async platform and let me tell you… better than I even thought.</p><p name="f3dc" id="f3dc" class="graf graf--p graf-after--p">We renamed it “Threads”.</p><p name="785f" id="785f" class="graf graf--p graf-after--p">Here is what it can do:</p><ol class="postList"><li name="5a99" id="5a99" class="graf graf--li graf-after--p">Define a thread which can be @future, batch, or queueable.</li><li name="3c9e" id="3c9e" class="graf graf--li graf-after--li">Define the apex handler that will be executed for the thread. All of the boiler plate is managed by the framework.</li><li name="0714" id="0714" class="graf graf--li graf-after--li">Launch a thread directly from apex, including async apex. Async operations will use the next feature to survive the async governor limitations:</li><li name="3b79" id="3b79" class="graf graf--li graf-after--li">Launch a thread via a platform event</li><li name="4fa6" id="4fa6" class="graf graf--li graf-after--li">Schedule, Unschedule, Pause, Unpause, and Synchronize the threads with the Apex CRON scheduler.</li><li name="50b3" id="50b3" class="graf graf--li graf-after--li">Launch a thread using the thread api endpoint.</li><li name="e009" id="e009" class="graf graf--li graf-after--li">Each thread captures time stamps, the batch query, and the record IDs in scope of the execution context. All of the logs are cross-referenced together so you can see exactly what ran, were there errors, and what debug logs were tied to that execution.</li><li name="0b5d" id="0b5d" class="graf graf--li graf-after--li">The system automatically notifies regarding success, errors, etc to a notification email. This will eventually be hooked into our messaging app to support sending SMS directly from the framework. Imagine getting a text message if your job had errors. It would feel like the distant future of 2024. Oh wait.</li><li name="11d9" id="11d9" class="graf graf--li graf-after--li">The thread monitor makes sure you are notified about when jobs did NOT run that should have. That would have saved me a few hours of my life earlier in my career!</li><li name="1c56" id="1c56" class="graf graf--li graf-after--li">Threads monitor the Platform Event DLQ, automatically retrying any failed or scheduled events. Creating scheduled system events is now as easy as setting a time/date stamp on the Platform Event and waiting for the Thread to process them in the future.</li><li name="829c" id="829c" class="graf graf--li graf-after--li">Easily chain threads to each other, in configuration, with no concern for the underlining platform limitations. The framework will automatically manage the thread continuations.</li><li name="9224" id="9224" class="graf graf--li graf-after--li">Thread priority and concurrency is managed with a simple configuration.</li><li name="2979" id="2979" class="graf graf--li graf-after--li graf--trailing">Even more cool stuff that super nerds as myself will geek out over.</li></ol></div></div></section><section name="0566" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="e4b0" id="e4b0" class="graf graf--p graf--leading">Needless to say… its awesome and now writing an enterprise level async process takes nothing more than a few lines of code. We are even considering hooking this to flow just to leverage the benefits of the management and logging functions.</p><p name="f99b" id="f99b" class="graf graf--p graf-after--p">This was the last of the low-level libraries that we have been slowly rebuilding over the course of the last year. Because we have been so busy implementing the platform as is for clients, I have not focused to get this on the AppExchange. I think time is about up… the world needs this app.</p><p name="eaea" id="eaea" class="graf graf--p graf-after--p">We have a few more days of development and then I will put together a demo. You are going to be jealous… or you are going to email me at greg@cloudpremise.com to figure out how you can get ahold of this incredible framework.</p><p name="8374" id="8374" class="graf graf--p graf-after--p">This is my new favorite line of code:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="sql" name="a71f" id="a71f" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-keyword">new</span> Thread(<span class="hljs-string">&#x27;LogThread&#x27;</span>).<span class="hljs-keyword">execute</span>(<span class="hljs-string">&#x27;PURGE&#x27;</span>);</span></pre><p name="a343" id="a343" class="graf graf--p graf-after--pre">If you haven’t figured it out from my blog, I appreciate an app that is easy to troubleshoot in production.</p><p name="0558" id="0558" class="graf graf--p graf-after--p graf--trailing">Told you I would update this… I always keep my word.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@gregheartcloud" class="p-author h-card">gregheartcloud</a> on <a href="https://medium.com/p/f4c5d67df12d"><time class="dt-published" datetime="2023-04-02T06:56:29.202Z">April 2, 2023</time></a>.</p><p><a href="https://medium.com/@gregheartcloud/the-apex-async-worker-pattern-to-rule-them-all-f4c5d67df12d" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on July 16, 2026.</p></footer></article></body></html>
