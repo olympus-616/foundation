@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>The Ultimate “Backend” For Salesforce Hosted Apps</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">The Ultimate “Backend” For Salesforce Hosted Apps</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+We finally got through the global callable refactor this week. I am ready to revisit the security review process. It took almost a year to…
+</section>
+<section data-field="body" class="e-content">
+<section name="1846" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h2 name="4a04" id="4a04" class="graf graf--h2 graf--leading graf--title">The Ultimate “Backend” for Salesforce Hosted Apps</h2><figure name="35a4" id="35a4" class="graf graf--figure graf-after--h2"><img class="graf-image" data-image-id="0*uSYU_b_DbDhEsqVA" data-width="2048" data-height="1536" data-unsplash-photo-id="oyXis2kALVg" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/0*uSYU_b_DbDhEsqVA"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/@fabioha?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com/@fabioha?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-creator noopener" target="_blank">fabio</a> on <a href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-source noopener" target="_blank">Unsplash</a></figcaption></figure><p name="6996" id="6996" class="graf graf--p graf-after--figure">We finally got through the global callable refactor this week. I am ready to revisit the security review process. It took almost a year longer to get it the way I wanted it… but good things take time and I’ve got a lot of mouths to feed.</p><p name="6040" id="6040" class="graf graf--p graf-after--p">Anyway, here are the features that will make up the backend app layer (for Salesforce hosted applications if you are new to my blog)</p><figure name="2243" id="2243" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="0*rtc6wyFsQ7QRUu5o" data-width="2185" data-height="1909" src="https://cdn-images-1.medium.com/max/800/0*rtc6wyFsQ7QRUu5o"><figcaption class="imageCaption">The Ultimate “Backend” of your next Salesforce solution</figcaption></figure><p name="4a7a" id="4a7a" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">IPlugin</strong> — this sits at the base of the architecture… allowing dynamic instantiation AND modularization of all of the rest of the components of the system. This module is where you register your interfaces and dynamic code. It makes the entire architecture loosely coupled and I’m so excited to show how this is going to make future upgrades and add-ons SOOOO easy to work with.</p><p name="9bbc" id="9bbc" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">IConfig</strong> — this is a configuration store to hold any and all configuration data both from within our Reactforce Suite of apps as well as any client specific configuration that maybe required. This makes it extremely easy to deploy, manage, and use configuration data of numerous data types. It also supports encryption of configuration data allowing you a super simple and auditable way to keep secrets like API keys TRULY encrypted at rest.</p><p name="4887" id="4887" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">ICustomExc </strong>— this is a wrapper on custom exceptions that makes it super easy to throw, catch, and log all the important things you care about when dealing with Apex exceptions. For example all of the contents of the call stack will be written to an SObject via the ILogger. (And yes they survive DML rollbacks thank you platform events I love you).</p><p name="a403" id="a403" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">IDb </strong>— this is a database utility for handling most of the DML in the system. It handles unit of work style caching of datasets, or you can commit each transaction. It makes it very easy to work with and without sharing, and handles all of the magic necessary to get your app safely through security review. (Assuming this app passes security review of course!!)</p><p name="2448" id="2448" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">ISoql</strong> — this is another utility for handling many of your SOQL needs. It will very easily return maps of data with any object/field that you have security access too. While it doesn’t handle complex queries it handles most of my use cases and makes the code super simple to write and maintain.</p><p name="6744" id="6744" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">IObjectTrigger- </strong>Everyone else has a trigger handler… why can’t I throw another in the mix! This trigger solution has built in on/off. It also supports pending trigger updates (if you have unrelated database activity that can wait until the end of the first trigger fire… allowing less unnecessary recursion through the environment. But at the end of the day… a trigger is a trigger.</p><p name="99ae" id="99ae" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">IPlatformEvent</strong>- This framework uses a generic event type to allow super simple creation and handling of platform events via custom handlers (which can be apex or flow). Just register a new event type with IPlugin, write your corresponding handler and you are off and running. All events can be logged and there is also a dead-letter queue that supports retrys.</p><p name="acfc" id="acfc" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">ILogger-</strong> Ive been dreaming of this app ever since I started on Salesforce.com 15 years ago. As an ex-Java developer I had a man-crush on log4j and I just have hated every minute of debugging issues on Salesforce. ESPECIALLY on production managed packages where logging is obfuscated without a lot of fuss. Well not anymore… I finally have the logging solution I wanted as a Developer, Architect, AND CTO. Logging is now as easy as an on/off switch. And logs are automatically pruned based upon your own retention policies.</p><p name="1d53" id="1d53" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">IApi</strong>- This is probably my favorite feature on the backend. It makes Salesforce feel and act like an Express.JS backend vs a tangled and unorganized collection of 1000s of pieces of metadata as most large organizations evolve to. The apis are similar in nature to a typical services layer. However every function is written RESTful style (GET/POST/PATCH/PUT/DELETE) and makes organizing your business logic EXTREMELY easy. The API layer can be accessed internally from Salesforce via Apex/Flow/LWC/Visualforce and externally (HTTP/Postman/etc) via an awesome route based system that supports dynamic paths, variables, etc. There is even route based security on this solution. Adding routes and handlers is so simple that basically everyone is going to end up being a front-end developer as this is like the one-controller-to-rule-them-all. This code is all you need to design, code, and manage an enterprise API solution (sorry to the Mulesoft lovers out there). This code is so awesome that I broke up with log4j and just learned self-love of my own solutions :)</p><p name="cdb4" id="cdb4" class="graf graf--p graf-after--p graf--trailing"><strong class="markup--strong markup--p-strong">IAsync</strong>- This plugin makes working with Async salesforce about as easy as it can be. Each type of job (@future, Queueable, Batch, Scheduled) is now defined as an AsyncWorker, all of which gain similar cross-cutting concerns such as scheduling, ad-hoc execution, pausing, error handling, and of course… LOGGING! After writing thousands of batch jobs in my life I have everything I need and want to make writing these as painless as possible. The scheduling solution supports CRON expression but even lets you define your scheduled jobs in human terms such as “Run Every Hour” which will dynamically create and maintain the CRON expressions for you. There is even a scheduling console that every Salesforce admin will absolutely love. (Pause/Unpause anyone?)</p></div></div></section><section name="f360" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="3d04" id="3d04" class="graf graf--p graf--leading graf--trailing">Who Should Care?</p></div></div></section><section name="a5ad" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="ef43" id="ef43" class="graf graf--p graf--leading">First of all… I care. I am a Certified Technical Architect for Salesforce.com. I have written thousands of lines of code on the platform and managed tens if not hundreds of millions of dollars of investment on Salesforce implementations, start-ups, and Fortune 100 digital transformation projects. This solution just works and it just makes things easy. I use it for my client work as a consultant, and I use it for numerous apps on the app exchange. It makes writing apps an absolute breeze and the more you use the backend platform, the more useful it becomes. This is the backbone of my solutions for 10+ years and I’ve finally figured out how to productize the architecture. I plan to use it until I win the lottery or get hit by a bus, which ever comes first.</p><p name="a377" id="a377" class="graf graf--p graf-after--p">Second… you should care about this if you are a CTO, Architect, or Salesforce developer. Imagine if someone came from the future and handed you the secret to successful multi-million dollar software solutions. I think you would listen. So… listen. You can use this as the backbone of your next Salesforce implementation or even your own Salesforce ISV app.</p><p name="cd6d" id="cd6d" class="graf graf--p graf-after--p graf--trailing">Third… if you are able to follow this article AND you are planning a new capital investment. This solution takes you from zero to scale in about 5 minutes. It demystifies so much of what makes Salesforce challenging as an org scales. Most of my apps now are heavy on the the front-end (Reactforce anyone?) because there is just not that much to figure out on the backend anymore. Which is why I named it “Backend”. Throw in a React Enterprise Portal on top of this thing and unlock your Salesforce architecture in a way you never thought possible.</p></div></div></section><section name="ee3c" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="d197" id="d197" class="graf graf--p graf--leading">If you are interested in a demo of “Backend” please reach out to me directly at greg@cloudpremise.com. I promise you will thank me someday. Until then I’ll be waiting in line with Salesforce security review!</p><p name="5f1d" id="5f1d" class="graf graf--p graf-after--p">Happy coding!</p><p name="100a" id="100a" class="graf graf--p graf-after--p graf--trailing">P.S. If you want to buy Marketing Cloud, Mulesoft, Heroku, and hire an Azure or AWS team to do the same thing… contact 1.800.BIG.FOUR. CHEERS!</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@gregheartcloud" class="p-author h-card">gregheartcloud</a> on <a href="https://medium.com/p/85ed4f6f6c2e"><time class="dt-published" datetime="2024-04-11T02:06:50.200Z">April 11, 2024</time></a>.</p><p><a href="https://medium.com/@gregheartcloud/backend-services-mvp-85ed4f6f6c2e" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on July 16, 2026.</p></footer></article></body></html>

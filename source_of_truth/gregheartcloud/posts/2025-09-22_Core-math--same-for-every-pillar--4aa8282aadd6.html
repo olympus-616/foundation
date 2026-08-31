@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Core math (same for every pillar)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Core math (same for every pillar)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Per-user coins after n edits: C(n) = Fib(n+3) − 2, where Fib(1)=Fib(2)=1.
+</section>
+<section data-field="body" class="e-content">
+<section name="7790" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="d11d" id="d11d" class="graf graf--p graf--leading">Core math (same for every pillar)</p><p name="5402" id="5402" class="graf graf--p graf-after--p">Per-user coins after n edits: C(n) = Fib(n+3) − 2, where Fib(1)=Fib(2)=1.</p><p name="1361" id="1361" class="graf graf--p graf-after--p">Cost of the k-th edit (the fee shown to the user): Fₖ = {1,2,3,5,8,13,21,34,55,89,144,233,…}</p><p name="4e5e" id="4e5e" class="graf graf--p graf-after--p">ARPU(n) = $7 × C(n)</p><p name="df1b" id="df1b" class="graf graf--p graf-after--p">If edits grow from n₁ → n₂ in a given year, that year’s marginal revenue per user is</p><p name="45e6" id="45e6" class="graf graf--p graf-after--p">$7 × Σ Fₖ for k = n₁+1 … n₂.</p><p name="d999" id="d999" class="graf graf--p graf-after--p">Adoption model (plug-and-play)</p><p name="908d" id="908d" class="graf graf--p graf-after--p">For each pillar i:</p><p name="0ed3" id="0ed3" class="graf graf--p graf-after--p">Signers(t) = Logistic growth to a ceiling:</p><p name="977b" id="977b" class="graf graf--p graf-after--p">Sᵢ(t) = Sᵢ,max / (1 + e^(−kᵢ (t − t₀ᵢ)))</p><p name="e002" id="e002" class="graf graf--p graf-after--p">Editors(t) = Sᵢ(t) × conversionᵢ (share of signers who actually edit)</p><p name="d86d" id="d86d" class="graf graf--p graf-after--p">Avg edits path per pillar over time: Eᵢ(t) (you set this ramp)</p><p name="76ec" id="76ec" class="graf graf--p graf-after--p">Revenueᵢ(t) = Editorsᵢ(t) × $7 × [C(Eᵢ(t)) − C(Eᵢ(t−1))]</p><p name="d087" id="d087" class="graf graf--p graf-after--p">One concrete 5-year scenario (illustrative, adjustable)</p><p name="784d" id="784d" class="graf graf--p graf-after--p">Assumptions (steady editor counts by Year 5; you can tighten later with your real S-curve)</p><p name="edd7" id="edd7" class="graf graf--p graf-after--p">Iliad of El-Shaddai (faith)</p><p name="6282" id="6282" class="graf graf--p graf-after--p">Editors (steady by Y1 for simplicity): 55.2M</p><p name="d2a4" id="d2a4" class="graf graf--p graf-after--p">(e.g., 2.3B TAM → 6% sign → 40% edit)</p><p name="56a6" id="56a6" class="graf graf--p graf-after--p">Avg edits path by year: 7 → 8 → 9 → 10 → 10</p><p name="9ede" id="9ede" class="graf graf--p graf-after--p">Moulin Rouge (artists, global)</p><p name="962f" id="962f" class="graf graf--p graf-after--p">Editors: 75M</p><p name="10f8" id="10f8" class="graf graf--p graf-after--p">(e.g., 1.0B TAM → 15% sign → 50% edit)</p><p name="9d59" id="9d59" class="graf graf--p graf-after--p">Avg edits path: 8 → 10 → 11 → 12 → 12</p><p name="1e59" id="1e59" class="graf graf--p graf-after--p">Republic-616 (truth commons, heavy edits)</p><p name="9e86" id="9e86" class="graf graf--p graf-after--p">Editors: 4M</p><p name="d85e" id="d85e" class="graf graf--p graf-after--p">(e.g., 100M TAM → 6.25% sign → 64% edit)</p><p name="e836" id="e836" class="graf graf--p graf-after--p">Avg edits path: 12 → 15 → 18 → 20 → 22</p><p name="32dc" id="32dc" class="graf graf--p graf-after--p">Per-user marginal coins each year (from the Fibonacci fee ladder)</p><p name="9778" id="9778" class="graf graf--p graf-after--p">Going 7→8 adds 34; 8→9 adds 55; 9→10 adds 89</p><p name="6bc6" id="6bc6" class="graf graf--p graf-after--p">8→10 adds 55+89 = 144; 10→11 adds 144; 11→12 adds 233</p><p name="4b9b" id="4b9b" class="graf graf--p graf-after--p">12→15 adds 377+610+987 = 1,974</p><p name="ad7f" id="ad7f" class="graf graf--p graf-after--p">15→18 adds 1,597+2,584+4,181 = 8,362</p><p name="d5a3" id="d5a3" class="graf graf--p graf-after--p">18→20 adds 6,765+10,946 = 17,711</p><p name="1efb" id="1efb" class="graf graf--p graf-after--p">20→22 adds 17,711+28,657 = 46,368</p><p name="a765" id="a765" class="graf graf--p graf-after--p">Year-by-year revenue (USD) at $7/coin</p><p name="7b0f" id="7b0f" class="graf graf--p graf-after--p">Iliad (55.2M editors)</p><p name="3ea1" id="3ea1" class="graf graf--p graf-after--p">Y1: 7 edits total (53 coins) ⇒ $371/user ⇒ $20.5B</p><p name="a1be" id="a1be" class="graf graf--p graf-after--p">Y2: +1 edit (34 coins) ⇒ $238/user ⇒ $13.1B</p><p name="7730" id="7730" class="graf graf--p graf-after--p">Y3: +1 edit (55 coins) ⇒ $385/user ⇒ $21.2B</p><p name="cbc1" id="cbc1" class="graf graf--p graf-after--p">Y4: +1 edit (89 coins) ⇒ $623/user ⇒ $34.4B</p><p name="2a6b" id="2a6b" class="graf graf--p graf-after--p">Y5: +0 ⇒ $0</p><p name="ff6d" id="ff6d" class="graf graf--p graf-after--p">5-yr total ≈ $89.2B</p><p name="7e1c" id="7e1c" class="graf graf--p graf-after--p">Moulin Rouge (75M editors)</p><p name="89b7" id="89b7" class="graf graf--p graf-after--p">Y1: 8 edits total (87 coins) ⇒ $609/user ⇒ $45.7B</p><p name="b047" id="b047" class="graf graf--p graf-after--p">Y2: +2 edits (144 coins) ⇒ $1,008/user ⇒ $75.6B</p><p name="072e" id="072e" class="graf graf--p graf-after--p">Y3: +1 edit (144 coins) ⇒ $1,008/user ⇒ $75.6B</p><p name="beae" id="beae" class="graf graf--p graf-after--p">Y4: +1 edit (233 coins) ⇒ $1,631/user ⇒ $122.3B</p><p name="1511" id="1511" class="graf graf--p graf-after--p">Y5: +0 ⇒ $0</p><p name="71e2" id="71e2" class="graf graf--p graf-after--p">5-yr total ≈ $319.2B</p><p name="686b" id="686b" class="graf graf--p graf-after--p">Republic-616 (4M editors)</p><p name="d97c" id="d97c" class="graf graf--p graf-after--p">Y1: 12 edits total (608 coins) ⇒ $4,256/user ⇒ $17.0B</p><p name="475d" id="475d" class="graf graf--p graf-after--p">Y2: +3 edits (1,974 coins) ⇒ $13,818/user ⇒ $55.3B</p><p name="8544" id="8544" class="graf graf--p graf-after--p">Y3: +3 edits (8,362 coins) ⇒ $58,534/user ⇒ $234.1B</p><p name="6340" id="6340" class="graf graf--p graf-after--p">Y4: +2 edits (17,711 coins) ⇒ $123,977/user ⇒ $495.9B</p><p name="1a4e" id="1a4e" class="graf graf--p graf-after--p">Y5: +2 edits (46,368 coins) ⇒ $324,576/user ⇒ $1.298T</p><p name="bf5e" id="bf5e" class="graf graf--p graf-after--p">5-yr total ≈ $2.10T</p><p name="2d4f" id="2d4f" class="graf graf--p graf-after--p">Combined (this scenario)</p><p name="7aa6" id="7aa6" class="graf graf--p graf-after--p">Y1: ~$82.2B</p><p name="930f" id="930f" class="graf graf--p graf-after--p">Y2: ~$144.0B</p><p name="c6ff" id="c6ff" class="graf graf--p graf-after--p">Y3: ~$330.9B</p><p name="406c" id="406c" class="graf graf--p graf-after--p">Y4: ~$652.6B</p><p name="d4f5" id="d4f5" class="graf graf--p graf-after--p">Y5: ~$1.298T</p><p name="b994" id="b994" class="graf graf--p graf-after--p graf--trailing">5-yr cumulative ≈ $2.51T</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@gregheartcloud" class="p-author h-card">gregheartcloud</a> on <a href="https://medium.com/p/4aa8282aadd6"><time class="dt-published" datetime="2025-09-22T17:32:09.169Z">September 22, 2025</time></a>.</p><p><a href="https://medium.com/@gregheartcloud/core-math-same-for-every-pillar-4aa8282aadd6" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on July 16, 2026.</p></footer></article></body></html>

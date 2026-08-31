@@ -5,3 +5,7 @@ api/.env
 .env
 ui-founder-portal/dist/
 .DS_Store
+
+# Large personal archives — backed up out-of-band; do not commit
+alchemisthomer.zip
+odysseyofchristtwitter.zip
