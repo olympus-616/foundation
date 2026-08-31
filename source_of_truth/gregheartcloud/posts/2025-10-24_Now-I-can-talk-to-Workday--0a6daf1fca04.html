@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Now I can talk to Workday…</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Now I can talk to Workday…</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+ho ho ho
+</section>
+<section data-field="body" class="e-content">
+<section name="71db" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h2 name="d059" id="d059" class="graf graf--h2 graf--leading graf--title">Now I can talk to Workday…</h2><h2 name="d807" id="d807" class="graf graf--h2 graf-after--h2">ho ho ho</h2><figure name="b5fe" id="b5fe" class="graf graf--figure graf-after--h2"><img class="graf-image" data-image-id="1*1xaUz_IQryNxp2f1BQb-BA@2x.jpeg" data-width="640" data-height="360" src="https://cdn-images-1.medium.com/max/800/1*1xaUz_IQryNxp2f1BQb-BA@2x.jpeg"></figure><h3 name="9746" id="9746" class="graf graf--h3 graf-after--figure">Bridging the Clouds: A New Workday to Salesforce Integration Architecture</h3><h4 name="da65" id="da65" class="graf graf--h4 graf-after--h3">Executive Summary</h4><p name="477f" id="477f" class="graf graf--p graf-after--h4">For years, large enterprises have struggled to synchronize business data between their CRM and ERP ecosystems. Salesforce governs the customer experience; Workday governs finance and HR. Connecting them has traditionally required third-party middleware, heavy XML customization, and costly per-transaction fees.</p><p name="a169" id="a169" class="graf graf--p graf-after--p">A new approach changes that equation.</p><p name="5b7b" id="5b7b" class="graf graf--p graf-after--p">By embedding a native SOAP orchestration engine directly inside Salesforce — driven entirely by metadata — you can achieve Workday integration with zero external middleware, minimal overhead, and total security compliance. This paper introduces Olympus-Grid Workday Connector, a metadata-driven integration framework for Salesforce that natively communicates with Workday’s SOAP APIs while maintaining full Salesforce governor compatibility.</p><p name="3e3b" id="3e3b" class="graf graf--p graf-after--p">⸻</p><h3 name="70e5" id="70e5" class="graf graf--h3 graf-after--p">The Problem with Traditional Integrations</h3><p name="59a3" id="59a3" class="graf graf--p graf-after--h3">Most Salesforce to Workday integrations fall into one of three categories:</p><p name="3d83" id="3d83" class="graf graf--p graf-after--p">1.	ETL/Middleware (MuleSoft, Boomi, Informatica)</p><p name="17f0" id="17f0" class="graf graf--p graf-after--p">•	External runtime and licensing fees</p><p name="dbd0" id="dbd0" class="graf graf--p graf-after--p">•	Complex credential and WSDL management</p><p name="fc53" id="fc53" class="graf graf--p graf-after--p">•	Difficult debugging and limited visibility inside Salesforce</p><p name="7439" id="7439" class="graf graf--p graf-after--p">2.	Point-to-Point Custom Apex Code</p><p name="b877" id="b877" class="graf graf--p graf-after--p">•	Fast but brittle</p><p name="2349" id="2349" class="graf graf--p graf-after--p">•	XML templates hard-coded into classes</p><p name="620a" id="620a" class="graf graf--p graf-after--p">•	No environment isolation</p><p name="9032" id="9032" class="graf graf--p graf-after--p">3.	Manual File Exchange (CSV + Workday EIB)</p><p name="166e" id="166e" class="graf graf--p graf-after--p">•	Batch-oriented and error-prone</p><p name="5a40" id="5a40" class="graf graf--p graf-after--p">•	No near-real-time synchronization</p><p name="2b15" id="2b15" class="graf graf--p graf-after--p">The cost of maintaining these architectures often exceeds the initial implementation effort. What’s missing is a Salesforce-native, metadata-driven solution that speaks Workday natively.</p><p name="233e" id="233e" class="graf graf--p graf-after--p">⸻</p><h3 name="9c92" id="9c92" class="graf graf--h3 graf-after--p">The Olympus-Grid Workday Connector</h3><p name="75ba" id="75ba" class="graf graf--p graf-after--h3">Our connector is built entirely on the Salesforce platform, using:</p><p name="d624" id="d624" class="graf graf--p graf-after--p">•	Custom Metadata (Workday_Credential__mdt) to manage authentication and environment endpoints (sandbox, staging, production).</p><p name="da7d" id="da7d" class="graf graf--p graf-after--p">•	Dynamic Template Injection for all Workday SOAP payloads, allowing business users to edit XML templates without code changes.</p><p name="c4b8" id="c4b8" class="graf graf--p graf-after--p">•	Queueable Orchestration to ensure reliable, asynchronous delivery that respects Salesforce governor limits.</p><p name="492c" id="492c" class="graf graf--p graf-after--p">•	Secure WS-Security Envelope Generation that automatically builds UsernameTokens and timestamps.</p><p name="856a" id="856a" class="graf graf--p graf-after--p">•	Dynamic Object Mapping for both Customer and Invoice workflows, with support for all Workday reference descriptors (Company, Payment Terms, Currency, Cost Center, Organization, and Location).</p><p name="cc8b" id="cc8b" class="graf graf--p graf-after--p">The connector functions entirely within Salesforce’s native runtime, using Queueable Apex for asynchronous execution. Each Workday object type (Customer, Invoice, etc.) is injected through an XML template that is parameterized at runtime and then sent through HttpRequest callouts to Workday’s SOAP endpoints.</p><p name="6e4f" id="6e4f" class="graf graf--p graf-after--p">⸻</p><h3 name="5559" id="5559" class="graf graf--h3 graf-after--p">Key Innovation: Metadata-Driven Environment Management</h3><p name="386a" id="386a" class="graf graf--p graf-after--h3">Unlike static integrations hard-coded to a single endpoint, our architecture automatically selects credentials based on your specific needs.</p><p name="e707" id="e707" class="graf graf--p graf-after--p">⸻</p><h3 name="3381" id="3381" class="graf graf--h3 graf-after--p">Real-World Use Case</h3><p name="c37b" id="c37b" class="graf graf--p graf-after--h3">A healthcare services organization needed to automatically create Workday Customer and Invoice records each time a patient evaluation was completed in Salesforce.</p><p name="f176" id="f176" class="graf graf--p graf-after--p">Traditional integration estimates exceeded $100,000.</p><p name="6e0c" id="6e0c" class="graf graf--p graf-after--p">Using the Olympus-Grid connector:</p><p name="58cc" id="58cc" class="graf graf--p graf-after--p">•	Development time: &lt; 3 weeks</p><p name="91c9" id="91c9" class="graf graf--p graf-after--p">•	Cost: &lt; 10% of projected</p><p name="3913" id="3913" class="graf graf--p graf-after--p">•	Reliability: 100% Salesforce uptime</p><p name="65c1" id="65c1" class="graf graf--p graf-after--p">•	Audit compliance: HIPAA-compatible logs maintained inside Salesforce</p><p name="ddd4" id="ddd4" class="graf graf--p graf-after--p">⸻</p><h3 name="b144" id="b144" class="graf graf--h3 graf-after--p">Technical Highlights</h3><p name="e967" id="e967" class="graf graf--p graf-after--h3">•	Dynamic XML injection engine powered by Salesforce string substitution.</p><p name="fd92" id="fd92" class="graf graf--p graf-after--p">•	Regex-based WID extraction for Workday reference IDs.</p><p name="7693" id="7693" class="graf graf--p graf-after--p">•	Granular queue control (max 10 per transaction) to protect against governor limits.</p><p name="ea68" id="ea68" class="graf graf--p graf-after--p">•	Retry and error-handling framework via safeUpdateError() pattern.</p><p name="6d48" id="6d48" class="graf graf--p graf-after--p">•	Unit-test ready: mock responses simulate Workday 200/500 returns.</p><p name="4479" id="4479" class="graf graf--p graf-after--p">⸻</p><h3 name="7b4d" id="7b4d" class="graf graf--h3 graf-after--p">Security &amp; Compliance</h3><p name="d6e4" id="d6e4" class="graf graf--p graf-after--h3">All credentials remain encrypted in Salesforce custom metadata or Named Credentials.</p><p name="c226" id="c226" class="graf graf--p graf-after--p">No external middleware or file transfer is required.</p><p name="a80c" id="a80c" class="graf graf--p graf-after--p">All transactions run within the Salesforce callout security framework, logged, and governed.</p><p name="edfc" id="edfc" class="graf graf--p graf-after--p">⸻</p><h3 name="7528" id="7528" class="graf graf--h3 graf-after--p">Product Roadmap</h3><p name="910d" id="910d" class="graf graf--p graf-after--h3">1.	v1.0 (Current Beta)</p><p name="900c" id="900c" class="graf graf--p graf-after--p">•	Customer + Invoice integrations</p><p name="427b" id="427b" class="graf graf--p graf-after--p">•	Metadata-driven authentication</p><p name="34f0" id="34f0" class="graf graf--p graf-after--p">•	XML template injection</p><p name="6b6c" id="6b6c" class="graf graf--p graf-after--p">2.	v1.5</p><p name="a456" id="a456" class="graf graf--p graf-after--p">•	Dynamic mapping engine (JSON-based metadata map)</p><p name="6320" id="6320" class="graf graf--p graf-after--p">•	Retry dashboard and transaction monitor</p><p name="ba65" id="ba65" class="graf graf--p graf-after--p">3.	v2.0</p><p name="6d3a" id="6d3a" class="graf graf--p graf-after--p">•	GUI Template Editor within Salesforce</p><p name="d4b1" id="d4b1" class="graf graf--p graf-after--p">•	Multi-module support (HCM, Payroll, Time Tracking)</p><p name="2c4b" id="2c4b" class="graf graf--p graf-after--p">•	Managed Package release on AppExchange</p><p name="4f1a" id="4f1a" class="graf graf--p graf-after--p">⸻</p><h3 name="a02b" id="a02b" class="graf graf--h3 graf-after--p">Call to Action — Join the Beta</h3><p name="3b86" id="3b86" class="graf graf--p graf-after--h3">We’re opening early access for Salesforce admins, architects, and Workday integration teams who want to eliminate middleware complexity and own their integration natively.</p><h3 name="4f60" id="4f60" class="graf graf--h3 graf-after--p">How to Join</h3><p name="9e19" id="9e19" class="graf graf--p graf-after--h3">•	for now just email me greg@cloudpremise.com</p><p name="ebaf" id="ebaf" class="graf graf--p graf-after--p">⸻</p><h3 name="f123" id="f123" class="graf graf--h3 graf-after--p">About the Author</h3><p name="b41b" id="b41b" class="graf graf--p graf-after--h3">I am a Salesforce Certified Technical Architect and founder of CloudPremise LLC, an independent consulting and product development firm specializing in cloud integrations and serverless automation. Over the past 15 years, I have delivered enterprise architectures for Fortune 500 companies and start-ups as well as launched multiple ISV products on the Salesforce AppExchange.</p><p name="ce7c" id="ce7c" class="graf graf--p graf-after--p graf--trailing">Follow my ongoing research and product development journey at Medium.com/@gregheartcloud</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@gregheartcloud" class="p-author h-card">gregheartcloud</a> on <a href="https://medium.com/p/0a6daf1fca04"><time class="dt-published" datetime="2025-10-24T03:52:22.247Z">October 24, 2025</time></a>.</p><p><a href="https://medium.com/@gregheartcloud/now-i-can-talk-to-workday-0a6daf1fca04" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on July 16, 2026.</p></footer></article></body></html>
