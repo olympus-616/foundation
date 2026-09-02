@@ -319,6 +319,7 @@ Each PR is independently revertable. The coordinated-merge order (§10.2) means 
 ### Feedback that emerged from THIS cycle (seed for the next one)
 - Client-side hostile defense (cosmos-logos) — open cycle.
 - Kronos-in-CI — open cycle.
+- **EOS-portal URL-parser bug (surfaced 2026-09-01 during this cycle's own doc opening)** — `app.olympus-grid.com/eos/github.com/{owner}/{repo}/tree/<ref>/<path>` splits on the first `/` after `/tree/`, so it can't resolve `refs/heads/` names that themselves contain `/` (which every alias-produced `@<user>/neuralpathway/<sha>-<ts>-<slug>` branch does — i.e. every EOS-cycle branch in the fleet). Only `%2F`-encoded URLs currently resolve; unencoded ones return `FOLDER NOT FOUND · repo not found on this ref`. Fix: parser should (a) try successively-longer ref prefixes against `GET /repos/{owner}/{repo}/git/refs/heads/{prefix}` until one resolves and treat the suffix as path, and (b) accept `%2F`-encoded slashes in the ref segment. The EOS portal cannot dogfood itself against its own most-common branch-name shape until this is fixed. Candidate for a small iris-scoped cycle after §10.2 lands.
 
 ### Memory updates
 - Added `~/.claude/projects/-Users-gregory-dev-repos-olympus-616/memory/project_hostile_universe_defense.md` (single-authority-doc pointer + $131B incident summary).
