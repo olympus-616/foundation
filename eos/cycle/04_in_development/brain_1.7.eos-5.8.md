@@ -43,7 +43,9 @@ The doc is opened **before merge** because:
 
 ## Canonical attestation statement
 
-> *"I attest that athena's `/v1/athena/chat` accepts caller-supplied provider keys only inside a Cosmos-Logos sealed envelope (v1 flat OR v2 nested storage-inner); that the plaintext key is decrypted only inside athena and never persists to any wire, log, ledger, or intermediate store; that every chat turn writes a Plutus row whose `byok`, `tithed`, `key_source`, and `characters.input` values truthfully reflect the origin of the inference; that every response carries provenance dual-emitted as a response header AND a terminal `event: provenance` SSE frame; that the god-key rotation kill-switch is armed by SSM key rotation in lockstep with the manifest pubkey change; and that no TurtleShell surface hits `envelope_decrypt_failed` on the merge because client-side rollout notice preceded deploy."*
+> *"I attest that every request to the Athena LLM router is delivered inside a Cosmos-Logos envelope sealed to Athena's public key; that only correctly-formed envelopes decrypt at Athena's process boundary and are then dispatched to the appropriate inference provider (OpenAI, Anthropic, Grok, Gemini, Ollama). When a caller uses BYOK, the plaintext provider key exists on the client only at the moment of first paste — from that instant forward it lives sealed to Athena's public key and travels only in that sealed form; Athena decrypts at request time using its private key, uses the key for the single provider call, and the plaintext never persists to any wire, log, Plutus row, or intermediate store. Rotation of Athena's private key immediately renders every client-cached sealed BYOK slot undecryptable — the god-key-rotation kill switch, Steward property 2026-07-07."*
+>
+> — Refined 2026-09-28 from Steward direction, aligned with the umbrella axiom in [`brain_1.7.eos-5.5.md`](brain_1.7.eos-5.5.md). Athena remains the anchor reference implementation of the sealed-envelope wire per §6.B of the umbrella.
 
 ## §1 User story
 

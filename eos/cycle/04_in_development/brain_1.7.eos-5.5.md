@@ -19,11 +19,11 @@
 
 # § Steward-authored (top half)
 
-## Canonical attestation statement
+## Canonical attestation statement — sealed-at-capture / decrypt-at-god-boundary axiom
 
-> *"I attest that no user-supplied credential exists in clear on any device, wire, or intermediate store after the moment of capture. Every credential — LLM API key, TTS audio-provider key, MCP integration secret — is sealed with the receiving god's cosmos-logos public key at the moment of capture, decryptable only by that god's private key. No intermediate service (Ares perimeter, Hermes router, Salesforce storage, Plutus logging, any wire tap, any database dump, any operator with admin access) can read the credential in clear. Only the server with the target god's cosmos-logos private key can decrypt the credential, and it does so only at the moment of use."*
+> *"Every cross-service call to an Olympus god is delivered inside a Cosmos-Logos envelope sealed to that god's public key; the plaintext exists only at the moment of composition on the caller and at the god's process boundary after decrypt — never on any wire, log, or intermediate store between. Credentials the god holds on the caller's behalf (BYOK provider keys, service OAuth tokens, PATs, refresh secrets) are themselves stored sealed to the same god's public key, decrypted only at the moment of use. Rotation of a god's SSM-injected private key is the universal kill switch: every client-cached BYOK slot for that god becomes undecryptable, and every server-held credential sealed under that god's public key becomes unusable, in one atomic action. This is the **sealed-at-capture / decrypt-at-god-boundary axiom** — credential sovereignty is verifiable per turn, not per session."*
 >
-> — Steward, 2026-07-08 (working attestation; refine before locking §5)
+> — Refined 2026-09-28 from Steward 2026-07-08 working attestation, generalized to cover BOTH inbound-message sealing AND server-held-credential sealed-at-rest storage. Per-god instantiations of this axiom live in the peer sub-attestations: [`brain_1.7.eos-5.7.md`](brain_1.7.eos-5.7.md) (apollo), [`brain_1.7.eos-5.8.md`](brain_1.7.eos-5.8.md) (athena), [`brain_1.7.eos-5.11.md`](brain_1.7.eos-5.11.md) (poseidon).
 
 ## §1 User story
 

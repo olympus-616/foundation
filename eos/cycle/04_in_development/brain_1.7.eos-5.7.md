@@ -39,7 +39,9 @@ The doc is opened **now** rather than at PR merge because two evidence-capture i
 
 ## Canonical attestation statement
 
-> *"I attest that apollo's `/speak` and music turns accept a caller-supplied provider key only inside a Cosmos-Logos sealed envelope; that the plaintext key is decrypted only inside the apollo process and never persists to any wire, log, ledger, or intermediate store; that every turn writes a Plutus row whose `byok`, `tithed`, `key_source`, and `characters.input` values truthfully reflect the origin of the inference; and that every response carries an `x-og-provenance` header readable by every consuming client surface."*
+> *"I attest that every request to Apollo (TTS and music generation) is delivered inside a Cosmos-Logos envelope sealed to Apollo's public key; that only correctly-formed envelopes decrypt at Apollo's process boundary and are then dispatched to the correct TTS engine or downstream service. When a caller uses BYOK, the plaintext provider key (ElevenLabs, XTTS, olympus-grid) exists on the client only at the moment of first paste — from that instant forward it lives sealed to Apollo's public key; Apollo decrypts at request time using its private key, invokes the provider, and streams audio bytes back to the caller. The plaintext key never persists to any wire, log, Plutus row, or intermediate store. Rotation of Apollo's private key renders every client-cached sealed BYOK slot undecryptable — the god-key-rotation kill switch."*
+>
+> — Refined 2026-09-28 from Steward direction, aligned with the umbrella axiom in [`brain_1.7.eos-5.5.md`](brain_1.7.eos-5.5.md).
 
 ## §1 User story
 
