@@ -261,6 +261,19 @@ Not required for this cycle. iPhone attestation surfaces (SIWA / StoreKit / devi
 
 ---
 
+## §9-observed appendix — 2026-09-30 production deploy (code-identity attestation)
+
+**Deploy record:** [`../DEPLOY-2026-09-30.md`](../DEPLOY-2026-09-30.md) — parent `841c222` · ares submodule ptr `1203f77` · Steward-verified 2026-09-29.
+
+**Code identity for ares (W3+W4 + §11.1):** ✓ VERIFIED — boot log shows CloudWatch EMF metric `AresGateRefusal` emitting live under Namespace `Olympus/Ares` with `ClusterDomain=api-int.turtleshell.ai` (metric exists ONLY in W3 code path — proof of code identity) + `Policy bootstrapped — version=0 policy_id=compiled-strict-v1` + `Policy floor: ip.mode=deny-only, per_ip=0A/0D, rpm=600/300/600, inflight=500, kill_all=false`.
+
+**§9 behavior signals: NOT YET TESTED.** Per Steward direction 2026-09-29 (*"especially related to the security updates"*), every §9.ARES / §9.HUD signal remains unverified. **No defeating-attack probe has fired against the deployed ares.** Rate-cap burst, cluster-status-flip, IP-allowlist 403 out-of-range, CF_SECRET external-vs-localhost, trust-boundary-spoof — all pending. Attestation pass per DEPLOY-2026-09-30 priority sequence **step 3**.
+
+**Ticket-specific follow-ups from deploy:**
+- `ARES_VERSION` env var missing from ECS task-def — cosmetic; boot banner shows `Version: unknown`. Not a code issue.
+
+---
+
 ## References
 
 - **Umbrella cycle:** [`brain_2.7.eos-1.md`](brain_2.7.eos-1.md) — HUD L1–L14 cascade; ares #66 is the W3+W4 wave (§6.A); this doc is its per-repo attestation loop.

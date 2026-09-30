@@ -156,6 +156,18 @@ Feedback candidates: BLOCK-mode day-one impact on real-user acquisition (adjust 
 
 ---
 
+## §9-observed appendix — 2026-09-30 production deploy (code-identity attestation)
+
+**Deploy record:** [`../DEPLOY-2026-09-30.md`](../DEPLOY-2026-09-30.md) — parent `841c222` · zeus submodule ptr `c9e0faf` · Steward-verified 2026-09-29.
+
+**Code identity for zeus:** ✓ VERIFIED — boot log shows `ZEUS ONLINE version 1.7.4`.
+
+**§9 behavior signals: NOT YET TESTED.** Per Steward direction 2026-09-29 (*"especially related to the security updates"*), every §9.ZEU / §9.HUD signal remains unverified. WAF rule presence in `edge-global-stack.ts` (BLOCK-mode day-one for `RateLimit-Coarse-5min` + `AWSManagedRulesAnonymousIpList` + `AWSManagedRulesBotControlRuleSet`) + `cluster.sh` fingerprint-triplet writes on next provision + raw-secret-never-crosses grep — all pending. Attestation pass per DEPLOY-2026-09-30 priority sequence **step 3**.
+
+**Ticket-specific follow-ups from deploy:** none directly (zeus not implicated in the surfaced findings).
+
+---
+
 ## References
 
 - **Umbrella cycle:** [`brain_2.7.eos-1.md`](brain_2.7.eos-1.md) — HUD; §6.A W5+W7b row names zeus #45.

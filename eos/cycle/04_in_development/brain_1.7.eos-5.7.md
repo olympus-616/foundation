@@ -280,6 +280,18 @@ Ordered task list. Each item maps to an evidence ID `E-N`, a gate `G-N`, an acti
 
 ---
 
+## §9-observed appendix — 2026-09-30 production deploy (code-identity attestation)
+
+**Deploy record:** [`../DEPLOY-2026-09-30.md`](../DEPLOY-2026-09-30.md) — parent `841c222` · apollo submodule ptr `e294c94` · Steward-verified 2026-09-29.
+
+**Code identity for apollo:** ✓ VERIFIED — boot log shows `APOLLO ONLINE version 1.0`.
+
+**§9 behavior signals: NOT YET TESTED.** Per Steward direction 2026-09-29 (*"i have not tested everything - so we have to catch it in the eos attestation, especially related to the security updates"*), every §9.SOV signal in this ticket remains unverified against the deployed state. Sealed-envelope round-trip probes + BYOK truthful-attribution + god-key-rotation kill-switch smoke all pending. Attestation pass per DEPLOY-2026-09-30 priority sequence **step 3** (surface fanout after agent).
+
+**Ticket-specific follow-ups from deploy:** none directly (apollo not implicated in the surfaced items).
+
+---
+
 ## References
 
 - **Companion status record (this cycle's seed):** `/Users/gregory/temp/eos-5.4-apollo-sovereign-ai-status.md` (recorded 2026-09-25 by thoth)

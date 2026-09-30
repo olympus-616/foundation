@@ -269,6 +269,19 @@ Commits are chronologically ordered:
 
 ---
 
+## §9-observed appendix — 2026-09-30 production deploy (code-identity attestation)
+
+**Deploy record:** [`../DEPLOY-2026-09-30.md`](../DEPLOY-2026-09-30.md) — parent `841c222` · plutus submodule ptr `2da7c8e` · Steward-verified 2026-09-29.
+
+**Code identity for plutus (HUD W2 scope):** ✓ VERIFIED — boot log shows `PLUTUS ONLINE, /v1/plutus/api/ingest, /v1/plutus/api/ledger, /v1/plutus/api/stripe/*, live request traffic on /v1/plutus/api/ingest`.
+
+**§9 behavior signals: NOT YET TESTED.** Per Steward direction 2026-09-29 (*"especially related to the security updates"*), every §9.PLU / §9.HUD signal remains unverified. Three-tier drain order, SIGTERM critical-first flush, insert-with-duplicate-catch under replay, `cluster_name → domain` fleet-wide grep-zero-hits — all pending. Attestation pass per DEPLOY-2026-09-30 priority sequence **step 3**. **Twin closes-together with `brain_1.7.eos-5.10`.**
+
+**Ticket-specific follow-ups from deploy:**
+- **Designed-behavior observation** (not a defect): boot log shows `critical event dropped, reason: retry_ttl_expired` — this IS the W2 tier-drain behavior per §9.PLU-4 (bounded capacity ceiling with metric). Not an error; contributes toward §9.PLU-4 evidence when captured formally.
+
+---
+
 ## References
 
 - **Umbrella cycle:** [`brain_2.7.eos-1.md`](brain_2.7.eos-1.md) — HUD hostile-defense; §6.A W2 row names plutus #42.

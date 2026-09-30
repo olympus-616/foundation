@@ -260,6 +260,18 @@ Message-lifecycle metering ingest. Verified by live smoke per PR test plan item 
 
 ---
 
+## §9-observed appendix — 2026-09-30 production deploy (code-identity attestation)
+
+**Deploy record:** [`../DEPLOY-2026-09-30.md`](../DEPLOY-2026-09-30.md) — parent `841c222` · plutus submodule ptr `2da7c8e` · Steward-verified 2026-09-29.
+
+**Code identity for plutus (attribution scope):** ✓ VERIFIED — boot log shows `PLUTUS ONLINE, /v1/plutus/api/ingest, /v1/plutus/api/ledger, /v1/plutus/api/stripe/*, live request traffic on /v1/plutus/api/ingest`.
+
+**§9 behavior signals: NOT YET TESTED.** Per Steward direction 2026-09-29 (*"especially related to the security updates"*), every §9.ATT / §9.LED / §9.MSG signal remains unverified. Live attribution 7% write smoke, refund reversal, `/meter-messaging` scaffold all pending. Attestation pass per DEPLOY-2026-09-30 priority sequence **step 3**. **Twin closes-together with `brain_2.7.eos-1.3`.**
+
+**Ticket-specific follow-ups from deploy:** none directly for attribution scope (the observed `retry_ttl_expired` W2 event belongs to the HUD-W2 twin — see `brain_2.7.eos-1.3` §9-observed appendix).
+
+---
+
 ## References
 
 - **EOS-5 primary (frozen):** [`brain_1.7.eos-5.md`](brain_1.7.eos-5.md) — system-wide transactional accounting + autonomous revenue path.

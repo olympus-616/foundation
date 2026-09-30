@@ -316,6 +316,20 @@ Every §9.PROD-5 leg (web / iOS / iris / offgrid) runs the same test scenario: s
 
 ---
 
+## §9-observed appendix — 2026-09-30 production deploy (code-identity attestation)
+
+**Deploy record:** [`../DEPLOY-2026-09-30.md`](../DEPLOY-2026-09-30.md) — parent `841c222` · athena submodule ptr `7a17f9e` · Steward-verified 2026-09-29.
+
+**Code identity for athena:** ✓ VERIFIED — boot log shows `Athena Version: 2.0.0, Schema: athena-soul@2.0.0` + `Routing config loaded — 5 tiers, default: claude-3-5-haiku-20241022` + `MCP discovery via Poseidon at: http://localhost:3431/v1/poseidon/mcp/servers` + `knowledge base (2 docs, 8993 chars) loaded`.
+
+**§9 behavior signals: NOT YET TESTED.** Per Steward direction 2026-09-29 (*"especially related to the security updates"*), every §9.SOV / §9.INFRA / §9.PROD signal in this ticket remains unverified against the deployed state. Sealed-envelope round-trip probes, SSM lockstep verification, and cross-surface smokes all pending. Attestation pass per DEPLOY-2026-09-30 priority sequence **step 3**.
+
+**Ticket-specific follow-ups from deploy:**
+- **`XAI_API_KEY` missing from `/olympus/int/*` SSM** — Athena xAI routing tier will fail in prod until the key is added. Fix: `aws ssm put-parameter --name /olympus/int/keys/XAI_API_KEY --value <key> --type SecureString`.
+- `ATHENA_VERSION` env var missing from ECS task-def — cosmetic; boot banner shows `Version: unknown`. Not a code issue.
+
+---
+
 ## References
 
 - **Umbrella cycle:** [`brain_1.7.eos-5.5.md`](brain_1.7.eos-5.5.md) — BYOK / sealed-at-capture credential sovereignty; athena is the anchor reference implementation.

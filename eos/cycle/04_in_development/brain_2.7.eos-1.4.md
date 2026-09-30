@@ -167,6 +167,22 @@ Rollback: PR revert. Non-revertable: `Cluster__c.Domain__c` schema is additive; 
 
 ---
 
+## §9-observed appendix — 2026-09-30 production deploy (**olympus-grid EXPLICITLY ABSENT from this deploy**)
+
+**Deploy record:** [`../DEPLOY-2026-09-30.md`](../DEPLOY-2026-09-30.md) — parent `841c222` · 8 submodule pointer bumps · Steward-verified 2026-09-29.
+
+**Code identity for olympus-grid:** ✗ NOT DEPLOYED. PR #345 was NOT among the 8 submodule pointer bumps in parent `841c222`. The fleet shipped plutus #42 + zeus #45 + ares #66 + hermes #62 WITHOUT this ticket's W1 schema anchor landing.
+
+**Cascade-ordering implication.** HUD `brain_2.7.eos-1` §10.2 defines olympus-grid #345 (W1) as landing FIRST before the downstream layers. This deploy inverts that ordering. Two possibilities:
+- **(a)** The `Cluster__c` fields already existed on the target org from a prior separate landing path — schema-anchor obligation satisfied out-of-cycle.
+- **(b)** Soft-fail semantics in downstream code paths kicked in and the fleet operates in a degraded-but-functional state.
+
+**Steward-review action required** — confirm (a) vs. (b) and record the finding. If (b), close the schema-anchor properly (per one of the 3 disposition paths in §2.16 / §5) before the HUD umbrella §9.HUD-9 + §9.HUD-12 can attest.
+
+**§9.OG signals — all unverified** (this ticket's code isn't deployed yet; nothing to verify against). Awaits the 4 hard blockers clearing (§2.8 CI deploy, §2.9 `.forceignore`, §2.10 pubkey, §2.11 cert location) + disposition path pick per §2.16. Per Steward direction 2026-09-29 (*"especially related to the security updates"*), the placeholder `cosmos-logos.json` pubkey and the un-ignored `idp/default/certs/` path are exactly the class of security-relevant items the attestation pass exists to gate on.
+
+---
+
 ## References
 
 - **Umbrella cycle:** [`brain_2.7.eos-1.md`](brain_2.7.eos-1.md) — HUD; §6.A W1 row names olympus-grid #345.

@@ -138,6 +138,20 @@ Rollback: revert the three PRs as a unit (co-merged, co-reverted). Legacy `mcp/s
 
 ---
 
+## §9-observed appendix — 2026-09-30 production deploy (code-identity attestation)
+
+**Deploy record:** [`../DEPLOY-2026-09-30.md`](../DEPLOY-2026-09-30.md) — parent `841c222` · poseidon submodule ptr `fcd1174` · Steward-verified 2026-09-29.
+
+**Code identity for poseidon (v2 dynamic MCP router scope):** ✓ VERIFIED — boot log shows `Dynamic MCP catalog (proxies olympus-grid)` at `/v1/poseidon/mcp/servers` + per-codename route at `/v1/poseidon/mcp/:codename`. **v2 control plane observably active in prod.**
+
+**Salesforce is reachable through this router.** Per Steward direction 2026-09-29: *"we have salesforce working through sovereign cosmos-logos"* — the SF-scoped MCP path via poseidon is the **CURRENT ATTESTED BASELINE** the rest of the fleet must be brought up to per DEPLOY-2026-09-30 priority sequence.
+
+**§9 behavior signals: NOT YET TESTED.** Per Steward direction 2026-09-29 (*"especially related to the security updates"*), every §9.PSD signal in this ticket remains unverified. Rebase-vs-#41 metering-middleware re-verification + three-PR co-merge coordination (olympus-grid #288 + athena PR TBD) + tool re-introduction cohorts — all pending. Attestation pass per DEPLOY-2026-09-30 priority sequence **step 1** (stabilize — the SF-via-poseidon baseline informs everything else).
+
+**Related finding — belongs to sibling ticket:** The same poseidon submodule (`fcd1174`) has a manifest publicKey-derivation blocker (`[cosmos-logos] Poseidon fingerprint compute failed: invalid seed length`) that affects the **sealed-envelope sibling ticket [`brain_1.7.eos-5.11.md`](brain_1.7.eos-5.11.md)**. This dynamic-MCP-router ticket is not directly blocked by that finding, but both poseidon tickets share the same deployed binary.
+
+---
+
 ## References
 
 - **Poseidon PR #40:** [`feat(poseidon): dynamic MCP router (v2 control plane)`](https://github.com/olympus-616/poseidon/pull/40)

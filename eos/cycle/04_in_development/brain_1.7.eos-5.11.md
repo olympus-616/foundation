@@ -261,6 +261,28 @@ When an MCP tool call needs a stored credential (e.g., SF query needs a live acc
 
 ---
 
+## §9-observed appendix — 2026-09-30 production deploy (code-identity attestation + 🔴 security-critical BLOCKER)
+
+**Deploy record:** [`../DEPLOY-2026-09-30.md`](../DEPLOY-2026-09-30.md) — parent `841c222` · poseidon submodule ptr `fcd1174` · Steward-verified 2026-09-29.
+
+**Code identity for poseidon (sovereign-envelope scope):** ✓ VERIFIED — boot log shows the poseidon binary running (see also `brain_2.7.eos-6.md` for the dynamic-MCP-router scope on the same submodule ptr).
+
+**§9 behavior signals: NOT YET TESTED — plus a security-critical BLOCKER surfaced by the boot log:**
+
+**🔴 CRITICAL — §2.10 (Manifest publicKey ↔ private-key coherence) is CURRENTLY FAILING per boot warning:**
+> `[cosmos-logos] Poseidon fingerprint compute failed: invalid seed length — falls through to static manifest pub key`
+
+This means the poseidon manifest is serving a **static fallback pub key**, not one derived from the loaded private key. Downstream consequences:
+- **§2.8** (god-key rotation invalidates client-cached BYOK slots) is **NOT ARMED** — clients seal to a manifest pub key that doesn't match the private-key derivation path; rotation won't invalidate anything meaningful.
+- **§2.9** (god-key rotation invalidates stored service-credential blobs) — same failure mode; kill switch broken.
+- **§9.PSD-7 / §9.PSD-8 / §9.PSD-9 — all currently red by construction until the seed shape is fixed.**
+
+**Fix:** SSM-injected key PEM shape must match what the sodium loader expects (Ed25519 32-byte seed, not 64-byte private-key material or PEM-wrapped alternative).
+
+Per Steward direction 2026-09-29 (*"especially related to the security updates"*), this is exactly the class of finding the attestation pass exists to catch. Filing as **top-priority stabilize item per DEPLOY-2026-09-30 priority sequence step 1** — must clear before §5 sign on this ticket.
+
+---
+
 ## References
 
 - **Umbrella cycle:** [`brain_1.7.eos-5.5.md`](brain_1.7.eos-5.5.md) — sealed-at-capture / decrypt-at-god-boundary axiom (refined 2026-09-28)

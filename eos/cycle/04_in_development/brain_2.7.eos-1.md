@@ -369,6 +369,19 @@ Each PR is independently revertable. The coordinated-merge order (§10.2) means 
 
 ---
 
+## §9-observed appendix — 2026-09-30 production deploy (HUD umbrella observations)
+
+**Deploy record:** [`../DEPLOY-2026-09-30.md`](../DEPLOY-2026-09-30.md) — parent `841c222` · 8 submodule pointer bumps · Steward-verified 2026-09-29.
+
+**Cascade observations:**
+
+- **W1 olympus-grid #345 was NOT in this deploy** — see [`brain_2.7.eos-1.4.md`](brain_2.7.eos-1.4.md) §9-observed appendix for detail. The fleet shipped W2 (plutus #42) + W3+W4 (ares #66) + W5+W7b (zeus #45) + §11.5 (hermes #62) **without the W1 schema anchor**. Either (a) the `Cluster__c` fields already exist on the target org from a prior separate landing path, OR (b) soft-fail semantics in downstream code paths kicked in and the fleet operates in a degraded-but-functional state.
+- **Steward-review action required** — confirm (a) vs. (b) and update §6.A W1 row accordingly. If (b), a follow-up cycle must close the schema-anchor properly before the umbrella §9.HUD-9 (validation-rule immutability) and §9.HUD-12 (cluster lifecycle rows) can attest.
+- **§9.HUD signals — all unverified.** Per Steward direction 2026-09-29 (*"i have not tested everything - so we have to catch it in the eos attestation, especially related to the security updates"*), no defeating-attack probe has run against the deployed state. Kronos playbook (per `brain_2.7.eos-4.md`) will be the third-party witness once kronos runner exists; interim manual smokes still owed.
+- **Salesforce baseline attested** — SF works through the sovereign cosmos-logos wire (poseidon path). Per Steward 2026-09-29, this is the CURRENT ATTESTED LEVEL. Agent surface is the next attestation target per DEPLOY-2026-09-30 priority sequence step 2; all other surfaces follow per step 3.
+
+---
+
 ## References — documents used to design and implement hostile-universe defense
 
 **Sealed design chain (olympus-grid/docs/, in review order):**

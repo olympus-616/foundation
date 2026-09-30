@@ -284,6 +284,20 @@ Not required for this cycle. Hermes chain is server-side.
 
 ---
 
+## §9-observed appendix — 2026-09-30 production deploy (code-identity attestation)
+
+**Deploy record:** [`../DEPLOY-2026-09-30.md`](../DEPLOY-2026-09-30.md) — parent `841c222` · hermes submodule ptr `b9e46fe` · Steward-verified 2026-09-29.
+
+**Code identity for hermes:** ✓ VERIFIED — boot log shows `Hermes.server Version: 1.7.4, Boot Complete, God proxy ready: 33 routes` + `facade.ready mount=/omens, catalog.loaded universes=15 books=18 chapters=346 scenes=1040 from /app/omens/content` (Heracles canon facade) + `persona.ready codename=logos name=Logos routes=[.well-known/cosmos-logos.json, cosmos-logos.json, chat]` (Logos persona facade).
+
+**§9 behavior signals: NOT YET TESTED.** Per Steward direction 2026-09-29 (*"especially related to the security updates"*), every §9.HRM signal remains unverified against the deployed state. §11.5 URL-normalize behavior + full-chain audit-trail restoration + unmounted-routes-return-404 smokes all pending. Attestation pass per DEPLOY-2026-09-30 priority sequence **step 3**.
+
+**Deploy carried the §11.5 HUD-required scope.** The unmounted route modules disposition (split-vs-ship per §5) remains open and does not affect deploy.
+
+**Ticket-specific follow-ups from deploy:** none directly (hermes not implicated in the surfaced findings).
+
+---
+
 ## References
 
 - **Umbrella cycle:** [`brain_2.7.eos-1.md`](brain_2.7.eos-1.md) — HUD L1–L14 cascade; hermes #62 is the §11.5 wave (§6.A row); this doc is its per-repo attestation loop.
