@@ -50,6 +50,8 @@ Five immutable cycles in `06_shipped/`. **Every attestation of the agent surface
 
 **What "attest agent on those levels" means concretely.** For the agent-app-extension surface (`iris/reactforce/agent/`, home of brain-genesis), the campaign closes only when each of the 5 shipped claims is empirically true for that surface: visible to the AI (eos-1), reachable via athena-717 pattern (eos-2), reproducible from public repos (eos-3), merge-is-deploy (eos-4), self-attesting via portal (eos-4.1).
 
+**Concurrent EOS-2 reinforcement during the 2026-09-30 verification session:** the `business-innovation-652` cluster was fully torn down — 4 stacks destroyed + `Cluster__c a05cb00000NyoSPAAZ` deleted from `dev_enterprise` — demonstrating the second half of EOS-2's canonical claim (*"the compute resources can be destroyed without losing data integrity of the system"*) holds for the current `brain/2.7.x.x` deployed state. See [`DEPLOY-2026-09-30.md`](DEPLOY-2026-09-30.md) §Concurrent attestation evidence for detail.
+
 ---
 
 # § 2. WHAT IS IN-PROGRESS — 27 tickets across 5 clusters

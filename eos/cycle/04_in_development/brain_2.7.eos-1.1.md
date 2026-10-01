@@ -272,6 +272,16 @@ Not required for this cycle. iPhone attestation surfaces (SIWA / StoreKit / devi
 **Ticket-specific follow-ups from deploy:**
 - `ARES_VERSION` env var missing from ECS task-def — cosmetic; boot banner shows `Version: unknown`. Not a code issue.
 
+### Supplementary attestation observation — Steward egress 403 from external CF probes (2026-09-30)
+
+**Steward's egress IP** (not a GHA-runner IP) → direct-to-CloudFront probes to `/health` and `/v1/ares/status` on `api-int.turtleshell.ai` returned **HTTP 403**. Same probes from GHA-runner-egress during the Verify Deployment job → **passed**.
+
+This empirically demonstrates partial activation of the HUD defense chain against external direct-to-CF traffic:
+- **§2.3 / §9.ARES-6** (§11.1 IP allowlist 403 out-of-range) — Steward egress not in allowed set; refused.
+- **§2.4 / §9.ARES-7** (CF_SECRET external reject) — direct-to-CF without `X-Origin-Secret` header refused.
+
+**Not a scripted defeating-attack probe** — this is observational, not an end-to-end §9.ARES signal fire. But it's attestation-reinforcing evidence that the defense is active rather than inert. The scripted probes per §11 verification protocol still owed before close.
+
 ---
 
 ## References
