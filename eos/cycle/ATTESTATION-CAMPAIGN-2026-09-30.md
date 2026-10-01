@@ -124,7 +124,7 @@ Five immutable cycles in `06_shipped/`. **Every attestation of the agent surface
 
 ---
 
-## Cluster 2.D · Standalone 2.7 primaries (4 tickets)
+## Cluster 2.D · Standalone 2.7 primaries (5 tickets)
 
 | Ticket | Scope | Deploy status | Attestation-pass action |
 |---|---|---|---|
@@ -132,8 +132,9 @@ Five immutable cycles in `06_shipped/`. **Every attestation of the agent surface
 | [`brain_2.7.eos-6.md`](04_in_development/brain_2.7.eos-6.md) | **poseidon** — dynamic MCP router v2 control plane (PR #40) | Code identity ✓ (`Dynamic MCP catalog proxies olympus-grid`) — this is the SF-via-poseidon baseline | Rebase vs PR #41 metering-middleware check; three-PR co-merge coordination (olympus-grid #288 + athena PR TBD); 49-tool re-introduction cascade blocked on SF↔poseidon bridge contract |
 | [`brain_2.7.eos-7.md`](04_in_development/brain_2.7.eos-7.md) | **iris** — portal delivery fleet (PRs #135 + #136 + workspace inventory) | Partial (PR #135 unmerged; agent workspace scaffolding awaits) | PR #135 merge disposition co-owned with `brain_2.7.eos-5.2`; PR #136 (gpt-api docs) merges independently (path-disjoint); varent local dirty resolution; `.dev` bundleId sentinel → real 2.7 bundle cut |
 | [`brain_2.7.eos-8.md`](04_in_development/brain_2.7.eos-8.md) | **olympus-gpt.ai** — developer portal + 224-route forecasted API surface | Initiative tracker | 5 Steward decisions: PR #136 disposition + 3 handoff owners (Plutus P0 / Keys hard-delete / Quota+throttle) + vision refresh + DNS cutover + branch discipline |
+| [`brain_2.7.eos-9.md`](04_in_development/brain_2.7.eos-9.md) | **cp-biz production-readiness** — delete `deprecate/` + raise test coverage to ≥75% + validate-push pipeline | Hardening cycle (Steward started Part 1 + Part 2 concurrent with ticket authoring 2026-09-30) | Delete `olympus-grid/force-app/deprecate/**`; author tests for 15 named classes/triggers (meaningful assertions, not coverage-only); add `validate-push-cp-biz.yaml` workflow mirroring PR #350/#351 split-step pattern; close criterion = `sf project deploy validate --target-org cp-biz --test-level RunLocalTests` returns Succeeded. **cp-biz becomes the Steward's business-production env (ahead of alpha-org's namespace-sharded design) — shortened deployment loop via unmanaged direct-deploy.** |
 
-**Campaign target for this cluster:** poseidon is deploy-verified (SF-via-poseidon baseline is here); iris fleet closes on PR #135 + #136 dispositions; olympus-gpt initiative closes on the 5 named decisions; kronos framework buildout is the third-party-witness enabler that unlocks §9 external attestation for every other cluster.
+**Campaign target for this cluster:** poseidon is deploy-verified (SF-via-poseidon baseline is here); iris fleet closes on PR #135 + #136 dispositions; olympus-gpt initiative closes on the 5 named decisions; kronos framework buildout is the third-party-witness enabler that unlocks §9 external attestation for every other cluster; **cp-biz production-readiness closes on a single Succeeded validate, enabling fast-feedback production for the Steward's own business operations in parallel with alpha-org's managed-package production path**.
 
 ---
 
