@@ -1,0 +1,185 @@
+{
+  "schema_version": "1.0",
+  "description": "Display-metadata index for the EOS kanban. Keyed by relative-to-kanban-root path. Pitches are plain-English, sales-ready, 4-10 word headlines rendered as card titles; the H1 of each doc is the full attestation claim and is too long for a card title. Filename stays as the card subtitle for git traceability.",
+  "introduced_by_cycle": "sales-ready card titles — 2026-10-02 Steward directive",
+  "cards": {
+    "06_shipped/brain_1.7.eos-1.md": {
+      "pitch": "Players feed back; software improves — a self-building loop"
+    },
+    "06_shipped/brain_1.7.eos-2.md": {
+      "pitch": "The platform spawns its own cloud — and tears it back down"
+    },
+    "06_shipped/brain_1.7.eos-3.md": {
+      "pitch": "From empty folder to five live surfaces — zero drift"
+    },
+    "06_shipped/brain_1.7.eos-4.md": {
+      "pitch": "Every merge to main IS the production deploy"
+    },
+    "06_shipped/brain_1.7.eos-4.1.md": {
+      "pitch": "The EOS kanban attests its own existence"
+    },
+
+    "04_in_development/brain_1.7.eos-5.md": {
+      "pitch": "Every dollar accounted; every surface paid; every tithe routed"
+    },
+    "04_in_development/brain_1.7.eos-5.1.md": {
+      "pitch": "Launch-ready in every country Apple ships to"
+    },
+    "04_in_development/brain_1.7.eos-5.2.md": {
+      "pitch": "No paid endpoint accepts an unidentified caller"
+    },
+    "04_in_development/brain_1.7.eos-5.3.md": {
+      "pitch": "7% of every dollar reaches a cause — by construction"
+    },
+    "04_in_development/brain_1.7.eos-5.5.md": {
+      "pitch": "User credentials sealed from the moment of capture"
+    },
+    "04_in_development/brain_1.7.eos-5.7.md": {
+      "pitch": "Voice synthesis with bring-your-own-key"
+    },
+    "04_in_development/brain_1.7.eos-5.8.md": {
+      "pitch": "Chat with bring-your-own-key — provider-neutral"
+    },
+    "04_in_development/brain_1.7.eos-5.9.md": {
+      "pitch": "Game client speaks the sovereign cosmos-logos wire"
+    },
+    "04_in_development/brain_1.7.eos-5.10.md": {
+      "pitch": "Every API call attributed to a paying account"
+    },
+    "04_in_development/brain_1.7.eos-5.11.md": {
+      "pitch": "Zero-trust envelopes on every tool call; secrets sealed at rest"
+    },
+    "04_in_development/brain_2.7.eos-1.md": {
+      "pitch": "The platform survives hostile traffic — no runaway bills"
+    },
+    "04_in_development/brain_2.7.eos-1.1.md": {
+      "pitch": "Gateway refuses hostile traffic before it costs us money"
+    },
+    "04_in_development/brain_2.7.eos-1.2.md": {
+      "pitch": "Message router hardened against URL abuse"
+    },
+    "04_in_development/brain_2.7.eos-1.3.md": {
+      "pitch": "Ledger survives server kills — not one dollar lost"
+    },
+    "04_in_development/brain_2.7.eos-1.4.md": {
+      "pitch": "Fleet-wide cluster schema anchored in one place"
+    },
+    "04_in_development/brain_2.7.eos-1.5.md": {
+      "pitch": "Platform-level HUD defense coordinator"
+    },
+    "04_in_development/brain_2.7.eos-1.6.md": {
+      "pitch": "WAF + sealed origin secrets at the CDN edge"
+    },
+    "04_in_development/brain_2.7.eos-4.md": {
+      "pitch": "AI-authored adversarial testing of any platform"
+    },
+    "04_in_development/brain_2.7.eos-5.md": {
+      "pitch": "An AI operations team that runs your actual life"
+    },
+    "04_in_development/brain_2.7.eos-5.1.md": {
+      "pitch": "Ship the /agent surface to production"
+    },
+    "04_in_development/brain_2.7.eos-5.2.md": {
+      "pitch": "Agent workspace scaffolding into main"
+    },
+    "04_in_development/brain_2.7.eos-5.3.md": {
+      "pitch": "Port the canonical agent-architecture docs forward"
+    },
+    "04_in_development/brain_2.7.eos-5.4.md": {
+      "pitch": "Per-cluster LLM keys — no shared tenancy"
+    },
+    "04_in_development/brain_2.7.eos-5.5.md": {
+      "pitch": "Enforce one cycle branch per repo per cycle"
+    },
+    "04_in_development/brain_2.7.eos-6.md": {
+      "pitch": "AI tools register themselves at runtime"
+    },
+    "04_in_development/brain_2.7.eos-7.md": {
+      "pitch": "Every portal workspace accounted for"
+    },
+    "04_in_development/brain_2.7.eos-8.md": {
+      "pitch": "Public developer portal at olympus-gpt.ai"
+    },
+    "04_in_development/brain_2.7.eos-9.md": {
+      "pitch": "Run the Steward's own business on the platform"
+    },
+    "04_in_development/eos-5b-triage.md": {
+      "pitch": "Triage the EOS-5 reconciliation backlog"
+    },
+
+    "02_design/brain_2.7.eos-2.md": {
+      "pitch": "The AI's recursive self-improvement loop kernel"
+    },
+    "02_design/brain_2.7.eos-3.md": {
+      "pitch": "Observability that runs on a solar-powered Pi"
+    },
+    "02_design/brain_2.7.eos-10.md": {
+      "pitch": "One file-storage API across every provider"
+    },
+
+    "01_planning/brain_1.7.eos-5.4.md": {
+      "pitch": "No vendor lock-in at any building block"
+    },
+    "01_planning/brain_1.7.eos-5.6.md": {
+      "pitch": "Wallet balance never drifts — ever"
+    },
+
+    "00_backlog/brain_1.7.eos-6.md": {
+      "pitch": "Rebuild the whole platform from the alpha node alone"
+    },
+    "00_backlog/brain_1.7.eos-7.md": {
+      "pitch": "Nothing granted without explicit admin approval"
+    },
+    "00_backlog/brain_1.7.eos-8.md": {
+      "pitch": "Globally reachable through the alpha node"
+    },
+    "00_backlog/brain_1.7.eos-9.md": {
+      "pitch": "Scale globally on Fargate per user"
+    },
+    "00_backlog/brain_1.7.eos-10.md": {
+      "pitch": "Zero secrets in source control — keys injected at boot"
+    },
+    "00_backlog/brain_1.7.eos-11.md": {
+      "pitch": "Steward can't read customer data without consent"
+    },
+    "00_backlog/brain_1.7.eos-12.md": {
+      "pitch": "Money moves only via Stripe + Apple Pay"
+    },
+    "00_backlog/cand-a.md": {
+      "pitch": "Roll back a bad deploy without losing data"
+    },
+    "00_backlog/cand-b.md": {
+      "pitch": "Surface degradation before any customer feels it"
+    },
+    "00_backlog/cand-c.md": {
+      "pitch": "Partial failure degrades cleanly — no cascade"
+    },
+    "00_backlog/cand-d.md": {
+      "pitch": "Customer data durable and recoverable"
+    },
+    "00_backlog/cand-e.md": {
+      "pitch": "Tenants fully isolated across nodes and clusters"
+    },
+    "00_backlog/cand-f.md": {
+      "pitch": "Identity verified, not merely authorized"
+    },
+    "00_backlog/cand-g.md": {
+      "pitch": "The 7% tithe actually reaches the cause"
+    },
+    "00_backlog/cand-h.md": {
+      "pitch": "The AI loop stays bounded and governed"
+    },
+    "00_backlog/cand-i.md": {
+      "pitch": "The platform stays out of PCI scope"
+    },
+    "00_backlog/cand-j.md": {
+      "pitch": "Terms + privacy accepted at every signup"
+    },
+    "00_backlog/cand-k.md": {
+      "pitch": "SOC2 evidence trail — real auditor engagement"
+    },
+    "00_backlog/cand-l.md": {
+      "pitch": "Production state is reproducible and version-provenanced"
+    }
+  }
+}

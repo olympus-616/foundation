@@ -1,6 +1,8 @@
-# {short title}
+# {short title — the full attestation claim, often 10-25 words}
 
 > File name: `brain_{major.minor}.eos-{N}.md` — the Nth EOS cycle on the `brain/{major.minor}.x.x` deployment branch family.
+
+> **Pitch (sales-ready, 4-10 words)** — add this cycle's one-line headline to [`.eos/cards.json`](.eos/cards.json) under the key `"<lane-folder>/<filename>"`. The pitch is what renders on the kanban card and in sales material; the H1 above is the full attestation claim and is too long for a card title.
 
 | | |
 |---|---|
