@@ -173,6 +173,8 @@ Every merge to `brain/2.7.x.x` passes through `.github/workflows/deploy-push-cp-
 |---|---|---|---|---|---|---|---|---|---|
 | 2026-10-02 21:34:13 | [`6954f07`](https://github.com/olympus-616/olympus-grid/commit/6954f075288eb491141ceec90ef59aa4e53522fb) · [PR #356](https://github.com/olympus-616/olympus-grid/pull/356) | `0AfPj000002HcSjKAK` | ✅ Succeeded | ✅ 1548/1548 (0 errors) | ✅ 2024/2024 (0 failures) | ✅ 0 warnings | ✅ Release [`cp-biz-deploy-6954f07`](https://github.com/olympus-616/olympus-grid/releases/tag/cp-biz-deploy-6954f07) | 1297s | [workflow run 37067617179](https://github.com/olympus-616/olympus-grid/actions/runs/37067617179) + [PR follow-up comment](https://github.com/olympus-616/olympus-grid/pull/356#issuecomment-cp-biz-deploy-post-merge) |
 
+**Independent org-side verification (2026-10-02).** Steward verified the above row by navigating cp-biz Setup → Deployment Status directly against `cloudpremise.my.salesforce.com` (OrgId `00D3k000000tHlJEAU`). The org-side record shows: Name `0AfPj000002HcSj` · Type API · Deployed By Greg Cook · Start 3:35 PM / End 3:56 PM (21-min wall-clock, matches CI 1297s) · Number of Files 1,753 · Total Unzipped Size 44,084,215 bytes (44.08 MB) · Deploy Components 1548/1548 · Run Apex Tests 2024/2024 · Deployment Succeeded. Independent of the CI side — the GitHub Actions run observed a Succeeded status via `sf project deploy start --json`; the Salesforce org observed the same artifact via its own deployment subsystem. Both paths concur on every metric. §9.CP-1..CP-5 attested on commit `6954f07` with a two-path witness — CI emission ↔ org receipt.
+
 ## §10 Execution plan
 
 ### §10.1 Pre-work verification
