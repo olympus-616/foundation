@@ -1,3 +1,7 @@
+---
+pitch: "Gateway refuses hostile traffic before it costs us money"
+---
+
 # Ares hostile-defense attestation — per-repo in-flight state for PR #66 (W3+W4 + §11.1 + CF_SECRET localhost exempt)
 
 > File: `brain_2.7.eos-1.1.md` — **first sub-attestation of `brain_2.7.eos-1`** (hostile-universe defense). Slices the **ares** leg out of the cross-repo HUD cascade so ares-specific verification, cross-repo dependencies, and merge readiness are tracked in a single-authority doc. Umbrella semantics (L1–L14 cascade, §9.HUD-1…13 assertions) remain in the parent cycle; this doc is the ares-scoped attestation loop.

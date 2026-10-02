@@ -1,3 +1,7 @@
+---
+pitch: "WAF + sealed origin secrets at the CDN edge"
+---
+
 # Zeus HUD W5 + W7b — WAF hardening + origin secret metadata
 
 > File: `brain_2.7.eos-1.6.md` — **sixth sub-attestation of `brain_2.7.eos-1`** (hostile-universe defense). Peer of `eos-1.1` (ares), `eos-1.2` (hermes), `eos-1.3` (plutus HUD W2), `eos-1.4` (olympus-grid W1), `eos-1.5` (parent coordinator). Slices the **zeus** leg.

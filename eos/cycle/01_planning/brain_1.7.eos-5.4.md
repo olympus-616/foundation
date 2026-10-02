@@ -1,3 +1,7 @@
+---
+pitch: "No vendor lock-in at any building block"
+---
+
 # Sovereign substrate — no vendor lock-in at any technical building block
 
 | | |

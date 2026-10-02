@@ -1,3 +1,7 @@
+---
+pitch: "Ledger survives server kills — not one dollar lost"
+---
+
 # Plutus HUD W2 — three-tier ring buffer + SIGTERM last-gasp + `cluster_name → domain` rename — per-repo attestation for PR #42
 
 > File: `brain_2.7.eos-1.3.md` — **third sub-attestation of `brain_2.7.eos-1`** (hostile-universe defense). Peer of `eos-1.1` (ares) + `eos-1.2` (hermes). Slices the **plutus** leg out of the HUD cascade.

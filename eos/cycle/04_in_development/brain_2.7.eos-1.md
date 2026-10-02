@@ -1,3 +1,7 @@
+---
+pitch: "The platform survives hostile traffic — no runaway bills"
+---
+
 # Hostile-universe defense — the platform survives adversarial exploitation of its own cost, capacity, and reachability primitives
 
 > File: `brain_2.7.eos-1.md` — the first EOS cycle on the `brain/2.7.x.x` deployment branch family. The 1.7-family docs in `04_in_development/` (`brain_1.7.eos-5*`) roll forward into `brain/2.7.x.x` without rename per Steward direction 2026-09-01.

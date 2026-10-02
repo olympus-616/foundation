@@ -1,3 +1,7 @@
+---
+pitch: "Rebuild the whole platform from the alpha node alone"
+---
+
 # EOS-6 — Survive total destruction except the alpha node
 
 > File: `brain_1.7.eos-6.md` (00_backlog card — Attested but not yet promoted to planning)

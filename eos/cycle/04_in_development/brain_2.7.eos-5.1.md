@@ -1,3 +1,7 @@
+---
+pitch: "Ship the /agent surface to production"
+---
+
 # /agent surface production ship — blocked by local-sentinel bundleId
 
 > File: `brain_2.7.eos-5.1.md` — first sub-attestation of `brain_2.7.eos-5` (brain-genesis / Olympus-Brain agent-app extension). Scope: production ship of the `/agent` route.

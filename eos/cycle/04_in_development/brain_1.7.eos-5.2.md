@@ -1,3 +1,7 @@
+---
+pitch: "No paid endpoint accepts an unidentified caller"
+---
+
 # Guest-access lockdown — no revenue-attributing endpoint admits an unattributed request
 
 > File name: `brain_1.7.eos-5.2.md` — second sub-ordinal off `brain_1.7.eos-5` covering the "properly locked down from guest access" attestation.

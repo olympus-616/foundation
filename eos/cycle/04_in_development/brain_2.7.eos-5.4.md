@@ -1,3 +1,7 @@
+---
+pitch: "Per-cluster LLM keys — no shared tenancy"
+---
+
 # Templeathena / Logos — dead OpenAI key routing gap; per-cluster keys not yet built
 
 > File: `brain_2.7.eos-5.4.md` — fourth sub-attestation of `brain_2.7.eos-5` (brain-genesis). Scope: agentId `logos` / `athena` / `cosmos` all map to openai provider with stale SSM key. Templeathena chamber currently must use `agentId:'thoth'` (anthropic/Claude) as workaround.

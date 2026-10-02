@@ -1,3 +1,7 @@
+---
+pitch: "Every merge to main IS the production deploy"
+---
+
 # Checking into brain/1.7.x.x IS the production deployment — the merge IS the arrival in production
 
 > File: `brain_1.7.eos-4.md`

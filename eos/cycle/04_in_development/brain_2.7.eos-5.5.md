@@ -1,3 +1,7 @@
+---
+pitch: "Enforce one cycle branch per repo per cycle"
+---
+
 # Iris agent work living on neuralpathway/thought branches instead of `cycle/eos-<N>`
 
 > File: `brain_2.7.eos-5.5.md` — fifth sub-attestation of `brain_2.7.eos-5` (brain-genesis). Scope: cycle-branch convention violation. Iris agent work lives on `@alchemisthomer/neuralpathway/…iris_2_7_consolidation` — a per-thought branch — not on the shared `cycle/eos-<N>` per parent CLAUDE.md.

@@ -1,3 +1,7 @@
+---
+pitch: "Globally reachable through the alpha node"
+---
+
 # EOS-8 — Global accessibility via the alpha node's networks
 
 > File: `brain_1.7.eos-8.md` (00_backlog card — Attested but not yet promoted to planning)

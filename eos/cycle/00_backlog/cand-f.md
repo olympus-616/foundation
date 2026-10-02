@@ -1,3 +1,7 @@
+---
+pitch: "Identity verified, not merely authorized"
+---
+
 # CAND-F — Identity is verified, not merely authorized
 
 > File: `cand-f.md` (00_backlog proposed candidate — not yet attested or EOS-numbered)

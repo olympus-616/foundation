@@ -1,3 +1,7 @@
+---
+pitch: "Agent workspace scaffolding into main"
+---
+
 # iris PR #135 — 2.7 pre-transition consolidation carrying agent workspace scaffolding
 
 > File: `brain_2.7.eos-5.2.md` — second sub-attestation of `brain_2.7.eos-5` (brain-genesis). Scope: iris PR #135 merge decision — it carries the entire `iris/reactforce/agent/` workspace scaffolding.

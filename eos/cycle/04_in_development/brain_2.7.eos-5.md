@@ -1,3 +1,7 @@
+---
+pitch: "An AI operations team that runs your actual life"
+---
+
 # Olympus-Brain Genesis — operational digital twin v1 shipping through the agent-app extension
 
 > File: `brain_2.7.eos-5.md` — **fifth primary EOS cycle on the `brain/2.7.x.x` family** (after HUD `eos-1`, aeon `eos-2`, argos `eos-3`, kronos `eos-4`). Source-of-truth feature file: [`olympus-grid/docs/features/04_in_development/olympus-brain-genesis.md`](../../../../olympus-grid/docs/features/04_in_development/olympus-brain-genesis.md) — **`FT-BRAIN-GENESIS`**, priority `high`, effort `XL`, owner `@alchemisthomer`. Primary contract: `olympus-grid/docs/olympus-brain-spec-athena-2.7-2026-09-01.md` (Steward-authored spec, re-read at every session entry).

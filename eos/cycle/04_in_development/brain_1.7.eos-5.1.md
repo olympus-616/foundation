@@ -1,3 +1,7 @@
+---
+pitch: "Launch-ready in every country Apple ships to"
+---
+
 # Globally deployable — alongside Apple's channels
 
 > File name: `brain_1.7.eos-5.1.md` — sub-ordinal opened parallel to `brain_1.7.eos-5` so the EOS-5 shape is preserved while the compliance chain runs alongside.

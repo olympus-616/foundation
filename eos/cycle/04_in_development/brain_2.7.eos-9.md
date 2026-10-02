@@ -1,3 +1,7 @@
+---
+pitch: "Run the Steward's own business on the platform"
+---
+
 # cp-biz production-readiness — delete `deprecate/` + raise test coverage to ≥75% org-wide + validate-push pipeline
 
 > File: `brain_2.7.eos-9.md` — **ninth primary EOS cycle on the `brain/2.7.x.x` family** (after HUD `eos-1`, aeon `eos-2`, argos `eos-3`, kronos `eos-4`, brain-genesis `eos-5`, poseidon `eos-6`, iris `eos-7`, olympus-gpt `eos-8`). Hardening cycle, not a feature cycle.

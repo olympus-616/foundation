@@ -1,3 +1,7 @@
+---
+pitch: "Players feed back; software improves — a self-building loop"
+---
+
 # Portal lifecycle + cycle tracking infrastructure
 
 > File: `brain_1.7.eos-1.md`

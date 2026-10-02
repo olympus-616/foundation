@@ -1,3 +1,7 @@
+---
+pitch: "Tenants fully isolated across nodes and clusters"
+---
+
 # CAND-E — Tenant isolation across nodes and clusters
 
 > File: `cand-e.md` (00_backlog proposed candidate — not yet attested or EOS-numbered)

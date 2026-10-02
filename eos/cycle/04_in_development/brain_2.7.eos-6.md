@@ -1,3 +1,7 @@
+---
+pitch: "AI tools register themselves at runtime"
+---
+
 # Poseidon — dynamic MCP router (v2 control plane) — framework cutover + tool re-introduction cascade
 
 > File: `brain_2.7.eos-6.md` — **sixth primary EOS cycle on the `brain/2.7.x.x` family** (after HUD `eos-1`, aeon `eos-2`, argos `eos-3`, kronos `eos-4`, brain-genesis `eos-5`). Source: Steward-provided poseidon open-work summary 2026-09-25.

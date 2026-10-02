@@ -1,3 +1,7 @@
+---
+pitch: "Triage the EOS-5 reconciliation backlog"
+---
+
 # EOS-5 Attestation Triage — `eos-5b-triage.md`
 
 > **Purpose:** This document is the minimum closure criteria for the EOS-5 attestation statement —

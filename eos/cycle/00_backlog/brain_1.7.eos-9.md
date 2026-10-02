@@ -1,3 +1,7 @@
+---
+pitch: "Scale globally on Fargate per user"
+---
+
 # EOS-9 — Global horizontal scale via Fargate, governed by provisioning authority
 
 > File: `brain_1.7.eos-9.md` (00_backlog card — Attested but not yet promoted to planning)

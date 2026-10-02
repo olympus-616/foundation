@@ -1,3 +1,7 @@
+---
+pitch: "The AI's recursive self-improvement loop kernel"
+---
+
 # Aeon — the loop kernel that binds the fleet into an infinitely-recursive self-improvement cycle
 
 > File: `brain_2.7.eos-2.md` — **second primary EOS cycle on the `brain/2.7.x.x` family** (first was HUD hostile-universe defense, `brain_2.7.eos-1`). **Design stage.** Source material: Steward + aeon-agent design-stage capture 2026-09-25 — *"Aeon — Design Stage Prompt for the EOS Agent."*

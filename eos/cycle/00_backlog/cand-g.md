@@ -1,3 +1,7 @@
+---
+pitch: "The 7% tithe actually reaches the cause"
+---
+
 # CAND-G — The accounted royalty is actually disbursed to the cause
 
 > File: `cand-g.md` (00_backlog proposed candidate — not yet attested or EOS-numbered)

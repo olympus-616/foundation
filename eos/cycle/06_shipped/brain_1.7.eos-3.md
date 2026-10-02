@@ -1,3 +1,7 @@
+---
+pitch: "From empty folder to five live surfaces — zero drift"
+---
+
 # Void → every-surface manifestation — the platform reproducible from nothing, zero errors, zero warnings, forever
 
 > File: `brain_1.7.eos-3.md`

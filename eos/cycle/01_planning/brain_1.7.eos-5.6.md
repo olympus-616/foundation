@@ -1,3 +1,7 @@
+---
+pitch: "Wallet balance never drifts — ever"
+---
+
 # Durable shell balance — every user's sea-shell balance is correct, atomic, and observable on Identity and Profile
 
 | | |

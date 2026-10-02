@@ -1,3 +1,7 @@
+---
+pitch: "User credentials sealed from the moment of capture"
+---
+
 # Sealed-at-capture credential sovereignty — no clear-text credentials on any wire between capture surface and target god
 
 | | |

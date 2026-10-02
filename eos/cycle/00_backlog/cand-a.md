@@ -1,3 +1,7 @@
+---
+pitch: "Roll back a bad deploy without losing data"
+---
+
 # CAND-A — Roll back a faulty production deploy without data loss
 
 > File: `cand-a.md` (00_backlog proposed candidate — not yet attested or EOS-numbered)

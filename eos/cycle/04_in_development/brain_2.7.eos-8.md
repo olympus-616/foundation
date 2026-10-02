@@ -1,3 +1,7 @@
+---
+pitch: "Public developer portal at olympus-gpt.ai"
+---
+
 # olympus-gpt.ai — developer portal open work + 224-route forecasted API surface
 
 > File: `brain_2.7.eos-8.md` — **eighth primary EOS cycle on the `brain/2.7.x.x` family** (after HUD `eos-1`, aeon `eos-2`, argos `eos-3`, kronos `eos-4`, brain-genesis `eos-5`, poseidon `eos-6`, iris `eos-7`).

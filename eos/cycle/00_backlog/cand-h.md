@@ -1,3 +1,7 @@
+---
+pitch: "The AI loop stays bounded and governed"
+---
+
 # CAND-H — The recursive loop is bounded and governed
 
 > File: `cand-h.md` (00_backlog proposed candidate — not yet attested or EOS-numbered)

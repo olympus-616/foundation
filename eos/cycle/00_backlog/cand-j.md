@@ -1,3 +1,7 @@
+---
+pitch: "Terms + privacy accepted at every signup"
+---
+
 # CAND-J — Terms, privacy, and customer agreement accepted at signup
 
 > File: `cand-j.md` (00_backlog proposed candidate — Business/Legal Class — not yet attested)

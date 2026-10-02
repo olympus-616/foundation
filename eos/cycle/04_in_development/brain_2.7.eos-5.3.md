@@ -1,3 +1,7 @@
+---
+pitch: "Port the canonical agent-architecture docs forward"
+---
+
 # Canonical agent-design docs port — `OLYMPUS_AGENT_MVP.md` + `OLYMPUS_BRAIN_ARCHITECTURE.md` + `TEMPLEATHENA_KEY_MANAGEMENT.md` missing from working branch
 
 > File: `brain_2.7.eos-5.3.md` — third sub-attestation of `brain_2.7.eos-5` (brain-genesis). Scope: three canonical agent-design docs live on the stale `olympus-agent-mvp` branch (2026-08-21) and have NOT been ported to the current working branch `iris_2_7_consolidation`.
