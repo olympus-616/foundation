@@ -1,3 +1,7 @@
+---
+pitch: "Game client speaks the sovereign cosmos-logos wire"
+---
+
 # Omens sovereign-envelope v2 primitives + wire-schema `EndpointUrl → Domain` cutover — per-repo attestation for PR #60
 
 > File: `brain_1.7.eos-5.9.md` — **ninth sub-attestation of EOS-5**. Peer of `eos-5.7` (apollo) + `eos-5.8` (athena); omens is the client-side game engine consumer of the sovereign-envelope v2 wire the athena/apollo/turtleshell-web/turtleshell-ios PRs already shipped. This doc is omens' per-repo attestation loop.

@@ -1,3 +1,7 @@
+---
+pitch: "Money moves only via Stripe + Apple Pay"
+---
+
 # EOS-12 — Money moves only through trusted payment providers
 
 > File: `brain_1.7.eos-12.md` (00_backlog card — Attested but not yet promoted to planning)

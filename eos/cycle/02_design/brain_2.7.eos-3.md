@@ -1,3 +1,7 @@
+---
+pitch: "Observability that runs on a solar-powered Pi"
+---
+
 # Argos v2 — the loyal watcher; observability god that runs a billion years on a solar-powered Pi OR in ECS at scale
 
 > File: `brain_2.7.eos-3.md` — **third primary EOS cycle on the `brain/2.7.x.x` family** (after `brain_2.7.eos-1` HUD and `brain_2.7.eos-2` aeon). **Design stage.** Source: Steward + argos-agent design-ticket capture 2026-09-25 — *"Argos v2 — Design ticket intake."*

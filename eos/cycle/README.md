@@ -223,6 +223,7 @@ The result: each EOS cycle leaves exactly ONE squash commit on `brain/1.7.x.x` p
 
 - [`TEMPLATE.md`](TEMPLATE.md) — empty scaffold; copy when starting a new cycle.
 - [`GOALS.md`](GOALS.md) — master kanban canon: all twelve attested goals + twelve proposed candidates + launch-critical ranking.
+- [`.eos/cards.json`](.eos/cards.json) — **display-metadata index**. One `pitch` per card (plain-English, sales-ready, 4-10 words) rendered as the card title in the EOS kanban UI. The cycle doc's H1 is the full attestation claim and is too long for a card title; `.eos/cards.json` carries the short-form headline for display + marketing use. **When you open or move a cycle, add/update its entry in this file.** Keeps shipped-doc content untouched (true to append-only discipline) while giving the kanban + sales material a human-readable title.
 
 ### `06_shipped/` — immutable closed cycles
 

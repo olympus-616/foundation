@@ -1,3 +1,7 @@
+---
+pitch: "Zero-trust envelopes on every tool call; secrets sealed at rest"
+---
+
 # Poseidon sovereign-envelope + sealed-credential-at-rest — cosmos-logos boundary on every MCP request, sealed-at-rest for held credentials
 
 > File: `brain_1.7.eos-5.11.md` — **eleventh sub-attestation of EOS-5**. Peer of apollo (`5.7`), athena (`5.8`), omens (`5.9`), plutus attribution (`5.10`). Slices the **poseidon** leg out of the BYOK / sovereign-AI cascade umbrellaed by [`brain_1.7.eos-5.5.md`](brain_1.7.eos-5.5.md).

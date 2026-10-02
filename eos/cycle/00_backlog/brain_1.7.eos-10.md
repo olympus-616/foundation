@@ -1,3 +1,7 @@
+---
+pitch: "Zero secrets in source control — keys injected at boot"
+---
+
 # EOS-10 — No committed secrets; keys injected at start-up; steward holds no copies
 
 > File: `brain_1.7.eos-10.md` (00_backlog card — Attested but not yet promoted to planning)

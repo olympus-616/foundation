@@ -1,3 +1,7 @@
+---
+pitch: "Every portal workspace accounted for"
+---
+
 # Iris portal fleet — PRs #135 (2.7 consolidation) + #136 (olympus-gpt API docs) + workspace inventory
 
 > File: `brain_2.7.eos-7.md` — **seventh primary EOS cycle on the `brain/2.7.x.x` family**. Source: Steward-provided iris in-progress prompt 2026-09-25 (read-only workspace survey directive).

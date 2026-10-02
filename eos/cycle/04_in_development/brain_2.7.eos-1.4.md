@@ -1,3 +1,7 @@
+---
+pitch: "Fleet-wide cluster schema anchored in one place"
+---
+
 # Olympus-grid HUD W1 schema anchor — consolidated PR #345 + drift + Steward-review blockers
 
 > File: `brain_2.7.eos-1.4.md` — **fourth sub-attestation of `brain_2.7.eos-1`** (hostile-universe defense). Peer of `eos-1.1` (ares), `eos-1.2` (hermes), `eos-1.3` (plutus HUD W2). Slices the **olympus-grid** leg — the W1 schema anchor — plus drift beyond the PR body.

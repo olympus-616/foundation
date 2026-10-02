@@ -1,3 +1,7 @@
+---
+pitch: "Production state is reproducible and version-provenanced"
+---
+
 # CAND-L — Production state is reproducible and version-provenanced
 
 > File: `cand-l.md` (00_backlog proposed candidate — Business/Legal Class — not yet attested)

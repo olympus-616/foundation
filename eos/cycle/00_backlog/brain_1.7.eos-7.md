@@ -1,3 +1,7 @@
+---
+pitch: "Nothing granted without explicit admin approval"
+---
+
 # EOS-7 — Least privilege; access granted only via Identity__c
 
 > File: `brain_1.7.eos-7.md` (00_backlog card — Attested but not yet promoted to planning)

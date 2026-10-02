@@ -1,3 +1,7 @@
+---
+pitch: "Message router hardened against URL abuse"
+---
+
 # Hermes hostile-defense attestation — per-repo in-flight state for PR #62 (§11.5 URL normalize + unmounted route modules)
 
 > File: `brain_2.7.eos-1.2.md` — **second sub-attestation of `brain_2.7.eos-1`** (hostile-universe defense). Slices the **hermes** leg out of the cross-repo HUD cascade so the reviewer's split-vs-ship recommendation is captured as a governed §5 ruling, and the §11.5 audit-trail-unblock ships on the timeline HUD needs. Peer of ares' `brain_2.7.eos-1.1.md`.

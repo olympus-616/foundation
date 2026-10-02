@@ -1,3 +1,7 @@
+---
+pitch: "Surface degradation before any customer feels it"
+---
+
 # CAND-B — System is observed; degradation surfaces before customer impact
 
 > File: `cand-b.md` (00_backlog proposed candidate — not yet attested or EOS-numbered)

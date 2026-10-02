@@ -1,3 +1,7 @@
+---
+pitch: "Chat with bring-your-own-key — provider-neutral"
+---
+
 # Athena EOS-5.4 sovereign-AI consolidation — per-repo attestation for PR #106 (BYOK reference implementation)
 
 > File: `brain_1.7.eos-5.8.md` — **eighth sub-attestation of EOS-5**. Athena is the **anchor reference implementation** of the BYOK / sovereign-AI cascade governed by [`brain_1.7.eos-5.5.md`](brain_1.7.eos-5.5.md); apollo (`brain_1.7.eos-5.7.md`) is the voice mirror of this athena wire. This doc is athena's per-repo attestation loop.

@@ -1,3 +1,7 @@
+---
+pitch: "The platform stays out of PCI scope"
+---
+
 # CAND-I — System stays out of PCI scope
 
 > File: `cand-i.md` (00_backlog proposed candidate — Business/Legal Class — not yet attested)

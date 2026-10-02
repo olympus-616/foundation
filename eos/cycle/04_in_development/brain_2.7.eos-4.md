@@ -1,3 +1,7 @@
+---
+pitch: "AI-authored adversarial testing of any platform"
+---
+
 # Kronos — Universal Adversarial Assurance Platform framework buildout
 
 > File: `brain_2.7.eos-4.md` — **fourth primary EOS cycle on the `brain/2.7.x.x` family** (after HUD `eos-1`, aeon `eos-2`, argos `eos-3`). Source: Steward `--eos` prompt 2026-09-25 authorizing this ticket, plus the on-disk kronos framework at `kronos/`.

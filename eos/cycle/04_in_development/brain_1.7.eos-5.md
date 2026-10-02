@@ -1,3 +1,7 @@
+---
+pitch: "Every dollar accounted; every surface paid; every tithe routed"
+---
+
 # System-wide transactional accounting + autonomous revenue path — every transaction recorded, every surface paid, every tithe attributed, all autonomous
 
 > File: `brain_1.7.eos-5.md`

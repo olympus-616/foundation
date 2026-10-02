@@ -1,4 +1,5 @@
 ---
+pitch: "The EOS kanban attests its own existence"
 controls: [CC1.1, CC1.4, CC2.2, CC2.3, CC3.1, CC3.4, CC4.1, CC5.2, CC5.3, CC6.1, CC6.2, CC6.7, CC7.2, CC8.1]
 attestation_status: in_development
 prior_cycle: brain_1.7.eos-4.md

@@ -1,3 +1,7 @@
+---
+pitch: "Voice synthesis with bring-your-own-key"
+---
+
 # Apollo sovereign-AI — BYOK envelope decrypt on `/speak` + `/music`, per-turn Plutus attribution, per-response provenance header
 
 > File: `brain_1.7.eos-5.7.md` — seventh sub-attestation of EOS-5. Slices the **apollo** leg out of the BYOK / sovereign-AI cascade umbrellaed by [`brain_1.7.eos-5.5.md`](brain_1.7.eos-5.5.md) (sealed-at-capture credential sovereignty). Companion status record: `/Users/gregory/temp/eos-5.4-apollo-sovereign-ai-status.md` (recorded 2026-09-25 by thoth); this cycle doc absorbs it into EOS canon.

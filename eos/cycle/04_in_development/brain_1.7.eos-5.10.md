@@ -1,3 +1,7 @@
+---
+pitch: "Every API call attributed to a paying account"
+---
+
 # Plutus attribution subledger + message-lifecycle metering — per-repo attestation for PR #42 (EOS-5 slice)
 
 > File: `brain_1.7.eos-5.10.md` — **tenth sub-attestation of EOS-5**. Peer of `eos-5.7` (apollo) + `eos-5.8` (athena) + `eos-5.9` (omens). Slices the **attribution / message-lifecycle** scope of plutus PR #42 out of the EOS-5 primary (transactional accounting) and eos-5.3 (tithe integrity) territory.

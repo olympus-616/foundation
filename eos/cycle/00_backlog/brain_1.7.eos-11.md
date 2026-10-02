@@ -1,3 +1,7 @@
+---
+pitch: "Steward can't read customer data without consent"
+---
+
 # EOS-11 — Steward is not a data handler without customer-provisioned access
 
 > File: `brain_1.7.eos-11.md` (00_backlog card — Attested but not yet promoted to planning)

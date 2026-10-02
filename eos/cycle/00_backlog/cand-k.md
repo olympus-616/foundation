@@ -1,3 +1,7 @@
+---
+pitch: "SOC2 evidence trail — real auditor engagement"
+---
+
 # CAND-K — SOC2 evidence trail exists and the auditor engagement is real
 
 > File: `cand-k.md` (00_backlog proposed candidate — Business/Legal Class — not yet attested)

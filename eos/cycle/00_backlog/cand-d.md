@@ -1,3 +1,7 @@
+---
+pitch: "Customer data durable and recoverable"
+---
+
 # CAND-D — Customer data is durable and recoverable
 
 > File: `cand-d.md` (00_backlog proposed candidate — not yet attested or EOS-numbered)

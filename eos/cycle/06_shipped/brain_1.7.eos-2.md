@@ -1,3 +1,7 @@
+---
+pitch: "The platform spawns its own cloud — and tears it back down"
+---
+
 # Says what it does, does what it says — claim 1: athena-717 reachability
 
 > File: `brain_1.7.eos-2.md`

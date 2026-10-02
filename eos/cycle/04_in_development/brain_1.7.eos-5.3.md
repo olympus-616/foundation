@@ -1,3 +1,7 @@
+---
+pitch: "7% of every dollar reaches a cause — by construction"
+---
+
 # Tithe integrity + first-dollar-through — every dollar of net settlement writes an idempotent, reconciled, reversible 7% tithe row against the payer's chosen Cause
 
 > File name: `brain_1.7.eos-5.3.md` — third sub-ordinal off `brain_1.7.eos-5` covering the operational preconditions between READINESS and first-dollar-through-with-integrity.

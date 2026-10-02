@@ -1,3 +1,7 @@
+---
+pitch: "Partial failure degrades cleanly — no cascade"
+---
+
 # CAND-C — Partial failure degrades cleanly, no cascade
 
 > File: `cand-c.md` (00_backlog proposed candidate — not yet attested or EOS-numbered)
