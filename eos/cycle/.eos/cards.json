@@ -123,6 +123,9 @@
     "01_planning/brain_1.7.eos-5.6.md": {
       "pitch": "Wallet balance never drifts — ever"
     },
+    "01_planning/brain_2.7.eos-11.md": {
+      "pitch": "One .env, read deterministically by every god"
+    },
 
     "00_backlog/brain_1.7.eos-6.md": {
       "pitch": "Rebuild the whole platform from the alpha node alone"
