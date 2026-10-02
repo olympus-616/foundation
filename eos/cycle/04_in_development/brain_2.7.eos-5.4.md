@@ -20,7 +20,7 @@ pitch: "Per-cluster LLM keys — no shared tenancy"
 | **Owner** | UNASSIGNED — backend athena change is `--olympus-616` agent scope; iris-agent flags but does not own |
 | **Cross-repo** | athena (backend/api) + iris (surface) + olympus-616 parent (deploy chain) |
 | **Estimated effort** | M/L depending on path chosen — key rotation is fast; per-cluster routing is the real design target |
-| **Actual effort** | **2026-10-02** — surface-level manifest-driven routing shipped: schema (cosmos-logos) + Athena/Apollo/Poseidon manifest declarations + Athena `handleChat` default-via-manifest + iris `LoadedManifest.llm` parse + iris `Mouth.tsx` custom-chamber `body.agentId` wiring + fleetFetch `x-user-identity` on cross-origin chat POSTs. iris PR on existing agent branch (commit `d7bb245`) + olympus-grid PR [#356](https://github.com/olympus-616/olympus-grid/pull/356). openai + anthropic verified; gemini fails under load. |
+| **Actual effort** | **2026-10-02** — surface-level manifest-driven routing shipped: schema (cosmos-logos) + Athena/Apollo/Poseidon manifest declarations + Athena `handleChat` default-via-manifest + iris `LoadedManifest.llm` parse + iris `Mouth.tsx` custom-chamber `body.agentId` wiring + fleetFetch `x-user-identity` on cross-origin chat POSTs. iris PR on existing agent branch (commit `d7bb245`) + olympus-grid PR [#356](https://github.com/olympus-616/olympus-grid/pull/356). openai + anthropic verified; gemini fails under load. **PR #356 merged 2026-10-02T21:34:13Z as commit `6954f075`;** surface routing lands on cp-biz when deploy-push-cp-biz (run [37067617179](https://github.com/olympus-616/olympus-grid/actions/runs/37067617179)) completes green — §9.CP-* verification pending. |
 
 ---
 
