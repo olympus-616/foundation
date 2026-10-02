@@ -12,7 +12,7 @@ pitch: "Per-cluster LLM keys — no shared tenancy"
 |---|---|
 | **Branch family** | `brain/2.7.x.x` |
 | **Cycle ordinal** | `eos-5.4` — fourth sub of brain-genesis. |
-| **Status** | `In Development` — BLOCKED; cross-repo backend work required. Athena side needs SSM key rotation OR per-cluster key routing implementation. Also blocked on sibling `brain_2.7.eos-5.3` porting the `TEMPLEATHENA_KEY_MANAGEMENT.md` spec to the working branch. |
+| **Status** | `In Development` — **SURFACE-LEVEL ROUTING LANDED** (additive to §2.A/§2.B — neither path *closed* by this work). Path B (per-cluster key routing) still queued. Tonight's surface work: cosmos-logos schema gained `llm`/`tts`/`mcp` capability blocks; Athena/Apollo/Poseidon manifests declare their preferred engines; Athena `handleChat` reads her own `llm.preferred_engine` from disk per-request as the default; iris `LoadedManifest` parses the new blocks; iris `Mouth.tsx` custom-chamber branch reads the chamber's `llm.preferred_engine` and sends it as `body.agentId` on the chat POST. **Validated end-to-end 2026-10-02** from scratch (`business-innovation-652`) + alpha (`athena-303` local): `openai gpt-4o` returns live responses; `anthropic` (thoth) works; `google` (gemini) fails under provider-side load. Backend per-cluster key routing (§2.B) + `TEMPLEATHENA_KEY_MANAGEMENT.md` port (sibling 5.3) remain prerequisites for cluster-owned keys. |
 | **Opened** | 2026-09-25 |
 | **Prior cycle** | `brain_2.7.eos-5` (brain-genesis primary) |
 | **Theme** | Rotate stale SSM key OR implement per-cluster key routing per the spec at `docs/TEMPLEATHENA_KEY_MANAGEMENT.md`. Unblock the Templeathena chamber's `agentId:'logos'/'athena'/'cosmos'` paths so `thoth` isn't the only working option. |
@@ -20,7 +20,7 @@ pitch: "Per-cluster LLM keys — no shared tenancy"
 | **Owner** | UNASSIGNED — backend athena change is `--olympus-616` agent scope; iris-agent flags but does not own |
 | **Cross-repo** | athena (backend/api) + iris (surface) + olympus-616 parent (deploy chain) |
 | **Estimated effort** | M/L depending on path chosen — key rotation is fast; per-cluster routing is the real design target |
-| **Actual effort** | — |
+| **Actual effort** | **2026-10-02** — surface-level manifest-driven routing shipped: schema (cosmos-logos) + Athena/Apollo/Poseidon manifest declarations + Athena `handleChat` default-via-manifest + iris `LoadedManifest.llm` parse + iris `Mouth.tsx` custom-chamber `body.agentId` wiring + fleetFetch `x-user-identity` on cross-origin chat POSTs. iris PR on existing agent branch (commit `d7bb245`) + olympus-grid PR [#356](https://github.com/olympus-616/olympus-grid/pull/356). openai + anthropic verified; gemini fails under load. |
 
 ---
 

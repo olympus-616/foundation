@@ -12,14 +12,14 @@ pitch: "Ship the /agent surface to production"
 |---|---|
 | **Branch family** | `brain/2.7.x.x` |
 | **Cycle ordinal** | `eos-5.1` — first sub of brain-genesis. |
-| **Status** | `In Development` — BLOCKED on Steward go. Plugin__mdt `Configuration__c.bundleId` pinned to `.dev.priv45` (local dev sentinel); `/agent` path resolves ONLY when browser sends `?bundleDomain=http://localhost:5176`. **No production ship exists.** 4-way bundleId refs agree — but on the local dev value, not a shipped hash. |
+| **Status** | `In Development` — **SURFACE SHIPPED, awaiting merge.** Bundle `.dev.nsph` is a real production artifact (not a `.dev.priv45` sentinel). 5-way bundleId consistency verified: iris `build/index.html`, olympus-grid `staticresources/agent/index.html`, both `app.main.v1.js` loader `reactBundleId` refs, and `Plugin.iris_deployment_path_agent.bundleId` all agree on `.dev.nsph`. **iris PR + olympus-grid PR #356** pair OPEN against `brain/2.7.x.x`. Pending Steward §5 sign + merge + alpha-org deploy + prod hard-refresh (§2.3) + bundle-ceremony script verification (§2.2 / §9.AGT-1). |
 | **Opened** | 2026-09-25 |
 | **Prior cycle** | `brain_2.7.eos-5` (brain-genesis primary — agent-app extension) |
 | **Theme** | Land a real (non-sentinel) `bundleId` for `/agent` so the surface resolves in production without the `?bundleDomain=` local override. |
 | **Feedback inputs** | Steward survey 2026-09-25; iris/olympus-grid agent-bundle-deploy memory `project_agent_bundle_deploy.md`; bundle-ceremony discipline per olympus-grid CLAUDE.md |
 | **Owner** | iris-agent (implementation); iris + olympus-grid PR pair authors |
 | **Estimated effort** | S — `cd iris && npm run deployAlphaAgent` (build + publishAgent + `sf project deploy start` to alpha-org); then pin the resulting bundleId + 4-way consistency check + open iris PR + olympus-grid PR pair. |
-| **Actual effort** | — |
+| **Actual effort** | **2026-10-02** — `npm run publishAgent` produced bundle `.dev.nsph` (~4.52 MB zipped, ~250 KB under SF 5 MB limit); `Plugin.iris_deployment_path_agent.bundleId` pinned; 5-way consistency verified; iris commit `d7bb245` on existing agent branch + olympus-grid PR [#356](https://github.com/olympus-616/olympus-grid/pull/356) opened against `brain/2.7.x.x`. Alpha-org deploy + prod verification pending Steward merge sign-off. |
 
 ---
 
