@@ -163,6 +163,16 @@ Single-command close. The §9 shape is binary — pass or fail.
 
 - **§9.CP-Q (meaningful-assertion review)** — every test file authored or extended in Part 2 is reviewed; the review verifies assertions reference observable behavior (not just method execution). Steward or secondary agent gate.
 
+## §9.1 Per-merge §9.CP-* evidence log (accumulating during cycle)
+
+Every merge to `brain/2.7.x.x` passes through `.github/workflows/deploy-push-cp-biz.yaml` and exercises the §9.CP-1..CP-5 shape against cp-biz. This log accumulates per-merge evidence as the cycle progresses toward the Part 3 validate-close in §2.4. **Each row is an attestation of the §9 SHAPE holding on a specific brain SHA — not a cycle close.** Cycle close requires §9.CP-6 (destructive-deploy removal) + §9.CP-7 (`validate-push-cp-biz.yaml` green on `workflow_dispatch`) + §9.CP-Q (assertion-quality review).
+
+**Note on deploy-vs-validate wording.** §9.CP-1's canonical formulation references `sf project deploy validate`; `deploy-push-cp-biz.yaml` runs `sf project deploy start`. The §9.CP-1..CP-4 assertion SHAPE (`status==Succeeded` · `componentErrors==0` · `testFailures==0` · `coverageViolations==0`) is identical under both; a full deploy achieving the shape is strictly stronger than validate alone — the changes actually land on cp-biz. §9.CP-5 is natively a deploy artifact (Release annotation with Deploy ID), so the deploy workflow is where it's canonically produced.
+
+| Date (UTC) | Merge SHA · PR | Deploy ID | §9.CP-1 | §9.CP-2 | §9.CP-3 | §9.CP-4 | §9.CP-5 | Duration | Evidence |
+|---|---|---|---|---|---|---|---|---|---|
+| 2026-10-02 21:34:13 | [`6954f07`](https://github.com/olympus-616/olympus-grid/commit/6954f075288eb491141ceec90ef59aa4e53522fb) · [PR #356](https://github.com/olympus-616/olympus-grid/pull/356) | `0AfPj000002HcSjKAK` | ✅ Succeeded | ✅ 1548/1548 (0 errors) | ✅ 2024/2024 (0 failures) | ✅ 0 warnings | ✅ Release [`cp-biz-deploy-6954f07`](https://github.com/olympus-616/olympus-grid/releases/tag/cp-biz-deploy-6954f07) | 1297s | [workflow run 37067617179](https://github.com/olympus-616/olympus-grid/actions/runs/37067617179) + [PR follow-up comment](https://github.com/olympus-616/olympus-grid/pull/356#issuecomment-cp-biz-deploy-post-merge) |
+
 ## §10 Execution plan
 
 ### §10.1 Pre-work verification
