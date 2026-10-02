@@ -148,6 +148,15 @@
     "00_backlog/brain_1.7.eos-12.md": {
       "pitch": "Money moves only via Stripe + Apple Pay"
     },
+    "00_backlog/brain_2.7.eos-12.md": {
+      "pitch": "Close the anon Stripe subscription-status leak"
+    },
+    "00_backlog/brain_2.7.eos-13.md": {
+      "pitch": "Expand MeteringEvent to carry the full trace"
+    },
+    "00_backlog/brain_2.7.eos-14.md": {
+      "pitch": "Ship the missing Plutus event vocabulary"
+    },
     "00_backlog/cand-a.md": {
       "pitch": "Roll back a bad deploy without losing data"
     },
@@ -183,6 +192,12 @@
     },
     "00_backlog/cand-l.md": {
       "pitch": "Production state is reproducible and version-provenanced"
+    },
+    "00_backlog/cand-m.md": {
+      "pitch": "Receive Stripe webhooks for BYO-Stripe tenants"
+    },
+    "00_backlog/cand-n.md": {
+      "pitch": "Enforce + visualize per-app plutus quotas"
     }
   }
 }

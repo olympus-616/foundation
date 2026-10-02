@@ -115,6 +115,24 @@
 
 ---
 
+## Plutus reconciliation deltas (source: `04_in_development/eos-5b-triage.md` + PR #42 scope-delta analysis 2026-10-02)
+
+> PR #42 lands twin cards `brain_1.7.eos-5.10` + `brain_2.7.eos-1.3` with narrow scope. The 2026-10-02 delta analysis surfaced work NOT covered by those twins; each row below is a known obligation. Detail stays in `eos-5b-triage.md`; this table carries only the board-level pointer. Three new cards absorb part of the delta — [`eos-12`](00_backlog/brain_2.7.eos-12.md) (anon-Stripe-leak hotfix), [`eos-13`](00_backlog/brain_2.7.eos-13.md) (MeteringEvent trace widening), [`eos-14`](00_backlog/brain_2.7.eos-14.md) (event vocabulary), plus [`cand-m`](00_backlog/cand-m.md) and [`cand-n`](00_backlog/cand-n.md) — rows below cross-reference those where applicable.
+
+| From | God / scope | Theme | Prospective shape |
+|---|---|---|---|
+| [GAP-01](04_in_development/eos-5b-triage.md) | plutus · olympus-grid | Tenant primitive — retire the `LedgerEntry.TenantId="default"` hardcode; `Tenant__c` + `Application__c` as the foundational data-isolation boundary (promoted 2026-06-27 from defer → must-close) | multi-tenant foundational cycle; schema overlaps [eos-13](00_backlog/brain_2.7.eos-13.md) trace widening — may absorb or run parallel |
+| [GAP-45](04_in_development/eos-5b-triage.md) | ‹fleet Pattern 1 emitters› | 5-tuple attribution stamping — every Pattern 1 emitter stamps `IdentitySub__c`, `AppKey__c`, `TenantId__c`, `AppSource__c`, `RequestId__c` | absorbed into [eos-13](00_backlog/brain_2.7.eos-13.md) §10.5 Pattern 1 emitter sweep |
+| [GAP-46](04_in_development/eos-5b-triage.md) | ‹fleet emitters› | `LedgerEntry.AccountId__c` shape canonicalization — pick one canonical shape across Ares + Apex emitters (cosmetic, 🟡 defer) | small follow-up cycle after [eos-13](00_backlog/brain_2.7.eos-13.md) ships |
+| [GAP-51](04_in_development/eos-5b-triage.md) | plutus | Ingest pipeline in-flight visibility — surface emit-but-not-received state before it becomes customer-visible silence (🔴 BLOCKER, restored 2026-06-30) | plutus sub-cycle; §9.V assertion anchor; candidate for its own primary ordinal |
+| [GAP-77](04_in_development/eos-5b-triage.md) | plutus | `cluster.*` events per-event 5-tuple attribution for multi-tenant readiness (🟡 defer) | sub-cycle of GAP-01 tenant primitive OR absorbed into [eos-13](00_backlog/brain_2.7.eos-13.md) + [eos-14](00_backlog/brain_2.7.eos-14.md) `cluster.*` family |
+| [GAP-78](04_in_development/eos-5b-triage.md) | ‹fleet auth› | Sign-in FAILURE telemetry — current silence on auth-fail is both a visibility gap and an adversary-detection blind spot | monitoring-attestation cycle (non-happy-path validation); companion to [eos-14](00_backlog/brain_2.7.eos-14.md) `api.audit.*` family |
+| [GAP-79](04_in_development/eos-5b-triage.md) | plutus · ‹fleet› | "No data without purpose" axiom in schema — declared-purpose column on every ledger row + adaptive response to unclassified traffic (🟡 defer; foundational architectural principle) | foundational monitoring-attestation cycle; absorbs GAP-77 + GAP-78; precondition for the HUD-adjacent attestation surface |
+| [GAP-83](04_in_development/eos-5b-triage.md) | plutus (FeedbackTrgHnd) | `feedback.submitted` 5-tuple attribution — FeedbackTrgHnd must call the same attribution-resolver fallback as `LedgerEntryEmitter` for `profile.*` events (🟡 non-blocker, log-only) | one-commit fix; roll into [eos-13](00_backlog/brain_2.7.eos-13.md) §10.5 sweep |
+| [GAP-90](04_in_development/eos-5b-triage.md) | athena · plutus | `athena.analyze` LLM cost/token metering — close the §9.R attribution black hole; gpt-4o-vision cost unaccounted today (🟡 non-blocker, log-only, relevant for Stripe validation) | sub-cycle; absorbed into [eos-14](00_backlog/brain_2.7.eos-14.md) when the `metering.vision.*` family (or `payment.consumption.*` with `provider=athena` discriminator) lands |
+
+---
+
 ## Notes
 
 - Every row is a **known obligation** — the fleet promised itself this work when the source cycle absorbed a source doc. Rows do not disappear silently; they graduate to cycle status or the Steward explicitly deprecates them.
