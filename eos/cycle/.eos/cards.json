@@ -103,6 +103,9 @@
     "04_in_development/brain_2.7.eos-8.md": {
       "pitch": "Public developer portal at olympus-gpt.ai"
     },
+    "04_in_development/brain_2.7.eos-15.md": {
+      "pitch": "Any Git repo becomes a renderable publication"
+    },
     "04_in_development/eos-5b-triage.md": {
       "pitch": "Triage the EOS-5 reconciliation backlog"
     },
