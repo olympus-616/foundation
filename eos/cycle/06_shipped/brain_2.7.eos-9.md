@@ -12,9 +12,9 @@ pitch: "Run the Steward's own business on the platform"
 |---|---|
 | **Branch family** | `brain/2.7.x.x` |
 | **Cycle ordinal** | `eos-9` (ninth primary on 2.7 family) |
-| **Status** | `In Development` — Steward verbal §5 ratification 2026-09-30 + Steward started Part 1 (deprecate/ deletion) and Part 2 (coverage) on a `cycle/eos-9` olympus-grid branch concurrent with this ticket authoring. Formal §5 checkboxes pending. |
+| **Status** | **`Shipped — closed 2026-10-02 (GC).`** §5 formally ticked (all 8 boxes); §9.CP-1..CP-5 attested per §9.1 (five witnesses on commit `6954f07`); §9.CP-6 attested per §9.2 (destructive deploy `0AfPj000002HbEvKAK` on commit `24466fc7`, SOQL 0 rows); §9.CP-7 attested as-built per §9.3 (validate-pr + deploy-push ensemble, Steward 2026-10-02); §9.CP-Q verdict PASS per Steward 2026-10-02 (verdict A, 9/9 Part 2 test files accepted as-is). §13 closeout authored 2026-10-02 (GC). Moved to `06_shipped/` by this close PR. |
 | **Opened** | 2026-09-30 |
-| **Closed** | — |
+| **Closed** | 2026-10-02 |
 | **Prior cycle** | `brain_2.7.eos-8` (olympus-gpt — sibling 2.7 primary) |
 | **Theme** | cp-biz (`cloudpremise.my.salesforce.com`, Enterprise Edition PRODUCTION, OrgId `00D3k000000tHlJEAU`) becomes the **early-beta production environment** the Steward will run his business from — ahead of alpha-org's namespace-sharded multi-tenant design. Scratch orgs don't enforce 75% test coverage; cp-biz does. 15 Apex classes/triggers below threshold must reach ≥75% before validate can pass. `force-app/deprecate/**` gets removed from source + cp-biz. New `validate-push-cp-biz.yaml` workflow mirrors PR #350/#351 split-step pattern. |
 | **Feedback inputs** | Steward authorization 2026-09-30; validate run `0AfPj000002HOETKA4` 2026-10-01 (the 15 coverage gaps that proved the gate); cp-biz prep state (og_pcm + backend packages uninstalled, orphan `test` permset deleted, SoqlPluginTest fix landed, backup CSV at `logs/cp-biz-cleanup-2026-09-30/`); PR #350/#351 split-step CI pattern |
@@ -113,14 +113,14 @@ Classes/triggers below 75% per validate run `0AfPj000002HOETKA4` (2026-10-01):
 
 ## §5 Steward approval gate
 
-- [ ] Discipline principle acknowledged (hardening-not-feature; meaningful-assertions; scope-locked)
-- [ ] Canonical attestation statement locked
-- [ ] Story locked (§1.1 – §1.5)
-- [ ] Acceptance criteria locked (§2.1 – §2.10)
-- [ ] NFRs locked (§3.1 – §3.5)
-- [ ] **Part 1 destructive deploy against cp-biz authorized** — destructive-changes against a REAL production org, Steward sign-off per standing memory `prod_deploy_approval`
-- [ ] **No-new-feature-code discipline for Part 2 acknowledged** — any surface changes beyond `@TestVisible` exposure require explicit Steward override
-- [ ] Approved to execute — signed: **__________** **__________**
+- [x] Discipline principle acknowledged (hardening-not-feature; meaningful-assertions; scope-locked)
+- [x] Canonical attestation statement locked
+- [x] Story locked (§1.1 – §1.5)
+- [x] Acceptance criteria locked (§2.1 – §2.10)
+- [x] NFRs locked (§3.1 – §3.5)
+- [x] **Part 1 destructive deploy against cp-biz authorized** — destructive-changes against a REAL production org, Steward sign-off per standing memory `prod_deploy_approval`
+- [x] **No-new-feature-code discipline for Part 2 acknowledged** — any surface changes beyond `@TestVisible` exposure require explicit Steward override
+- [x] Approved to execute — signed: **GC** **2026-10-02**
 
 ---
 
@@ -307,24 +307,53 @@ Succeeded = closed per §2.10 / §9.CP-1 – §9.CP-4.
 
 ## §13 Closeout
 
-*Filled at end of cycle.*
+Closed 2026-10-02 (GC). §9.1 CP-* per-merge evidence log + §9.2 CP-6 attestation + §9.3 CP-7 as-built attestation remain in-place as the attestation record. §9.CP-Q verdict (Steward 2026-10-02): PASS, verdict A (all 9 Part 2 test files accepted as-is).
 
 ### What shipped
-- …
+
+**Part 1 — `deprecate/` removed from source + destroyed on cp-biz** (PR [#355](https://github.com/olympus-616/olympus-grid/pull/355) · commit [`24466fc7`](https://github.com/olympus-616/olympus-grid/commit/24466fc76f9c10e118dfc1bde765ed5dcce991d2) merged 2026-10-02T19:44:51Z):
+- Destructive manifest: 14 ApexClass + 3 LightningComponentBundle + 1 AuraDefinitionBundle + 1 ApexPage + 1 CustomTab destroyed on cp-biz via `manifest/destructiveChanges-cp-biz-deprecate.xml`.
+- Deploy ID `0AfPj000002HbEvKAK` · 27-min wall-clock · Release [`cp-biz-deploy-24466fc`](https://github.com/olympus-616/olympus-grid/releases/tag/cp-biz-deploy-24466fc).
+- SOQL verification: 0 rows for the 14 named ApexClass post-deploy against cp-biz (OrgId `00D3k000000tHlJEAU`).
+- Satisfies §9.CP-6.
+
+**Part 2 — coverage ≥75% on the 15 named classes/triggers** (same PR #355, squashed-in commits `580c3c76` + `09745dd7` + `16ca3b69`):
+- 9 new/extended `*Test.cls` files: `HermesEmailSenderJobTest` · `IPluginAbstractEntryPointTest` · `FacebookUserContextTest` · `GithubUserContextTest` · `GoogleUserContextTest` · `IdpCtrlExtTest` · `MicrosoftUserContextTest` · `HttpPluginTest` · `ISoqlTest`.
+- 164 `@isTest` methods · 312 asserts · 1.90 assert-per-method ratio · 38 negative-case signals.
+- 7 triggers (Identity, ProcessQueueTrig, ProcessTaskTrigger, ProfileRelationshp, TSFeedback, Thread, TurtleshellProfile) covered transitively (deploy emitted `codeCoverageWarnings: []`).
+- §9.CP-Q verdict 2026-10-02: PASS (verdict A, all 9 accepted as-is).
+
+**Part 3 — validate workflow landed** (as-built ensemble per Steward 2026-10-02):
+- [`.github/workflows/validate-pr-cp-biz.yaml`](https://github.com/olympus-616/olympus-grid/blob/brain/2.7.x.x/.github/workflows/validate-pr-cp-biz.yaml) (pull_request trigger) + [`.github/workflows/deploy-push-cp-biz.yaml`](https://github.com/olympus-616/olympus-grid/blob/brain/2.7.x.x/.github/workflows/deploy-push-cp-biz.yaml) (push on brain/2.7.x.x).
+- No separate `validate-push-cp-biz.yaml` with `workflow_dispatch` — Steward-accepted gap (decisions #1 and #2).
+- Satisfies §9.CP-7 as-built.
+
+**Post-attestation evidence** — subsequent PR #356 commit `6954f07` (2026-10-02T21:34:13Z) carried five-witness §9.CP-* SHAPE attestation on cp-biz via §9.1 log: CI emission · org receipt (Deployment Status UI) · public portal render · admin app v2.7.0.2 · EOS portal self-render.
 
 ### What deferred (and why)
+
+**Pre-attestation operational items** (preserved from pre-close draft):
 - cp-biz-uat sandbox alternative — Steward chose prod as primary.
 - 1GP uninstalls — Steward UI action, non-blocking.
 - Experience Cloud Site deletion — not required.
 - Deployment-precedence memory refresh — captured as feedback-for-next-cycle below.
 - `project_salesforce_alpha_org` complementary memory update — same.
 
+**Steward-accepted gaps 2026-10-02** (verbatim: *"1 - fine as built · 2 - fine as built · 3 - fine as built · 4 - fine as is"*):
+- Mid-cycle `workflow_dispatch` validate (decision #1) — ensemble covers the gate under current cadence; on-demand mid-cycle validate not required.
+- Release-annotation + Quick Deploy snippet on validate runs (decision #2) — deploy-push already carries the Release; validate doesn't need it.
+- Explicit per-class % table (decision #3) — `codeCoverageWarnings: []` on deploy is the durable witness; `ApexCodeCoverageAggregate` SOQL snapshot drifts post-deploy as org activity recompiles classes.
+- `ProcessQueueBatch` / `ProcessQueueTrig` / `ProfileRelationshp` absence from current `ApexCodeCoverageAggregate` snapshot (decision #4) — same drift mechanism.
+
 ### What surprised
-- …
+
+- **Each `sf project deploy start` gets its own Deploy ID even when the material delta is a no-op.** The destructive-deploy on `24466fc7` was `0AfPj000002HbEvKAK`; the re-deploy on `6954f07` was `0AfPj000002HcSjKAK`. The olympus-grid agent close-evidence report conflated them; verified independently via Release bodies. Noted for future attestation-authoring.
+- **Five concurring witnesses on commit `6954f07`.** The hardening story (§1) was expected to be attested at the §9.CP-* deploy-infrastructure layer. It was additionally attested on four orthogonal surfaces (org Setup → Deployment Status · public portal landing · Lightning admin v2.7.0.2 · EOS portal self-render), including Patent Claim 7 holding on a non-DevHub-connected production SF org for the first time (EOS portal self-rendering on cp-biz showed the kanban including PR #89 attesting that very witness).
+- **`ApexCodeCoverageAggregate` wipes between deploy and post-deploy query.** Current snapshot returns 0% for 16 of 18 queried classes despite the deploy passing with coverage enforced at ≥75%. The deploy-log `codeCoverageWarnings: []` is the durable witness; post-deploy aggregate SOQL is drift-artifact territory.
 
 ### Verification evidence
 
-Evidence accumulated during cycle; the "What shipped / What deferred / What surprised / Feedback" subsections above fill at Steward-authored §13 closeout.
+Evidence accumulated during cycle; preserved in-place as the attestation record.
 
 **§9.CP-6 (deprecate/ gone from cp-biz):**
 - Destructive-changes manifest: [`manifest/destructiveChanges-cp-biz-deprecate.xml`](https://github.com/olympus-616/olympus-grid/blob/24466fc7/manifest/destructiveChanges-cp-biz-deprecate.xml) on commit `24466fc7` — 14 ApexClass + 3 LightningComponentBundle + 1 AuraDefinitionBundle + 1 ApexPage + 1 CustomTab
@@ -348,19 +377,32 @@ Evidence accumulated during cycle; the "What shipped / What deferred / What surp
 - SF Deploy ID `0AfPj000002HOETKA4` (2026-10-01) — the failing validate against cp-biz on the 15-class coverage gaps that this cycle closed. Referenced in `manifest/destructiveChanges-cp-biz-deprecate.xml` header comment as the audit-trail anchor.
 
 ### Feedback that emerged from THIS cycle (seed for the next one)
-- Dual-target production reality (alpha-org = managed-package prod; cp-biz = Steward's business prod) needs memory + CLAUDE.md capture.
-- Assertion-quality gate (§9.CP-Q) — if it reveals systematic coverage-only patterns elsewhere in the codebase, that's a seed for a wider test-authorship-review cycle.
+- Dual-target production reality (alpha-org = managed-package 2GP prod; cp-biz = source-deploy prod for Steward's own business) needs memory + CLAUDE.md capture — the two prods have different deploy mechanisms (`main-beta-package-build.yaml` installs the 2GP on alpha-org; `deploy-push-cp-biz.yaml` source-deploys to cp-biz).
+- Assertion-quality gate (§9.CP-Q) — this cycle set a precedent (verdict A, 9/9 as-is) that could become a reusable close-criterion for future hardening cycles. If a future review reveals systematic coverage-only patterns elsewhere, that's a seed for a wider test-authorship-review cycle.
+- Deploy-vs-aggregate authority — `codeCoverageWarnings: []` on the deploy log is a stronger per-class ≥75% witness than any post-deploy `ApexCodeCoverageAggregate` snapshot. Future attestation authors should rely on the deploy log, not the aggregate.
+- Multi-witness-attestation pattern — the five-witness pattern on `6954f07` (CI · org · public portal · admin app · EOS portal self-render) is a reusable attestation strength. For future production-landing cycles, aim for at least two independent witnesses beyond the CI claim.
 
 ### Memory updates
-- Update `project_deployment_precedence` to reflect dual production targets.
-- Refine `project_salesforce_alpha_org` to clarify the complementary cp-biz target.
-- Note the PR #350/#351 split-step CI pattern as the fleet standard for validate workflows.
+- Codified: `project_cp_biz_second_production_target.md` — cp-biz as the second production target alongside alpha-org; different deploy mechanism; cross-references the existing `deployment_precedence` + `salesforce_alpha_org` memories.
+- Codified: `feedback_apex_code_coverage_aggregate_is_drift_prone.md` — post-deploy SOQL on `ApexCodeCoverageAggregate` returns 0% for classes that were ≥75% during deploy; `codeCoverageWarnings: []` on the deploy log is the durable witness.
+- Codified: `project_cp_biz_split_step_ci_pattern.md` — the Create (continue-on-error) + Verify (Python JSON assert) + Annotate (Release body) pattern from `main-beta-package-build.yaml` / `deploy-push-cp-biz.yaml` / `validate-pr-cp-biz.yaml` is the fleet standard for any workflow calling `sf project deploy *`; bash exit codes + stderr contamination are known hazards the pattern avoids.
 
 ### Cycle close commit
-- olympus-grid Part 1 + Part 2 + Part 3 merge SHAs on `brain/2.7.x.x`.
-- cp-biz Deploy ID + Release body annotation link.
-- foundation §13 closeout commit on this ticket.
-- Steward sign-off: **__________** **__________**
+- **olympus-grid merge SHAs on `brain/2.7.x.x`:**
+  - PR [#355](https://github.com/olympus-616/olympus-grid/pull/355) commit `24466fc7` (2026-10-02T19:44:51Z) — Parts 1 + 2 + 3 bundled (destructive-manifest + 9 Part 2 test files + validate-pr-cp-biz + deploy-push-cp-biz workflows).
+  - PR [#356](https://github.com/olympus-616/olympus-grid/pull/356) commit `6954f07` (2026-10-02T21:34:13Z) — subsequent iris agent-bundle merge whose §9.CP-* attestation on cp-biz carried the five-witness proof.
+- **cp-biz Deploy IDs + Release annotations:**
+  - Destructive deploy: `0AfPj000002HbEvKAK` · Release [`cp-biz-deploy-24466fc`](https://github.com/olympus-616/olympus-grid/releases/tag/cp-biz-deploy-24466fc).
+  - Subsequent re-deploy: `0AfPj000002HcSjKAK` · Release [`cp-biz-deploy-6954f07`](https://github.com/olympus-616/olympus-grid/releases/tag/cp-biz-deploy-6954f07).
+- **Foundation attestation PRs on `brain/2.7.x.x`** (today's walk from scope to close):
+  - [#85](https://github.com/olympus-616/foundation/pull/85) — patent + env-loader planning stub.
+  - [#86](https://github.com/olympus-616/foundation/pull/86) — plutus reconciliation cards.
+  - [#87](https://github.com/olympus-616/foundation/pull/87) — eos-5.1 + 5.4 initial status rows.
+  - [#88](https://github.com/olympus-616/foundation/pull/88) — eos-5.1 + 5.4 flipped to MERGED after PR #356.
+  - [#89](https://github.com/olympus-616/foundation/pull/89) (merge `3b69dba`) — §9.1 CP-* log + §9.2 CP-6 + §9.3 CP-7 as-built + §13 Verification evidence.
+  - [#90](https://github.com/olympus-616/foundation/pull/90) (merge `4c62727`) — eos-5.1 + 5.4 BPB + unlocked-nodes alpha-org deploy complete.
+- **Foundation close commit SHA:** TBD on this close PR squash.
+- **Steward sign-off: GC 2026-10-02**
 
 ---
 
@@ -374,8 +416,12 @@ Evidence accumulated during cycle; the "What shipped / What deferred / What surp
   - `olympus_grid_forceignore_environment_specific` — `.forceignore.olympus_grid` off-limits (per §3.2)
   - `handler_name_namespace_prefix` — PackageUtil.objectDotPrefix in ApiRoute tests (per §2.7)
   - `prod_deploy_approval` — Steward sign-off for prod-targeting destructive deploy (per §5)
-  - `salesforce_alpha_org` — alpha-org remains managed-package prod (complementary, not superseded)
-  - `deployment_precedence` — needs refinement post-close (per §13 feedback)
+  - `salesforce_alpha_org` — alpha-org remains managed-package 2GP prod (complementary with cp-biz source-deploy prod per new `project_cp_biz_second_production_target`)
+  - `deployment_precedence` — complemented by new `project_cp_biz_second_production_target` which captures the dual-prod reality
+- **Memories codified by this close:**
+  - `project_cp_biz_second_production_target` — cp-biz as second production target; different deploy mechanism than alpha-org
+  - `feedback_apex_code_coverage_aggregate_is_drift_prone` — deploy-log `codeCoverageWarnings: []` is the durable per-class ≥75% witness; `ApexCodeCoverageAggregate` SOQL snapshots drift post-deploy
+  - `project_cp_biz_split_step_ci_pattern` — Create (continue-on-error) + Verify (Python JSON assert) + Annotate (Release body) is the fleet standard for any workflow calling `sf project deploy *`
 - **Sibling 2.7 primaries:** [`brain_2.7.eos-1.md`](brain_2.7.eos-1.md) HUD · [`brain_2.7.eos-2.md`](../02_design/brain_2.7.eos-2.md) aeon · [`brain_2.7.eos-3.md`](../02_design/brain_2.7.eos-3.md) argos · [`brain_2.7.eos-4.md`](brain_2.7.eos-4.md) kronos · [`brain_2.7.eos-5.md`](brain_2.7.eos-5.md) brain-genesis · [`brain_2.7.eos-6.md`](brain_2.7.eos-6.md) poseidon · [`brain_2.7.eos-7.md`](brain_2.7.eos-7.md) iris · [`brain_2.7.eos-8.md`](brain_2.7.eos-8.md) olympus-gpt
 - **Campaign context:** [`../ATTESTATION-CAMPAIGN-2026-09-30.md`](../ATTESTATION-CAMPAIGN-2026-09-30.md) — this ticket is a stabilize-step-1 production-readiness addition to the campaign scope
 - **EOS operating manual:** [`../README.md`](../README.md)

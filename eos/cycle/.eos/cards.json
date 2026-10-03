@@ -18,6 +18,9 @@
     "06_shipped/brain_1.7.eos-4.1.md": {
       "pitch": "The EOS kanban attests its own existence"
     },
+    "06_shipped/brain_2.7.eos-9.md": {
+      "pitch": "Run the Steward's own business on the platform"
+    },
 
     "04_in_development/brain_1.7.eos-5.md": {
       "pitch": "Every dollar accounted; every surface paid; every tithe routed"
@@ -99,9 +102,6 @@
     },
     "04_in_development/brain_2.7.eos-8.md": {
       "pitch": "Public developer portal at olympus-gpt.ai"
-    },
-    "04_in_development/brain_2.7.eos-9.md": {
-      "pitch": "Run the Steward's own business on the platform"
     },
     "04_in_development/eos-5b-triage.md": {
       "pitch": "Triage the EOS-5 reconciliation backlog"
