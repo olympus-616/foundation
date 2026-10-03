@@ -163,6 +163,81 @@ Single-command close. The §9 shape is binary — pass or fail.
 
 - **§9.CP-Q (meaningful-assertion review)** — every test file authored or extended in Part 2 is reviewed; the review verifies assertions reference observable behavior (not just method execution). Steward or secondary agent gate.
 
+## §9.1 Per-merge §9.CP-* evidence log (accumulating during cycle)
+
+Every merge to `brain/2.7.x.x` passes through `.github/workflows/deploy-push-cp-biz.yaml` and exercises the §9.CP-1..CP-5 shape against cp-biz. This log accumulates per-merge evidence as the cycle progresses toward the Part 3 validate-close in §2.4. **Each row is an attestation of the §9 SHAPE holding on a specific brain SHA — not a cycle close.** Cycle close now requires §9.CP-6 (attested below in §9.2 — destructive deploy on PR #355 commit `24466fc7`, 2026-10-02) + §9.CP-7 (attested as-built below in §9.3 — Steward direction 2026-10-02) + §9.CP-Q (assertion-quality review — Steward or secondary-agent gate, still open) + §5 formal checkbox tick + §13 closeout authoring.
+
+**Note on deploy-vs-validate wording.** §9.CP-1's canonical formulation references `sf project deploy validate`; `deploy-push-cp-biz.yaml` runs `sf project deploy start`. The §9.CP-1..CP-4 assertion SHAPE (`status==Succeeded` · `componentErrors==0` · `testFailures==0` · `coverageViolations==0`) is identical under both; a full deploy achieving the shape is strictly stronger than validate alone — the changes actually land on cp-biz. §9.CP-5 is natively a deploy artifact (Release annotation with Deploy ID), so the deploy workflow is where it's canonically produced.
+
+| Date (UTC) | Merge SHA · PR | Deploy ID | §9.CP-1 | §9.CP-2 | §9.CP-3 | §9.CP-4 | §9.CP-5 | Duration | Evidence |
+|---|---|---|---|---|---|---|---|---|---|
+| 2026-10-02 21:34:13 | [`6954f07`](https://github.com/olympus-616/olympus-grid/commit/6954f075288eb491141ceec90ef59aa4e53522fb) · [PR #356](https://github.com/olympus-616/olympus-grid/pull/356) | `0AfPj000002HcSjKAK` | ✅ Succeeded | ✅ 1548/1548 (0 errors) | ✅ 2024/2024 (0 failures) | ✅ 0 warnings | ✅ Release [`cp-biz-deploy-6954f07`](https://github.com/olympus-616/olympus-grid/releases/tag/cp-biz-deploy-6954f07) | 1297s | [workflow run 37067617179](https://github.com/olympus-616/olympus-grid/actions/runs/37067617179) + [PR follow-up comment](https://github.com/olympus-616/olympus-grid/pull/356#issuecomment-cp-biz-deploy-post-merge) |
+
+**Independent org-side verification (2026-10-02).** Steward verified the above row by navigating cp-biz Setup → Deployment Status directly against `cloudpremise.my.salesforce.com` (OrgId `00D3k000000tHlJEAU`). The org-side record shows: Name `0AfPj000002HcSj` · Type API · Deployed By Greg Cook · Start 3:35 PM / End 3:56 PM (21-min wall-clock, matches CI 1297s) · Number of Files 1,753 · Total Unzipped Size 44,084,215 bytes (44.08 MB) · Deploy Components 1548/1548 · Run Apex Tests 2024/2024 · Deployment Succeeded. Independent of the CI side — the GitHub Actions run observed a Succeeded status via `sf project deploy start --json`; the Salesforce org observed the same artifact via its own deployment subsystem. Both paths concur on every metric. §9.CP-1..CP-5 attested on commit `6954f07` with a two-path witness — CI emission ↔ org receipt.
+
+**Third witness — public-side live surface rendering (2026-10-02).** Steward loaded `cloudpremise.my.salesforce-sites.com/portal/landing` in a fresh incognito session and confirmed the iris portal rendered end-to-end: tab title "Iris | Olympus-Grid", hero + body copy ("Welcome to Olympus-Grid · The Sovereign Enterprise Intelligence Layer"), sign-in panel with magic-link + Terms-of-Service checkbox, OAuth providers surfaced (Apple / Google / GitHub / Microsoft / Cognito — Coming Soon). Runtime-functional verification on the public user-facing surface — static resources propagated via Site Guest permissions, Experience Cloud Site routing resolved, auth-flow LWC wired.
+
+**Fourth witness — admin-side version advancement (2026-10-02).** Steward loaded `cloudpremise.lightning.force.com/lightning/n/Olympus_Grid_Home` (authenticated Lightning Experience inside cp-biz) and confirmed the Olympus-Grid admin app rendered with the Grid Control Plane version banner reading **v2.7.0.2** — the version counter advanced from pre-merge state via this deploy. The "CONNECT" surface rendered with "Systems standing by..." subtitle. This proves the deployed metadata produced a user-visible version jump on the admin surface, not just a passive propagation of static assets.
+
+**Fifth witness — EOS portal self-render (2026-10-02).** Steward loaded `cloudpremise.my.salesforce-sites.com/portal/eos/github.com/olympus-616/foundation/tree/brain%2F2.7.x.x/eos/cycle` and confirmed the EOS kanban (shipped artifact of [`brain_1.7.eos-4.1`](../06_shipped/brain_1.7.eos-4.1.md)) renders end-to-end on cp-biz: all five lanes populated (Backlog 24 · Planning 3 · Design 3 · In Development 29 · Shipped 5), SOC-2 control chips bar visible (`CC1.1`, `CC1.4`, `CC1.5` … `CC8.1`, plus `A1.1`-`A1.3` + `PI1.1`-`PI1.3`), Activity panel polling at 30s cadence surfacing recent PRs including **the open PR #89 that attests this very witness**. The three new backlog primaries from PR #86 ([`eos-12`](../00_backlog/brain_2.7.eos-12.md) anon Stripe leak · [`eos-13`](../00_backlog/brain_2.7.eos-13.md) MeteringEvent trace · [`eos-14`](../00_backlog/brain_2.7.eos-14.md) Plutus event vocabulary) render with their stored pitches as card titles — proof the `.eos/cards.json` display-metadata index is wired. **This is Patent Claim 7 (self-referential governance — "the governance tool is governed by an instance of itself") holding on a non-DevHub-connected production SF org for the first time.** The EOS kanban renders on cp-biz, including the card about the merge that deployed it.
+
+Five witnesses concur on commit `6954f07`: CI emission (workflow outputs) · org receipt (Deployment Status UI) · public-side render (portal landing) · admin-side version advancement (Lightning Experience v2.7.0.2) · EOS portal self-render (recursive-self-attestation on new org). **The hardening story (§1) is empirically true on cp-biz across every surface: deploy infrastructure + public portal + admin app + the governance surface itself.** Formal cycle close now gated only by §9.CP-Q (assertion-quality review) + §5 formal checkbox tick + §13 closeout authoring — §9.CP-6 attested below in §9.2; §9.CP-7 attested as-built below in §9.3 per Steward direction 2026-10-02. The fifth witness also constitutes append-only evidence for [`brain_1.7.eos-4.1`](../06_shipped/brain_1.7.eos-4.1.md)'s recursive-self-attestation claim — captured there in a separate follow-up PR.
+
+## §9.2 Part 1 attestation — §9.CP-6 (deprecate/ gone from cp-biz)
+
+**Attested 2026-10-02 via PR [#355](https://github.com/olympus-616/olympus-grid/pull/355) · merge commit [`24466fc7`](https://github.com/olympus-616/olympus-grid/commit/24466fc76f9c10e118dfc1bde765ed5dcce991d2) merged 2026-10-02T19:44:51Z.**
+
+Scope of the destructive manifest ([`manifest/destructiveChanges-cp-biz-deprecate.xml`](https://github.com/olympus-616/olympus-grid/blob/24466fc7/manifest/destructiveChanges-cp-biz-deprecate.xml)):
+
+- **14 ApexClass** (the §2.1 enumerated set)
+- **3 LightningComponentBundle**
+- **1 AuraDefinitionBundle**
+- **1 ApexPage**
+- **1 CustomTab**
+
+**Executed by** `deploy-push-cp-biz.yaml` run [37056119313](https://github.com/olympus-616/olympus-grid/actions/runs/37056119313) · **Deploy ID `0AfPj000002HbEvKAK`** · Succeeded · 1548/1548 components · 2024/2024 tests · 0 coverage warnings · 27-min wall-clock (19:44:54Z → 20:12:00Z). Release [`cp-biz-deploy-24466fc`](https://github.com/olympus-616/olympus-grid/releases/tag/cp-biz-deploy-24466fc) carries the Deploy ID + metrics.
+
+**SOQL verification (2026-10-02 against cp-biz, OrgId `00D3k000000tHlJEAU`):**
+
+```sql
+SELECT Name FROM ApexClass WHERE NamespacePrefix = null AND Name IN
+  ('AccountBatch','AccountBatchTest','AccountQueriesTest','AccountTriggerHandlerTest',
+   'ApexJobController','ApexJobControllerTest','FutureHandlerJobs','LeadTriggerHandlerTest',
+   'SearchSocialSupportCtrl','SearchSocialSupportCtrlTest','SmearchAPIScheduled',
+   'SmearchAPIScheduled_TEST','SmearchAPIService','SmearchAPIServiceTest')
+→ 0 rows
+```
+
+All 14 deprecate/ ApexClass names are gone from cp-biz. **§9.CP-6 attested.**
+
+**Note on Deploy ID lineage.** The subsequent re-deploy on commit `6954f07` (PR #356, §9.1 above) produced a different Deploy ID (`0AfPj000002HcSjKAK`) — same `Succeeded` shape, destructive manifest a no-op the second time because source was already clean. §9.CP-6's canonical evidence is the FIRST destructive-deploy run on `24466fc7`.
+
+## §9.3 Part 3 as-built attestation — §9.CP-7 (validate workflow)
+
+**Attested as-built 2026-10-02 per Steward direction** — Steward verbatim: *"1 - fine as built · 2 - fine as built"* on the two §9.CP-7 gap items raised in the olympus-grid-agent close-evidence report (workflow_dispatch trigger + Release-annotation with Quick Deploy).
+
+**As-shipped ensemble** (landed in PR [#355](https://github.com/olympus-616/olympus-grid/pull/355) commit [`24466fc7`](https://github.com/olympus-616/olympus-grid/commit/24466fc76f9c10e118dfc1bde765ed5dcce991d2)):
+
+| Workflow | Trigger | Role |
+|---|---|---|
+| [`.github/workflows/validate-pr-cp-biz.yaml`](https://github.com/olympus-616/olympus-grid/blob/brain/2.7.x.x/.github/workflows/validate-pr-cp-biz.yaml) | `pull_request` | Pre-merge validate against cp-biz — gates every PR touching force-app paths |
+| [`.github/workflows/deploy-push-cp-biz.yaml`](https://github.com/olympus-616/olympus-grid/blob/brain/2.7.x.x/.github/workflows/deploy-push-cp-biz.yaml) | `push` on `brain/2.7.x.x` | Post-merge full deploy with RunLocalTests + Release annotation (§9.1 log) |
+
+**Deviations from strict §2.9 wording (both Steward-accepted 2026-10-02):**
+
+1. No separate `validate-push-cp-biz.yaml` with `workflow_dispatch` trigger — the ensemble above covers the gate (pre-merge + post-merge).
+2. No Release-body annotation with Quick Deploy (`sf project deploy quick --job-id`) snippet on validate runs — Steward promotes to cp-biz via next merge rather than mid-cycle Quick Deploy, so the one-click affordance is not required.
+
+**Rationale accepted by Steward:**
+
+- Pre-merge gate (`validate-pr-cp-biz`) catches PRs that would break the deploy; post-merge gate (`deploy-push-cp-biz`) performs the full deploy with Release annotation.
+- The §9.CP-1..CP-5 shape is attested per-merge in §9.1 above via `deploy-push-cp-biz`; `validate-pr-cp-biz` catches regressions pre-merge.
+- No mid-cycle on-demand validate is needed under the current operational cadence.
+
+**Last pre-merge green validate run** (on PR #355's final SHA chain): run [37052731948](https://github.com/olympus-616/olympus-grid/actions/runs/37052731948) on `16ca3b69` (2026-10-02 19:13:48Z → 19:42:38Z, Succeeded).
+
+**§9.CP-7 attested as-built.**
+
 ## §10 Execution plan
 
 ### §10.1 Pre-work verification
@@ -248,11 +323,29 @@ Succeeded = closed per §2.10 / §9.CP-1 – §9.CP-4.
 - …
 
 ### Verification evidence
-- Link to the Succeeded Deploy ID from the §2.10 validate run.
-- Link to the GitHub Release body with Quick Deploy annotation.
-- Link to the olympus-grid merge commit for Part 1 + Part 2 + Part 3.
-- Link to the destructive deploy log against cp-biz.
-- Link to the pre-close baseline failure `0AfPj000002HOETKA4` for audit trail.
+
+Evidence accumulated during cycle; the "What shipped / What deferred / What surprised / Feedback" subsections above fill at Steward-authored §13 closeout.
+
+**§9.CP-6 (deprecate/ gone from cp-biz):**
+- Destructive-changes manifest: [`manifest/destructiveChanges-cp-biz-deprecate.xml`](https://github.com/olympus-616/olympus-grid/blob/24466fc7/manifest/destructiveChanges-cp-biz-deprecate.xml) on commit `24466fc7` — 14 ApexClass + 3 LightningComponentBundle + 1 AuraDefinitionBundle + 1 ApexPage + 1 CustomTab
+- Destructive-deploy run: [37056119313](https://github.com/olympus-616/olympus-grid/actions/runs/37056119313) · Deploy ID `0AfPj000002HbEvKAK` · 27-min wall-clock
+- GitHub Release carrying the Deploy ID + metrics: [`cp-biz-deploy-24466fc`](https://github.com/olympus-616/olympus-grid/releases/tag/cp-biz-deploy-24466fc)
+- SOQL verification against cp-biz (OrgId `00D3k000000tHlJEAU`): 0 rows for the 14 named ApexClass (query reproduced in §9.2 above)
+
+**§9.CP-7 (validate workflow as-built per Steward 2026-10-02):**
+- Pre-merge validate workflow: [`.github/workflows/validate-pr-cp-biz.yaml`](https://github.com/olympus-616/olympus-grid/blob/brain/2.7.x.x/.github/workflows/validate-pr-cp-biz.yaml) on brain tip
+- Post-merge deploy workflow: [`.github/workflows/deploy-push-cp-biz.yaml`](https://github.com/olympus-616/olympus-grid/blob/brain/2.7.x.x/.github/workflows/deploy-push-cp-biz.yaml) on brain tip
+- Last pre-merge green validate run on PR #355's final SHA: [37052731948](https://github.com/olympus-616/olympus-grid/actions/runs/37052731948) on `16ca3b69` (2026-10-02T19:13:48Z–19:42:38Z, Succeeded)
+
+**§9.CP-1 through §9.CP-5 (per-merge SHAPE evidence) — see §9.1 log above.**
+
+**§9.CP-4 per-class coverage ≥75% (§2.4 / §2.B) — attested via deploy-log** `codeCoverageWarnings: []` on both runs 37056119313 (Deploy ID `0AfPj000002HbEvKAK`, commit `24466fc7`) and 37067617179 (Deploy ID `0AfPj000002HcSjKAK`, commit `6954f07`). SF enforces per-class ≥75% under `RunLocalTests`; an empty warnings array is the durable attestation of the ≥75% bar across every class in `force-app/`. Steward 2026-10-02 accepted this evidence shape as sufficient (decision #3). Current `ApexCodeCoverageAggregate` SOQL snapshot is drift-prone (aggregate gets wiped by subsequent org activity); the deploy-log is the authoritative witness.
+
+**Part 2 merge commits in attestation window** (git log `--since=2026-10-01 brain/2.7.x.x -- '**/*Test.cls'`):
+- Commit [`24466fc7`](https://github.com/olympus-616/olympus-grid/commit/24466fc76f9c10e118dfc1bde765ed5dcce991d2) — "feat(olympus-grid): cp-biz CI — PR validate + brain-push full deploy ([brain_2.7.eos-9](https://github.com/olympus-616/olympus-grid/pull/355))" — squashed-in: `580c3c76` (raise coverage on 11 under-75% classes) · `09745dd7` (loosen assertions + extend social-auth coverage) · `16ca3b69` (ctx-vs-resp assertion fix)
+
+**Pre-close baseline:**
+- SF Deploy ID `0AfPj000002HOETKA4` (2026-10-01) — the failing validate against cp-biz on the 15-class coverage gaps that this cycle closed. Referenced in `manifest/destructiveChanges-cp-biz-deprecate.xml` header comment as the audit-trail anchor.
 
 ### Feedback that emerged from THIS cycle (seed for the next one)
 - Dual-target production reality (alpha-org = managed-package prod; cp-biz = Steward's business prod) needs memory + CLAUDE.md capture.
