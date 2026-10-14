@@ -63,6 +63,11 @@ The source feature-tracker's §2 (Business Context) enumerates the stakeholder n
 - **§1.4** As **the iris + agent-app + proteus + hestia + plutus + chronos + ares + hermes + athena agents** I want **explicit cross-repo scope and branch discipline** so that **eleven repos coordinate on one feature without stepping on each other's cycles**.
 - **§1.5** As **future Brain sessions** I want **the on-disk `.agent/localdata/` representation to be human-readable, git-diff-friendly, deterministic, rehydratable, portable, independent of Salesforce record IDs, based on stable logical GUIDs** so that **the substrate can later become S3 / Salesforce / Dynamo / Cosmos without rewriting the UI or invalidating the Genesis data**.
 - **§1.6** As **the fleet governance layer** I want **an explicit non-entanglement contract with `brain_2.7.eos-1` (HUD hostile-defense)** so that **the "brain" naming collision (branch-family prefix vs. product concept) does NOT cause the two cycles to entangle at merge, at attestation, or in operator mental model**. Non-entanglement is verified per §9.NENT.
+- **§1.7 (new 2026-10-06 — Chronos-lens grounding + persistent priorities)** As **the Steward actually running the Chronos task loop on my iPhone (not a demo — a daily surface)** I want three behaviors from the Chronos lens so **the loop IS the global priority UI — what's cycling + what's snoozed = my current priority stack**:
+  - **(a) Ground button.** A one-tap control in the Chronos lens that returns the loop pointer to the first **persistent-priority Signal** — not to whatever leaf task I happened to be looking at when I reset (observed symptom 2026-10-06: reset lands on "3b", a random leaf task, instead of returning to current core priorities).
+  - **(b) Persistent-priority Signals.** Signals I've declared as always-present (e.g. *do client work*, *check client email*) resurface on every full pass through the loop until I explicitly dismiss them or snooze them. They are not "tasks" — they are **anchors** that the loop keeps grounding against.
+  - **(c) Snooze with auto-return.** Any Signal — persistent or not — can be snoozed for a Steward-chosen window (30 min / 3 hr / end of day / custom). While `now < snooze_until` the Signal does NOT appear in the loop. At or after `snooze_until` it reappears on the next pass automatically — no re-selection or re-declaration required.
+  - **Open scope question (§5.1-style, needs Steward resolution before §5 sign):** when a persistent priority carries a recurrence hint like *"every 10 minutes"* — is that **(i) chronos-driven recurrence** (the loop surfaces the Signal with elevated weight every 10 min and tapering weight in between), or **(ii) Steward-calibration-only** (the "10 min" is just how often it should _feel_ present; the Signal is simply always-in-loop with no interval weighting)? §9.CHR-4 is marked `[OPEN]` pending this answer.
 
 ## §2 Acceptance criteria
 
@@ -99,13 +104,16 @@ Rather than duplicate the 15 ACs here (they belong to the implementation-tracker
 | — | Feature-tracker 2026-09-25 | `FT-BRAIN-GENESIS` authored in olympus-grid; source-of-truth for the 14/8/15 breakdown |
 | — | Canonical brain model | `olympus-grid/docs/canonical-brain/` — Neuron / Signal / Neural Pathway / Phenotype / Receptor / Assembly design that has never before been made operational against real personal data |
 | — | Steward memory `brain_agent_app_extension` | Handoff at `iris/reactforce/agent/docs/BRAIN_SESSION_HANDOFF.md` — read first |
+| — | Steward directive 2026-10-06 (chronos-grounding) | *"when i reset it goes to 3b. i think there needs to be a 'ground' button of sorts... a reset button that returns you to the core priorities. maybe my top priority is to do client work, and every 10 minus i need to check email. as i click thorugh the chronos tasks as it loops it should alwasy show 'check client email' etc unless i snooze it for 30 mins or 3 hours or whatever before which it would cease to be in the loop but after the snooze it would reemerge from the loop. in this way i can globally manage priority"* — captured as §1.7; §9.CHR signals; §10.5 (slice-2 implementation unless Steward bumps). |
 
 ## §5 Steward approval gate
 
 - [ ] Discipline principle acknowledged (no fabrication; mobile-Chrome-on-iPhone IS v1)
 - [ ] Canonical attestation statement locked
 - [ ] Non-entanglement contract with `brain_2.7.eos-1` acknowledged (§1.6)
-- [ ] Story locked (§1.1 – §1.6)
+- [ ] Story locked (§1.1 – §1.7)
+- [ ] §1.7 recurrence question resolved (chronos-driven interval vs. calibration-only — see §1.7 last bullet)
+- [ ] §1.7 slice: slice-1 (land in current reconciliation) **or** slice-2 (deferred per §10.5)
 - [ ] Acceptance criteria inheritance from `FT-BRAIN-GENESIS` §3.3 (AC-1 through AC-15) confirmed
 - [ ] NFRs locked — source §3.2 (NFR-1 through NFR-8) + cycle-scoped §3.9 through §3.13
 - [ ] Approved to execute — signed: **__________** **__________**
@@ -187,6 +195,13 @@ Every §2 AC lifted to observable shape. Signals appear during a scripted end-to
 - **§9.LEN-2 (No fabrication)** — each lens renders only what it truly knows. Verified by planted `unknown` values in `.agent/localdata/`: UI renders "unknown", not a fabricated placeholder. `grep` on Plutus rendered output for known-planted-unknown-values returns "unknown"; no invented balances.
 - **§9.LEN-3 (Today answers four questions)** — `/brain/today` route renders four sections: *what I need to know · what is important · what can be done · what am I forgetting* — each populated from actual Brain data, not templated demo content.
 
+### §9.CHR Chronos-lens grounding + persistent priorities + snooze (new 2026-10-06, scope §1.7)
+
+- **§9.CHR-1 (Ground button lands on first persistent-priority anchor)** — tapping the **Ground** control in the Chronos lens from any current loop state navigates the loop pointer to the first Signal with `priority_persistent=true` (schema name TBD at implementation time; see slice-2 note in §10.5). Verified by scripted assertion against the Chronos-view output pre/post Ground tap: `loop.cursor.after_ground === persistent_priorities[0].guid`.
+- **§9.CHR-2 (Persistent priorities resurface every pass)** — a Signal marked `priority_persistent=true` appears in the Chronos loop on every full pass until explicitly dismissed or snoozed. Verified by walking the loop forward through N≥3 complete cycles and asserting the Signal GUID appears in each cycle's rendered sequence.
+- **§9.CHR-3 (Snooze with auto-return)** — snoozing a Signal with window `W` (30 min / 3 hr / end-of-day / custom) writes `snooze_until = now + W` to the Signal. For all `now < snooze_until` the Signal is absent from the loop (verified: GUID does not appear in rendered sequence). At or after `snooze_until`, on the next loop pass, the Signal reappears without Steward re-selection (verified: GUID appears in the first full pass whose evaluation time ≥ `snooze_until`). The reappearance is purely time-driven, not Steward-event-driven.
+- **§9.CHR-4 (Interval-recurring priorities)** — **`[OPEN pending §1.7 Steward resolution]`**. IF the Steward chooses chronos-driven recurrence (option (i)), a Signal with `recur_interval=10m` (or similar) surfaces with elevated loop weight at every `t % 10m == 0` boundary and tapering weight between. IF the Steward chooses calibration-only (option (ii)), this signal is deleted and the Signal's recurrence field is purely informational (rendered to the user as a hint, no loop-weighting effect).
+
 ### §9.FACT Genesis-content correctness (AC-10 through AC-13)
 
 - **§9.FACT-1 (Real 2026-09-01-forward financial fact)** — at least one Signal in `.agent/localdata/` represents a real financial fact dated 2026-09-01 or later. Verified by direct file inspection during attestation; account name is an alias (`OPERATING`, `RESERVE`, `HOUSE`, `TAX`, `BROKERAGE`, `CARD_PRIMARY`) not a real account number per §NFR-3.
@@ -251,6 +266,7 @@ Ordered task list. Cross-repo work per source §4.2. Reconciliation cycle — im
 - **Additional lens views** — v1 is Proteus / Hestia / Plutus / Chronos only; future lenses (Aeon/Argos/Hermes as governance/observability/comm) are separate cycles.
 - **Deprecation of six-view prototype's obsolete parts** — Node Registry / Environments / Health Matrix may fold or split in v2.
 - **Kronos playbook for Brain-Genesis** — kronos-attests §9 signals; its own cycle authoring per kronos §7 handoff.
+- **§1.7 Chronos-lens grounding + persistent priorities + snooze (slice-2 unless Steward bumps on §5-sign).** Implementation under §9.CHR. Requires: (a) new fields or Signal-type on the canonical brain model to carry `priority_persistent` + `snooze_until` + optional `recur_interval` — authored in `olympus-grid/docs/canonical-brain/` by the olympus-grid agent, NOT by this cycle's agents (per memory `commit only own repo`); (b) a `Ground` control + priority-filter + snooze UI in the Chronos lens inside `iris/reactforce/agent/`; (c) a matching FR/AC entry in `olympus-grid/docs/features/04_in_development/olympus-brain-genesis.md` so the source feature-tracker stays source-of-truth. **If Steward opts for slice-1 on §5-sign, migrate this bullet to §10.1 and the FR/AC entry becomes blocking for current cycle close.**
 
 ## §11 Verification protocol
 
