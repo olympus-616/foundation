@@ -156,6 +156,9 @@
         "00_backlog/brain_2.7.eos-14.md": {
             "pitch": "Ship the missing Plutus event vocabulary"
         },
+        "00_backlog/brain_2.7.eos-19.md": {
+            "pitch": "Open the agent — see every constellation, program every intention"
+        },
         "00_backlog/cand-a.md": {
             "pitch": "Roll back a bad deploy without losing data"
         },
