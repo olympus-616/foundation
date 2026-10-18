@@ -114,7 +114,7 @@
         "02_design/brain_2.7.eos-3.md": {
             "pitch": "Observability that runs on a solar-powered Pi"
         },
-        "02_design/brain_2.7.eos-10.md": {
+        "04_in_development/brain_2.7.eos-10.md": {
             "pitch": "One file-storage API across every provider"
         },
         "01_planning/brain_1.7.eos-5.4.md": {
