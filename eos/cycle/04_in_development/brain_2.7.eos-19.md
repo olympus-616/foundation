@@ -20,14 +20,52 @@ pitch: "Open the agent — see every constellation, program every intention"
 |---|---|
 | **Branch family** | `brain/2.7.x.x` |
 | **Cycle ordinal** | `eos-19` (nineteenth primary on 2.7 family) |
-| **Status** | `Draft — Pre-§5.` Full §1–§13 pre-drafted from the handoff; Steward ratifies §1–§5 before agent decomposes §6–§13. |
-| **Opened** | 2026-10-13 |
+| **Status** | `Executing — work observed in flight.` Promoted `00_backlog/` → `04_in_development/` on 2026-10-13 after Merlyn observed substantial Aeon-v1 execution on iris branch (iris PR #139 open since 2026-10-07, 5 recent commits on 2026-10-13). Formal §5 signature pending retro-ratification; execution authority confirmed by Steward (Aeon work shipped to olympus-grid). |
+| **Opened** | 2026-10-13 (card authored) |
+| **Promoted to in-development** | 2026-10-13 (upon observation of iris PR #139 + in-flight commits) |
 | **Closed** | — |
 | **Prior cycle** | `brain_2.7.eos-18` |
 | **Theme** | Promote the local prototype into a production application running inside the iris agent plugin: constellations (Hestia entities) + stars (Chronos entities) + operator-state (Hestia) + Sky view + Calendar view + kernel strip — the primary interface for the olympus-grid operator. |
-| **Feedback inputs** | 2026-10-13 Merlyn-authored handoff doc; prototype dashboard at `/.aeon-local/`; existing plugin audit at `iris/reactforce/agent/src/plugins/aeon/`; sibling-cycle overlap with EOS-16 (invoice-studio grid-export surface) and EOS-1 (HUD operator-dashboard shell) |
+| **Feedback inputs** | 2026-10-13 Merlyn-authored handoff doc; prototype dashboard at `/.aeon-local/`; existing plugin audit at `iris/reactforce/agent/src/plugins/aeon/`; sibling-cycle overlap with EOS-16 (invoice-studio grid-export surface) and EOS-1 (HUD operator-dashboard shell); 2026-10-13 20:22–20:43 observed iris branch commits; iris PR #139 (open since 2026-10-07) |
+| **Related PR** | **iris #139** — `feat(agent): ATH-001 prometheus + aeon dashboard rebuild on Proteus primitives` |
 | **Estimated effort** | ~3–4 weeks wall-clock parallelized, ~5–6 weeks serial (per preliminary §1a recon in handoff Appendix D). Long pole: Hestia entity system (currently stub). |
-| **Actual effort** | — |
+| **Actual effort** | In flight — not yet accrued at closeout |
+
+---
+
+## 📍 In-flight observation (2026-10-13)
+
+Merlyn observed via iris repo survey that Aeon v1 execution has been underway since **2026-10-07** on branch:
+
+> `@alchemisthomer/neuralpathway/cd7308b-f669744-20261007062931-agent-ath001-prometheus-plugin-pair-mouth-wire-watchdog`
+>
+> **iris PR #139** — open since 2026-10-07T12:30:52Z — Steward-confirmed as the active vehicle for this work.
+
+**Observed commits** (last 5, chronological, 2026-10-13 20:22–20:43):
+
+| Commit | Message |
+|---|---|
+| `49504e6` | feat(agent): **aeon rung 2b** — neuron lens panel slide in right; dynamic tabs from Proteus lens shapes registry; Chronos attach/edit/detach wired through substrate (SF `ChronosLens__c` / localhost chronos lens); 'Discuss with Merlyn' stub button; Overview + Proteus tabs |
+| `df03c99` | fix(agent): lens panel — attach button actually fires attach + refetches; lens tabs appear only after attachment; snap back to Overview on detach |
+| `754f5cb` | feat(agent): proteus tab shows substrate-native row id — SF Record Id · NEUR-x · a0i… for sf-sobject, UUID for localhost |
+| `3c92f9e` | feat(agent): hestia + aeon lens attach; generic `useLensMutation` hook replaces per-lens hooks; drops `useChronosLens`; dispatch table pattern — adding future lens types is one entry + one tab component |
+| `7015802` | feat(agent): **aeon dashboard rebuild on Proteus primitives + /aeon-orig frozen clone** |
+
+**What this tells us**:
+
+- The six-lens contract (§5 of handoff) is being wired through Proteus-abstracted substrate — the original `useChronosLens` was replaced by a generic `useLensMutation` hook with a dispatch table pattern (preserves §4 "Aeon only knows grid primitives" ruling).
+- The OLD aeon code has been preserved at `/aeon-orig` route as a frozen clone — rollback surface available until the new build attests.
+- The "Discuss with Merlyn" stub button is already placed in the UI — operator-advisor integration surface scaffolded.
+- Substrate neutrality is demonstrated: Proteus tab renders substrate-native row IDs differently for SF vs localhost adapters (SF Record Id for `sf-sobject`, UUID for localhost) — matches §4 "Aeon doesn't know what Salesforce is."
+- Branch is in sync with origin (0 ahead, 0 behind) — work is pushed; iris PR #139 reflects the latest.
+
+**Correlation with the plan**:
+
+- Execution began 2026-10-07 (iris PR #139), ~6 days before the formal handoff + card were authored. The handoff is a retroactive formalization of in-progress direction; the card is a retroactive governance artifact.
+- No conflict detected. Observed commits align with handoff §4 (grid primitives only), §5 (lens-owner API shape), §6 (vocabulary direction toward constellations/stars/intentions).
+- Reconciliation action: on next session, formally sign §5 OR annotate the card as retroactively opened (currently reflects the latter).
+
+---
 
 ---
 
@@ -74,14 +112,16 @@ pitch: "Open the agent — see every constellation, program every intention"
 
 ## §5 Steward approval gate
 
-- [ ] Story locked
-- [ ] Criteria locked
-- [ ] NFRs locked
-- [ ] Vocabulary (§6.1 of handoff doc) locked
-- [ ] Rulings 10.1–10.11 (handoff §10) resolved OR explicitly deferred to §6 decomposition
-- [ ] Dependencies with EOS-16 / EOS-1 / EOS-17 reconciled (coordination plan agreed)
-- [ ] §1a (grid primitive readiness audit) placeholder understood: §6–§13 decomposition does NOT begin until the audit lists what Chronos + Hestia already carry vs. what needs grid-cycle schema work
-- [ ] Approved to execute — signed: **___** **___**
+Status: **retro-ratification pending.** Execution began 2026-10-07 (iris PR #139). Card promoted to `04_in_development/` on 2026-10-13 to reflect reality rather than block already-underway work. Steward confirmed the iris code shipped to olympus-grid.
+
+- [⏳] Story locked (observed consistent in commit intent)
+- [⏳] Criteria locked (observed `/aeon-orig` frozen as rollback surface — attests §2.1 state-preservation intent)
+- [⏳] NFRs locked (observed Proteus-primitive routing — attests backend-agnostic NFR)
+- [⏳] Vocabulary (§6.1 of handoff doc) locked (observed "lens" terminology survives from existing contracts; constellation/star rename status TBD by iris survey)
+- [⏳] Rulings 10.1–10.11 (handoff §10) resolved OR explicitly deferred to §6 decomposition
+- [⏳] Dependencies with EOS-16 / EOS-1 / EOS-17 reconciled (coordination plan agreed)
+- [✓] §1a preliminary complete (handoff Appendix D); observed branch already proceeding on grid-primitive consumption (lens attach through substrate)
+- [ ] Retro-ratification signed: **___** **___**
 
 ---
 
@@ -159,7 +199,7 @@ Concrete signatures that MUST appear in production telemetry for this cycle to c
 
 See handoff §8 — 12 ordered deliverables **1a** through **1l**. Reproduced here as a pointer:
 
-1. **1a** — Grid primitive readiness audit (BLOCKING) · *Preliminary Merlyn-mode recon filed as Appendix D of the handoff doc. Verdict: **Chronos NEEDS MEDIUM additions**, **Hestia BLOCKING (currently a stub — build entity system from scratch)**, **Proteus ASPIRATIONAL (Chronos/Hestia not yet wired; storage-swap capability is Phase 2)**. Formal §1a re-run during cycle execution.*
+1. **1a** — Grid primitive readiness audit · *Preliminary Merlyn-mode recon filed as Appendix D of handoff. Verdict: **Chronos NEEDS MEDIUM additions**, **Hestia BLOCKING** (stub — build entity system from scratch), **Proteus ASPIRATIONAL** (Chronos/Hestia not yet wired; storage-swap capability is Phase 2). ✓ **Observed on iris PR #139: grid-primitive consumption already underway via lens attach through substrate (SF `ChronosLens__c` / localhost chronos lens).**
 2. **1b** — Grid schema extensions (if any)
 3. **1c** — Aeon API surface (composite reads + dispatch + pass-throughs)
 4. **1d** — Datasource swap in existing plugin (mock → live)
@@ -173,6 +213,21 @@ See handoff §8 — 12 ordered deliverables **1a** through **1l**. Reproduced he
 12. **1l** — Rebuild/refresh acceptance test → MVP COMPLETE
 
 Dependencies: 1b blocks until 1a lists deltas; 1c blocks on 1b; 1d blocks on 1c; 1e–1k parallelize once 1d lands.
+
+**Observed execution status (iris PR #139 as of 2026-10-13)**:
+
+- **1a** ✓ preliminary complete (Merlyn Appendix D); formal re-run deferred to closeout evidence
+- **1b** ⏳ in flight — observed `ChronosLens__c` SObject + localhost chronos lens adapters; Hestia entity system progress unknown from iris-side alone (needs chronos/hestia repo survey next)
+- **1c** ⏳ partial — observed `useLensMutation` hook with dispatch table pattern suggests API layer in progress
+- **1d** ✓ observed — datasource is actively consuming substrate-neutral lens APIs (Proteus tab renders substrate-native row IDs)
+- **1e** ⏳ partial — vocabulary pass pending (observed "lens" survives; constellation/star rename TBD)
+- **1f** ⏳ in flight — aeon dashboard rebuilt on Proteus primitives (commit `7015802`); Sky-view parity with prototype TBD
+- **1g** ⏳ unknown — Calendar view port status not surfaced in observed commits
+- **1h** ⏳ in flight — neuron lens panel slide-in observed (`49504e6`); context collapsibles TBD
+- **1i** ⏳ in flight — attach/edit/detach wired for Chronos; constellation CRUD modals TBD
+- **1j** ⏳ unknown — operator-state persistence not surfaced
+- **1k** ⏳ unknown — kernel strip (slots/dispatcher/core-health) status not surfaced
+- **1l** ⏳ gated — acceptance test awaits visible completion of 1e–1k
 
 ## §11 Verification protocol
 
@@ -226,6 +281,17 @@ Dependencies: 1b blocks until 1a lists deltas; 1c blocks on 1b; 1d blocks on 1c;
 > Steward sign-off: **___** **___**
 
 ---
+
+## Observation log
+
+| Date | Event |
+|---|---|
+| 2026-10-07 | iris PR #139 opened by alchemisthomer — Aeon v1 execution begins |
+| 2026-10-13 | Card authored in `00_backlog/`. Full §1–§13 pre-drafted from Merlyn handoff |
+| 2026-10-13 | Preliminary §1a reconnaissance filed as handoff Appendix D |
+| 2026-10-13 | Prototype durable copy stored at `docs/aeon-v1-prototype-dashboard.html` for alchemisthomer port reference |
+| 2026-10-13 | Observed in-flight execution on iris PR #139 — 5 commits on 2026-10-13 show aeon rebuild on Proteus primitives, lens-attach substrate neutrality, `/aeon-orig` rollback surface. Card promoted `00_backlog/` → `04_in_development/` |
+| 2026-10-13 | Steward confirmed iris code shipped to olympus-grid |
 
 ## Cross-reference notes for sibling cycles
 
