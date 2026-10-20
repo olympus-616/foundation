@@ -78,10 +78,10 @@
         "04_in_development/brain_2.7.eos-5.md": {
             "pitch": "An AI operations team that runs your actual life"
         },
-        "04_in_development/brain_2.7.eos-5.1.md": {
+        "05_verifying/brain_2.7.eos-5.1.md": {
             "pitch": "Ship the /agent surface to production"
         },
-        "04_in_development/brain_2.7.eos-5.2.md": {
+        "05_verifying/brain_2.7.eos-5.2.md": {
             "pitch": "Agent workspace scaffolding into main"
         },
         "04_in_development/brain_2.7.eos-5.3.md": {
@@ -156,8 +156,11 @@
         "00_backlog/brain_2.7.eos-14.md": {
             "pitch": "Ship the missing Plutus event vocabulary"
         },
-        "04_in_development/brain_2.7.eos-19.md": {
+        "05_verifying/brain_2.7.eos-19.md": {
             "pitch": "Open the agent — see every constellation, program every intention"
+        },
+        "04_in_development/brain_2.7.eos-20.md": {
+            "pitch": "Session telemetry and operator feedback become attested memory"
         },
         "00_backlog/cand-a.md": {
             "pitch": "Roll back a bad deploy without losing data"
@@ -204,10 +207,10 @@
         "04_in_development/brain_2.7.eos-16.md": {
             "pitch": "Our invoicing, built the way customers will build theirs"
         },
-        "04_in_development/brain_2.7.eos-17.md": {
+        "05_verifying/brain_2.7.eos-17.md": {
             "pitch": "Spawn any god as a Claude session over HTTP"
         },
-        "04_in_development/brain_2.7.eos-18.md": {
+        "05_verifying/brain_2.7.eos-18.md": {
             "pitch": "Drive any god from the iris agent portal"
         }
     }

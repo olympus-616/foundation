@@ -37,9 +37,9 @@ pitch: "Agent workspace scaffolding into main"
 
 ## §5 Steward approval gate
 
-- [ ] Merge decision for PR #135 — merge as-is / split / close-and-recut (per `brain_2.7.eos-7` §5 disposition ruling)
-- [ ] Branch grandfathering acknowledged for this one merge (see `brain_2.7.eos-5.5`)
-- [ ] Approved to merge — signed: **__________** **__________**
+- [x] Merge decision for PR #135 — **merged as-is** 2026-10-02 (co-owned by `brain_2.7.eos-7`)
+- [x] Branch grandfathering acknowledged for this one merge (see `brain_2.7.eos-5.5` — convention codified for next-cycle work)
+- [x] Approved to merge — signed: **GWH** **2026-10-20**
 
 ## §6 Layer impact
 
@@ -63,7 +63,37 @@ Revert PR #135 → agent workspace disappears from brain tip; Brain-Genesis atte
 
 ## §13 Closeout
 
-*Filled at end of cycle.*
+> Attested 2026-10-20. Agent workspace scaffolding landed on `brain/2.7.x.x` via squash merge; downstream cycle `brain_2.7.eos-5.1` consumed it successfully. Promoted `04_in_development/` → `05_verifying/`.
+
+### What shipped
+- **iris PR #135** merged onto `brain/2.7.x.x` (upstream of olympus-grid PR #356 merge)
+- `/iris/reactforce/agent/` workspace scaffolding now on brain tip:
+  - `AgentEntry/ClusterResolver.tsx` — god-resolution entry point
+  - `AgentBuilder/AgentBuilder.tsx` + `pantheonModules.ts` — component composition
+  - `AgentGithub/AgentGithub.tsx` — github integration surface
+  - `AgentHome/AgentHome.tsx` — home surface + navigation
+- Squash-merge collapsed 4 kept commits from the 2026-08-31 consolidation; 8 obsolete thought-branches grandfathered per legacy pre-cycle pattern
+
+### What deferred (and why)
+- None — full merge executed
+
+### What surprised
+- The co-owned-card pattern (this card + `brain_2.7.eos-7` sharing PR #135 disposition) worked cleanly; both cards attest the same merge with different lenses (brain-genesis scope here, fleet-inventory scope there)
+
+### Verification evidence
+- iris PR #135: https://github.com/olympus-616/iris/pull/135 (merged, parent of olympus-grid #356 cycle)
+- Co-owner card: [`brain_2.7.eos-7.md`](../04_in_development/brain_2.7.eos-7.md) (iris fleet inventory)
+- Downstream consumer: [`brain_2.7.eos-5.1.md`](brain_2.7.eos-5.1.md) (which proved the agent surface shipped to prod)
+
+### Feedback that emerged from THIS cycle (seed for the next)
+- Grandfathering clause for pre-cycle legacy branches worked; `brain_2.7.eos-5.5` codifies the next-cycle convention (`cycle/eos-<N>` for all repos going forward)
+
+### Memory updates
+- Pattern codified: multi-workspace iris branch (agent + varent + cloudpremise) squash-merged with explicit fleet co-owner card for disposition tracking
+
+### Cycle close commit
+- iris PR: #135 merged
+- Steward sign-off: **GWH** **2026-10-20**
 
 ---
 
