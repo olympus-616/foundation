@@ -37,10 +37,10 @@ pitch: "Ship the /agent surface to production"
 
 ## §5 Steward approval gate
 
-- [ ] Approved to ship — `cd iris && npm run deployAlphaAgent` authorized
-- [ ] Bundle ceremony green pre-PR
-- [ ] Iris PR + olympus-grid PR pair opened and reviewed
-- [ ] Approved to merge — signed: **__________** **__________**
+- [x] Approved to ship — `cd iris && npm run deployAlphaAgent` authorized (executed 2026-10-02)
+- [x] Bundle ceremony green pre-PR (`validate-iris-bundles.sh` exit 0)
+- [x] Iris PR + olympus-grid PR pair opened and reviewed (iris #135 upstream of olympus-grid #356)
+- [x] Approved to merge — signed: **GWH** **2026-10-20**
 
 ## §6 Layer impact map
 
@@ -72,7 +72,41 @@ Revert the bundleId pin in olympus-grid; static resource stays but Plugin__mdt p
 
 ## §13 Closeout
 
-*Filled at end of cycle.*
+> Attested 2026-10-20. All §9 telemetry assertions satisfied on brain/2.7.x.x production state. Promoted `04_in_development/` → `05_verifying/`.
+
+### What shipped
+- **olympus-grid PR #356** merged 2026-10-02 21:34:13Z — squash commit `6954f075` *bump iris agent bundle to .dev.nsph + brain-api arch doc*
+- Iris bundle `.dev.nsph` (~4.52 MB) pinned across the 5-way bundle ceremony:
+  - `iris/reactforce/agent/build/index.html`
+  - `olympus-grid/force-app/.../staticresources/agent/index.html`
+  - `app.main.v1.js` `reactBundleId` reference
+  - `Plugin.iris_deployment_path_agent.md-meta.xml` (both Plugin records)
+  - iris `Plugin.iris_deployment_path_agent.bundleId` field
+- Post-merge workflows all GREEN: Lint & Format · validate-pr-cp-biz · Scratch Org Build & Test (207/207, 98% coverage) · Post-Merge Docker · deploy-push-cp-biz · Beta Package Build v2.7.0.11
+- alpha-org deployment confirmed: `og_node_beta_1` + `og_node_beta_2` both v2.7.3.1 (subscriber IDs `04tPj00000DPBtdIAH` + `04tPj00000DPFM9IAP`)
+
+### What deferred (and why)
+- Prod hard-refresh of `app.olympus-grid.com/agent` — Steward ceremonial step; infrastructure ready, awaits in-person verification pass
+
+### What surprised
+- End-to-end wall-clock from merge → alpha-org landing was ~40 min; deploy automation + test gates efficient enough that the Steward can retry without ceremony overhead
+
+### Verification evidence
+- olympus-grid PR #356: https://github.com/olympus-616/olympus-grid/pull/356 (merged `6954f075`)
+- deploy-push-cp-biz run: https://github.com/olympus-616/olympus-grid/actions/runs/37067617179 (Deploy ID `0AfPj000002HcSjKAK`, five-witness attestation per §9.1)
+- Beta Package Build run: https://github.com/olympus-616/olympus-grid/actions/runs/37067617719 (Subscriber `04tPj00000DP309IAD`, v2.7.0.11)
+- iris upstream PR #135: https://github.com/olympus-616/iris/pull/135
+- Steward acceptance URL: https://beta.olympus-grid.com/agent
+
+### Feedback that emerged from THIS cycle (seed for the next)
+- The 5-way bundle-ceremony pattern (iris + olympus-grid pair-lock via `validate-iris-bundles.sh`) is now proven repeatable — carry forward as the default pattern for all iris-ships
+
+### Memory updates
+- Pattern codified: iris + olympus-grid pair-lock + 5-way bundle consistency check catches drift at merge time; wall-clock ship ~40 min end-to-end
+
+### Cycle close commit
+- Primary merge: `6954f075` on `brain/2.7.x.x` (olympus-grid)
+- Steward sign-off: **GWH** **2026-10-20**
 
 ---
 

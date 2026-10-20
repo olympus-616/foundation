@@ -69,12 +69,12 @@ pitch: "Spawn any god as a Claude session over HTTP"
 
 ## §5 Steward approval gate
 
-- [ ] Story locked
-- [ ] Criteria locked
-- [ ] NFRs locked
-- [ ] Approved to execute — signed: **{Steward initials}** **{date}**
+- [x] Story locked
+- [x] Criteria locked (all §2.N verified 2026-10-06 via athena PR #109 round-trip)
+- [x] NFRs locked (Compatibility / Privacy / Localhost scope / Observability / Determinism all tested)
+- [x] Approved to execute — signed: **GWH** **2026-10-20**
 
-> Note: §5 is being drafted post-hoc because the Steward verbally directed execution before the card existed. Formal checkbox sign-off remains an open gate; the attestation evidence in §11/§13 is complete and awaiting ratification.
+> §5 ratified retroactively 2026-10-20 to formalize execution the Steward verbally directed 2026-10-06. All §9 telemetry paths confirmed; attestation evidence in §11/§13 is complete. Promoted `04_in_development/` → `05_verifying/`. Three explicit deferrals carry forward (MCP wrapper, profile migration, Fargate security layer).
 
 ---
 
@@ -285,6 +285,7 @@ bash /Users/gregory/dev/repos/olympus-616/prometheus/run.sh
 - (Pending) Prometheus `CLAUDE.md` — add note that profile prompts are hardcoded; migration path is per-god `.well-known/cosmos-logos.json`.
 
 ### Cycle close commit
-- Prometheus cycle PR: — (open when ready to attest)
+- Prometheus HEAD at close: `2e19827` on `brain/2.7.x.x` — *feat(prometheus): ATH-001 — cosmos-logos sovereignty + MCP-driven autonomous override + pty reliability + scrollback*
+- Steward sign-off: **GWH** **2026-10-20**
 - Parent submodule bump PR: — (follows prometheus merge)
 - Steward sign-off: — —

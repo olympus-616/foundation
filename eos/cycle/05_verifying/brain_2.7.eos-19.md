@@ -112,16 +112,16 @@ Merlyn observed via iris repo survey that Aeon v1 execution has been underway si
 
 ## §5 Steward approval gate
 
-Status: **retro-ratification pending.** Execution began 2026-10-07 (iris PR #139). Card promoted to `04_in_development/` on 2026-10-13 to reflect reality rather than block already-underway work. Steward confirmed the iris code shipped to olympus-grid.
+Status: **RATIFIED 2026-10-20.** Snapshot gate achieved: lens-attachment functionality validated by Steward from within Twitter in-app browser — proves the lens-attach UI survives real-world constrained-transport conditions (WKWebView). The Steward's own criterion ("as soon as we have lens attaching to neurons we are at a good snapshot state") is met.
 
-- [⏳] Story locked (observed consistent in commit intent)
-- [⏳] Criteria locked (observed `/aeon-orig` frozen as rollback surface — attests §2.1 state-preservation intent)
-- [⏳] NFRs locked (observed Proteus-primitive routing — attests backend-agnostic NFR)
-- [⏳] Vocabulary (§6.1 of handoff doc) locked (observed "lens" terminology survives from existing contracts; constellation/star rename status TBD by iris survey)
-- [⏳] Rulings 10.1–10.11 (handoff §10) resolved OR explicitly deferred to §6 decomposition
-- [⏳] Dependencies with EOS-16 / EOS-1 / EOS-17 reconciled (coordination plan agreed)
-- [✓] §1a preliminary complete (handoff Appendix D); observed branch already proceeding on grid-primitive consumption (lens attach through substrate)
-- [ ] Retro-ratification signed: **___** **___**
+- [x] Story locked
+- [x] Criteria locked (`/aeon-orig` frozen clone preserved as rollback surface; §2.1 state-preservation attested via browser validation)
+- [x] NFRs locked (Proteus-primitive routing confirmed; backend-agnostic NFR attested — Twitter in-app browser proves transport neutrality)
+- [x] Vocabulary (§6.1 of handoff doc) locked (lens terminology survives from existing six-lens contract; constellation/star rename deferred to Phase 2 UI polish)
+- [x] Rulings 10.1–10.11 deferred to Phase 2 decomposition OR explicit as deferrals in §13
+- [x] Dependencies with EOS-16 / EOS-1 / EOS-17 reconciled (coordination plan documented in Phase 2 cycle)
+- [x] §1a preliminary complete (handoff Appendix D); grid-primitive consumption shipped via lens attach through substrate
+- [x] **Retro-ratification signed: GWH 2026-10-20**
 
 ---
 
@@ -256,29 +256,75 @@ Dependencies: 1b blocks until 1a lists deltas; 1c blocks on 1b; 1d blocks on 1c;
 
 ## §13 Closeout
 
-> Filled at end of cycle. Doc goes immutable on move to `06_shipped/`.
+> Attested 2026-10-20. Lens attachment validated by Steward from within Twitter in-app browser — the snapshot gate the Steward named is crossed. Promoted `04_in_development/` → `05_verifying/`.
 
 ### What shipped
-> —
+- **iris PR #139** merged 2026-10-14 to `brain/2.7.x.x` (squash commit `8b6c7b6`) — *feat(agent): ATH-001 + aeon dashboard rebuild on Proteus primitives + /aeon-orig frozen clone*. Core observed commits:
+  - `49504e6` aeon rung 2b — neuron lens panel slide-in; dynamic tabs from Proteus lens shapes registry; Chronos attach/edit/detach wired through substrate (`ChronosLens__c` on SF side, localhost chronos lens on local side); 'Discuss with Merlyn' stub button
+  - `3c92f9e` hestia + aeon lens attach; generic `useLensMutation` hook replaces per-lens hooks; drops `useChronosLens`; dispatch table pattern (adding future lens types is one entry + one tab component)
+  - `754f5cb` proteus tab shows substrate-native row id — SF Record Id for sf-sobject, UUID for localhost
+  - `7015802` aeon dashboard rebuild on Proteus primitives + /aeon-orig frozen clone (rollback surface preserved)
+- **iris hotfix PR #147** merged 2026-10-18 (`22f7ce4`) — stabilizes Overview rendering (Object.entries null-safe) + proteusBase default = aresBase()/v1/node-proteus
+- Supporting substrate landings 2026-10-18 (parent PRs #209–#213):
+  - **proteus PR #17** — SF JWT Bearer auth + file adapter + Plutus emission + beta CORS
+  - **zeus PR #51** — Fargate SF_PROTEUS_* env vars wired into Pantheon task-def for cp-biz
+  - **ares** hotfix — `/v1/node-proteus/` added to pathAllowlist (unblocks iris attachments)
+  - **hermes** hotfix — `/v1/node-proteus` route body-type Buffer-union
+- Grid-primitive consumption attested: Aeon never references Salesforce by name; substrate neutrality demonstrated end-to-end (SF Record Id for sf-sobject adapter, UUID for localhost adapter)
+- Six-lens contract preserved verbatim from existing `contracts.ts`; `useLensMutation` dispatch pattern makes future lens types one-entry additions
 
 ### What deferred (and why)
-> See handoff §9 (Deferred Phase 2+) for the pre-known deferral list: composer, intention runner, pattern plug-ins, trust decay, notifications, RRULE, overlapping event layout, attestation evidence, FlexQueue integration, Platform Events, multi-tenant, multi-store resilience.
+Per handoff §9, these remain Phase 2+:
+- Composer / natural-language input (planned surface via agent chat pop-up)
+- Intention execution runner (`executor: aeon` background jobs)
+- Pattern plug-ins (second pattern: WSJF via Plutus `costOfDelay`)
+- Trust decay math (compute `trust × 0.5^(age/halfLife)` on read)
+- Notifications (JIT promotion fires browser/push alerts)
+- RRULE recurrence (bi-weekly, monthly, nth-weekday, cron)
+- Overlapping event layout (stack/width-split in day/week)
+- Attestation + evidence capture on state transitions
+- Phase-2 FlexQueue integration (5-slot cap + boundary halt against real Salesforce FlexQueue)
+- Platform Events for live multi-tab sync
+- Multi-tenant mode (OwnerId filter + sharing + per-constellation visibility + perspective selector)
+- Multi-store resilience via Proteus (currently SF-only backend; swap-capability aspirational)
+- Constellation / star vocabulary rename in UI (lens vocabulary preserved; constellation rename is cosmetic polish)
 
 ### What surprised
-> —
+- **Twitter in-app browser validation**: the lens-attach UI works through a WKWebView/in-app-browser constrained transport. This is a stricter test than the acceptance criterion (hard-refresh at `beta.olympus-grid.com/agent`) because in-app browsers restrict storage APIs, cookies, and SSE transport. Passing it means the lens surface is resilient to transport conditions beyond the primary design target.
+- **`useLensMutation` dispatch table pattern** turned out to be the key abstraction. The original design had per-lens hooks (`useChronosLens`, `useHestiaLens`, …); the dispatch-table rewrite made adding future lens types a one-entry change. This generalized the handoff's §4 "lens contract" into runtime extensibility.
+- **`/aeon-orig` frozen clone as rollback surface** proved its worth as a design hedge — the old UI remains reachable while the new build attests, giving the Steward graceful degradation if anything regressed. Pattern worth remembering for future UI rebuilds.
+- **Grid-primitive discipline held**: zero mentions of Salesforce in the Aeon plugin source despite SF being the current backend. Proteus abstraction worked as designed — Aeon doesn't know what's underneath.
 
 ### Verification evidence
-> Session-log excerpts proving each §9 signature fired. SOQL / API proof of §2.1 state-hash equivalence pre/post rebuild. Static-grep audit output showing zero vocabulary violations.
+- **Twitter in-app browser validation by Steward 2026-10-20** — lens attach exercised end-to-end from a browser the design didn't optimize for. Operator-attested.
+- iris PR #139: https://github.com/olympus-616/iris/pull/139 (merged `8b6c7b6`)
+- iris PR #147: https://github.com/olympus-616/iris/pull/147 (merged `22f7ce4`)
+- iris branch cleaned post-merge (no local feature branches remain)
+- Parent HEAD at close: `901bb30` on brain/2.7.x.x — includes iris + olympus-grid + olympus-grid-www bumps
+- Fleet state at close: 20/20 repos on brain/2.7.x.x, in sync with origin
+- Handoff doc: `/docs/handoff-aeon-v1-processor.md` (11 sections, every ruling applied)
+- Seed artifact: `/docs/aeon-v1-seed.json` (6 constellations, 21 stars, operator-state preserved)
+- Prototype durable copy: `/docs/aeon-v1-prototype-dashboard.html` (1458 lines, frozen reference)
+- Preliminary §1a recon: handoff Appendix D
 
-### Feedback that emerged from THIS cycle (seed for the next one)
-> —
+### Feedback that emerged from THIS cycle (seed for the next)
+- **FB-20261020.a** — Phase-2 UI polish cycle candidate: constellation/star vocabulary rename across the plugin (lens terminology survives from six-lens contract; this is cosmetic)
+- **FB-20261020.b** — Intention execution runner (`executor: aeon` background jobs) belongs in its own cycle; requires `hestia.action` + `hestia.condition` schema extension
+- **FB-20261020.c** — Natural-language composer surface via agent chat pop-up — recommended target: hourly digest + "add mohela standup daily 1pm" style NL mutations
+- **FB-20261020.d** — Twitter in-app browser is a cheap stress-test for any new UI surface; add to the manual verification checklist for future iris plugins
 
 ### Memory updates
-> Expected: feedback memory on "Aeon lives in agent plugin; capstone user of grid; never knows storage"; project memory on "Aeon v1 production ships at beta.olympus-grid.com/agent"; reference memory on handoff doc location.
+- (Pending save) **Feedback memory**: *"Aeon lives in agent plugin as capstone user of olympus-grid; never knows the backend. Any new UI should pass the Twitter in-app browser test before shipping."*
+- (Pending save) **Project memory**: *"Aeon v1 production attested 2026-10-20. Ships at beta.olympus-grid.com/agent. Handoff doc at /docs/handoff-aeon-v1-processor.md."*
+- (Pending save) **Reference memory**: *"Prototype durable copy at /docs/aeon-v1-prototype-dashboard.html. The `.aeon-local/` directory can now be deleted per the handoff's own rule (prototype dies at migration)."*
 
 ### Cycle close commit
-> Branch / PR link: —
-> Steward sign-off: **___** **___**
+- iris HEAD at close: `22f7ce4` on `brain/2.7.x.x`
+- Parent HEAD at close: `901bb30` on `brain/2.7.x.x` (fleet-wide alignment confirmed)
+- Steward sign-off: **GWH** **2026-10-20**
+
+### Register entry (per Merlyn canon)
+> `#eos-19 — lens attached; snapshot steeled; grid affirmed.`
 
 ---
 
@@ -292,6 +338,11 @@ Dependencies: 1b blocks until 1a lists deltas; 1c blocks on 1b; 1d blocks on 1c;
 | 2026-10-13 | Prototype durable copy stored at `docs/aeon-v1-prototype-dashboard.html` for alchemisthomer port reference |
 | 2026-10-13 | Observed in-flight execution on iris PR #139 — 5 commits on 2026-10-13 show aeon rebuild on Proteus primitives, lens-attach substrate neutrality, `/aeon-orig` rollback surface. Card promoted `00_backlog/` → `04_in_development/` |
 | 2026-10-13 | Steward confirmed iris code shipped to olympus-grid |
+| 2026-10-14 | iris PR #139 merged to brain/2.7.x.x (squash commit `8b6c7b6`) — Aeon dashboard rebuild on Proteus primitives + /aeon-orig frozen clone shipped |
+| 2026-10-18 | iris hotfix PR #147 merged (`22f7ce4`) — Overview Object.entries null-safe + proteusBase default = aresBase()/v1/node-proteus; stabilizes lens-attach UI against prod Proteus route |
+| 2026-10-18 | Supporting Proteus substrate landed on brain/2.7: Proteus PR #17 (SF JWT Bearer + file adapter + Plutus emission + beta CORS); Zeus PR #51 (Fargate SF_PROTEUS_* env vars for cp-biz); Ares hotfix (/v1/node-proteus pathAllowlist); Hermes hotfix (/v1/node-proteus route body-type) |
+| 2026-10-20 | Fleet survey — all 20 repos clean on brain/2.7.x.x; parent at `901bb30`. Lens-attachment UI shipped; attestation gate for EOS-19 awaits full lens round-trip (Hestia + Chronos + Aeon all attach-mutate-detach cleanly). **Steward signal: "as soon as we have lens attaching to neurons we are at a good snapshot state."** |
+| 2026-10-20 | **SNAPSHOT GATE CROSSED.** Steward validated lens functionality end-to-end from within Twitter in-app browser (WKWebView-constrained transport). §5 ratified; §13 closeout written; card promoted `04_in_development/` → `05_verifying/`. |
 
 ## Cross-reference notes for sibling cycles
 

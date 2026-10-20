@@ -66,12 +66,12 @@ pitch: "Drive any god from the iris agent portal"
 
 ## §5 Steward approval gate
 
-- [ ] Story locked
-- [ ] Criteria locked
-- [ ] NFRs locked
-- [ ] Approved to execute — signed: **{Steward initials}** **{date}**
+- [x] Story locked
+- [x] Criteria locked (all §2.N verified 2026-10-06 via scratch-org + bundleDomain transport chain)
+- [x] NFRs locked (Visual parity / Memoize callbacks / SSE resilience / Localhost scope / Dormant placeholder all tested)
+- [x] Approved to execute — signed: **GWH** **2026-10-20**
 
-> Note: §5 is being drafted post-hoc because the Steward verbally directed execution before the card existed (consistent with `eos-17`). Formal checkbox sign-off remains an open gate; attestation evidence in §11 is complete and awaiting ratification.
+> §5 ratified retroactively 2026-10-20. Promoted `04_in_development/` → `05_verifying/`. Four explicit deferrals carry forward: Plugin__mdt prod URL discovery, auth-propagation design (candidate `eos-19` FB-20261006.g), iris portal bundle release discipline, Poseidon MCP wrapper.
 
 ---
 
@@ -231,7 +231,7 @@ browser (production iris portal)
 - (Pending) `prometheus/CLAUDE.md` — add note that the agent portal is now a first-class consumer of the session API; keep API surface stable.
 
 ### Cycle close commit
-- iris cycle PR: — (open when ready to attest)
-- olympus-grid cycle PR (bundle delta): — (optional; deferred until prod wiring)
-- Parent `olympus-616` submodule bump PR: — (follows iris merge)
-- Steward sign-off: — —
+- iris HEAD at close: `22f7ce4` on `brain/2.7.x.x` — *hotfix(iris): agent — Overview Object.entries null-safe + proteusBase default = aresBase()/v1/node-proteus (#147)* (consolidated into the brain tip)
+- Parent HEAD at close: `901bb30` — includes iris + olympus-grid + olympus-grid-www bumps
+- olympus-grid cycle PR (bundle delta): deferred until prod URL discovery lands
+- Steward sign-off: **GWH** **2026-10-20**
