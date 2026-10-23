@@ -156,6 +156,27 @@
         "00_backlog/brain_2.7.eos-14.md": {
             "pitch": "Ship the missing Plutus event vocabulary"
         },
+        "00_backlog/brain_2.7.eos-21.md": {
+            "pitch": "Pantheon off EOL Node + CVE-watch + regex bounds"
+        },
+        "00_backlog/brain_2.7.eos-22.md": {
+            "pitch": "Ares answers CVEs in under a day — automatically"
+        },
+        "00_backlog/brain_2.7.eos-23.md": {
+            "pitch": "Every image signed; every poisoned dep heard"
+        },
+        "00_backlog/brain_2.7.eos-24.md": {
+            "pitch": "Prove envelope keys are born from real randomness"
+        },
+        "00_backlog/brain_2.7.eos-25.md": {
+            "pitch": "Athena notices when a model stops acting like itself"
+        },
+        "00_backlog/brain_2.7.eos-26.md": {
+            "pitch": "Deferred — upstream LLM model-weight attestation"
+        },
+        "00_backlog/brain_2.7.eos-27.md": {
+            "pitch": "Olympus-Grid itself under the Kronos oracle"
+        },
         "05_verifying/brain_2.7.eos-19.md": {
             "pitch": "Open the agent — see every constellation, program every intention"
         },
