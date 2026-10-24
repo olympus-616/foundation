@@ -1,0 +1,48 @@
+{
+  "cosmos_logos_version": "1.1.0",
+  "identity": {
+    "name": "Foundation",
+    "codename": "foundation",
+    "purpose": "Open source governance + tithe layer of olympus-grid",
+    "description": "Pantheon agent engineering the olympus-616/foundation repo and consuming Chronos tasks assigned to AgentRole=foundation. Charter: alpha/source_of_truth/foundation/.",
+    "email": "homer+foundation@cloudpremise.com",
+    "version": "1.7.0",
+    "repo": "https://github.com/olympus-616/foundation",
+    "maintainers": [
+      "@alchemisthomer"
+    ]
+  },
+  "display": {
+    "color": "#6366F1",
+    "homepage": "https://github.com/olympus-616/foundation"
+  },
+  "cryptography": {
+    "algorithm": "Ed25519",
+    "public_key": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEABGWyHsKXilC9nYzNF6LUUNGZYegvoBL+ikTSUiTPJM4=\n-----END PUBLIC KEY-----",
+    "fingerprint": "SHA256:Dk6jnRVkqaXQha1WvE/CIq5RxdMspY2cpZve1e7Lr+I=",
+    "signing_header": "x-cosmos-signature",
+    "timestamp_header": "x-cosmos-timestamp"
+  },
+  "capabilities": [],
+  "authority": {
+    "codename": "alpha",
+    "cosmos_logos_url": "https://raw.githubusercontent.com/olympus-616/alpha/brain/2.7.x.x/.well-known/cosmos-logos.json",
+    "fingerprint": "SHA256:/4lQWOFd0n6Hel0moRIJxEGWuB8BPOmfurOGUlouOLg=",
+    "constitution_index_url": "https://raw.githubusercontent.com/olympus-616/alpha/brain/2.7.x.x/.well-known/constitution-index.json",
+    "charter_path": "source_of_truth/foundation/"
+  },
+  "trust": {
+    "ttl": 3600,
+    "agents": []
+  },
+  "metadata": {
+    "tags": [
+      "foundation",
+      "pantheon",
+      "olympus-616"
+    ],
+    "created": "2026-10-24T02:02:49Z",
+    "updated": "2026-10-24T02:02:49Z",
+    "license": "proprietary"
+  }
+}
