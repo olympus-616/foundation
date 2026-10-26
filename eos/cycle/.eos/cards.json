@@ -160,7 +160,7 @@
             "pitch": "Pantheon off EOL Node + CVE-watch + regex bounds"
         },
         "00_backlog/brain_2.7.eos-22.md": {
-            "pitch": "Ares answers CVEs in under a day — automatically"
+            "pitch": "Ares answers CVEs in under a day \u2014 automatically"
         },
         "00_backlog/brain_2.7.eos-23.md": {
             "pitch": "Every image signed; every poisoned dep heard"
@@ -172,13 +172,13 @@
             "pitch": "Athena notices when a model stops acting like itself"
         },
         "00_backlog/brain_2.7.eos-26.md": {
-            "pitch": "Deferred — upstream LLM model-weight attestation"
+            "pitch": "Deferred \u2014 upstream LLM model-weight attestation"
         },
         "00_backlog/brain_2.7.eos-27.md": {
             "pitch": "Olympus-Grid itself under the Kronos oracle"
         },
         "05_verifying/brain_2.7.eos-19.md": {
-            "pitch": "Open the agent — see every constellation, program every intention"
+            "pitch": "Open the agent \u2014 see every constellation, program every intention"
         },
         "04_in_development/brain_2.7.eos-20.md": {
             "pitch": "Session telemetry and operator feedback become attested memory"
@@ -233,6 +233,9 @@
         },
         "05_verifying/brain_2.7.eos-18.md": {
             "pitch": "Drive any god from the iris agent portal"
+        },
+        "04_in_development/brain_2.7.eos-28.md": {
+            "pitch": "The pantheon became a routable BPM of autonomous AI selves"
         }
     }
 }
